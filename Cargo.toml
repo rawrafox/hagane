@@ -9,7 +9,11 @@ path = "src/lib.rs"
 
 [[bin]]
 name = "metal-info"
-path = "src/metal-info.rs"
+path = "src/bin/metal-info.rs"
+
+[[bin]]
+name = "example-01"
+path = "src/examples/example-01.rs"
 
 [dependencies]
 libc = "0.2.19"

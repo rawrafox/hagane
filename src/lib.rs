@@ -7,6 +7,12 @@ use objc_id::Id;
 use objc_foundation::{NSArray, NSString};
 use objc_foundation::{INSObject};
 
+#[link(name = "Metal", kind = "framework")]
+extern {
+  fn MTLCopyAllDevices() -> *mut u8;
+  fn MTLCreateSystemDefaultDevice() -> *mut u8;
+}
+
 object_struct!(Device);
 
 #[allow(non_camel_case_types)]
@@ -32,12 +38,6 @@ pub struct Size {
     pub width: usize,
     pub height: usize,
     pub depth: usize
-}
-
-#[link(name = "Metal", kind = "framework")]
-extern {
-  fn MTLCopyAllDevices() -> *mut u8;
-  fn MTLCreateSystemDefaultDevice() -> *mut u8;
 }
 
 impl Device {
