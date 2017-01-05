@@ -1,0 +1,18 @@
+[package]
+name = "metal"
+version = "0.1.0"
+authors = ["Aurora <aurora@aventine.se>"]
+
+[lib]
+name = "metal"
+path = "src/lib.rs"
+
+[[bin]]
+name = "metal-info"
+path = "src/metal-info.rs"
+
+[dependencies]
+libc = "0.2.19"
+objc = "0.2.2"
+objc_id = "0.1.0"
+objc-foundation = "0.1.1"
