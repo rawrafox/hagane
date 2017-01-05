@@ -7,6 +7,9 @@ use objc_id::Id;
 use objc_foundation::{NSArray, NSString};
 use objc_foundation::{INSObject};
 
+pub mod core_graphics;
+pub mod kit;
+
 #[link(name = "Metal", kind = "framework")]
 extern {
   fn MTLCopyAllDevices() -> *mut u8;
