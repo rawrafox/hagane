@@ -50,6 +50,14 @@ id!(NSArrayID, NSArray, "NSArray");
 
 impl NSObject for NSArrayID {}
 
+pub trait NSError : NSObject {
+  
+}
+
+id!(NSErrorID, NSError, "NSError");
+
+impl NSObject for NSErrorID {}
+
 pub enum NSStringEncoding {
   NSASCIIStringEncoding = 1,
   NSNEXTSTEPStringEncoding = 2,

@@ -15,6 +15,10 @@ path = "src/bin/metal-info.rs"
 name = "example-01"
 path = "src/examples/example-01.rs"
 
+[[bin]]
+name = "example-02"
+path = "src/examples/example-02.rs"
+
 [dependencies]
 libc = "0.2.19"
 objc = "0.2.2"

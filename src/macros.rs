@@ -16,6 +16,10 @@ macro_rules! id {
       pub fn nil() -> Self {
         return $id_name(0 as *mut std::os::raw::c_void);
       }
+
+      pub fn is_nil(&self) -> bool {
+        return self.0 as usize == 0;
+      }
     }
 
     impl $crate::ObjectiveC for $id_name {
@@ -25,6 +29,12 @@ macro_rules! id {
 
       fn ptr_to_self(&self) -> *mut std::os::raw::c_void {
         return self.0;
+      }
+    }
+
+    unsafe impl objc::Encode for $id_name {
+      fn encode() -> objc::Encoding {
+        return unsafe { objc::Encoding::from_str("@") };
       }
     }
 
