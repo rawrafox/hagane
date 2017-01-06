@@ -118,7 +118,7 @@ pub trait MTLDevice : NSObject {
     let mut error = NSErrorID::nil();
 
     unsafe {
-      let lib = msg_send![self.ptr_to_self() as *mut objc::runtime::Object, newLibraryWithFile: filepath error: &mut error];
+      let lib = msg_send![self.as_object(), newLibraryWithFile: filepath error: &mut error];
 
       if error.is_nil() {
         return Ok(lib);
@@ -132,7 +132,7 @@ pub trait MTLDevice : NSObject {
     let mut error = NSErrorID::nil();
 
     unsafe {
-      let lib = msg_send![self.ptr_to_self() as *mut objc::runtime::Object, newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
+      let lib = msg_send![self.as_object(), newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
 
       if error.is_nil() {
         return Ok(lib);

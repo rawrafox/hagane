@@ -27,7 +27,7 @@ macro_rules! id {
         return $id_name::from_ptr(ptr);
       }
 
-      fn ptr_to_self(&self) -> *mut std::os::raw::c_void {
+      fn as_ptr(&self) -> *mut std::os::raw::c_void {
         return self.0;
       }
     }
@@ -60,7 +60,7 @@ macro_rules! forward {
   ($fn_name:ident, $sel:expr, ($($name:ident : $arg_type:ty),*) -> $return_type:ty, <$($bound_name:ident : $bound_type:ident),*>) => (
     fn $fn_name<$($bound_name : $bound_type + 'static),*>(&self, $($name: $arg_type),*) -> $return_type where Self: Sized {
       unsafe {
-        let target = self.ptr_to_self() as *mut objc::runtime::Object;
+        let target = self.as_object();
 
         return match objc::__send_message(target, $sel, ($($name,)*)) {
           Err(s) => panic!("{}", s),
@@ -72,7 +72,7 @@ macro_rules! forward {
   ($fn_name:ident, $sel:expr, ($($name:ident : $arg_type:ty),*) -> $return_type:ty) => (
     fn $fn_name(&self, $($name: $arg_type),*) -> $return_type where Self: Sized {
       unsafe {
-        let target = self.ptr_to_self() as *mut objc::runtime::Object;
+        let target = self.as_object();
 
         return match objc::__send_message(target, $sel, ($($name,)*)) {
           Err(s) => panic!("{}", s),

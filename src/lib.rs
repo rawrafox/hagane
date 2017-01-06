@@ -19,8 +19,22 @@ pub use metal::*;
 pub mod metal_kit;
 pub use metal_kit::*;
 
+pub mod rust_metal;
+pub use rust_metal::*;
+
 pub trait ObjectiveC {
   fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self;
 
-  #[inline] fn ptr_to_self(&self) -> *mut std::os::raw::c_void;
+  #[inline] fn as_ptr(&self) -> *mut std::os::raw::c_void;
+  
+
+  fn as_object(&self) -> &mut objc::runtime::Object {
+    let ptr = self.as_ptr() as *mut objc::runtime::Object;
+    
+    if ptr as usize != 0 {
+      return unsafe { &mut *ptr };
+    } else {
+      panic!("Trying to convert nil into object")
+    }
+  }
 }
