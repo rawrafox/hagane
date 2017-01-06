@@ -20,12 +20,3 @@ pub struct CGRect {
   pub origin: CGPoint,
   pub size: CGSize
 }
-
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct MTLClearColor {
-  pub red: f64,
-  pub green: f64,
-  pub blue: f64,
-  pub alpha: f64
-}

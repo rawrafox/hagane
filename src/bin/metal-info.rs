@@ -1,8 +1,8 @@
 extern crate metal;
 
-use metal::{Id, NSObject, NSArray, NSString, MTLDevice};
+use metal::{NSObject, NSArray, NSString, MTLDevice, MTLDeviceID};
 
-fn print_device_info(device: &Id<MTLDevice>, default_device: bool) {
+fn print_device_info(device: MTLDeviceID, default_device: bool) {
   println!("\tDevice name: {}{}", device.name().as_str(), if default_device { " (default)" } else { "" });
   println!("\tHeadless: {}", device.is_headless());
   println!("\tLow power: {}", device.is_low_power());
@@ -39,6 +39,6 @@ pub fn main() {
 
   println!("Devices ({} found)", devices.len());
   for device in devices.to_vec() {
-    print_device_info(&device, default_device.is_equal_to(&device));
+    print_device_info(device, default_device.is_equal_to(device));
   }
 }
