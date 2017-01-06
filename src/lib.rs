@@ -1,22 +1,31 @@
 #[macro_use] extern crate objc;
-#[macro_use] extern crate objc_id;
-#[macro_use] extern crate objc_foundation;
+// #[macro_use] extern crate objc_id;
+// #[macro_use] extern crate objc_foundation;
 
-use objc_id::Id;
+use std::marker::PhantomData;
+use std::os::raw::c_void;
+use std::slice;
+use std::str;
 
-use objc_foundation::{NSArray, NSString};
-use objc_foundation::{INSObject};
+use objc::runtime::Object;
 
-pub mod core_graphics;
-pub mod kit;
+// pub mod core_graphics;
+// pub mod kit;
 
-#[link(name = "Metal", kind = "framework")]
-extern {
-  fn MTLCopyAllDevices() -> *mut u8;
-  fn MTLCreateSystemDefaultDevice() -> *mut u8;
+macro_rules! forward {
+  ($fn_name:ident, $sel:expr, ($($name:ident : $arg_type:ty),*) -> $return_type:ty) => (
+    fn $fn_name(&self, $($name: $arg_type),*) -> $return_type {
+      unsafe {
+        let target = self.ptr_to_self() as *mut Object;
+
+        return match objc::__send_message(target, $sel, ($($name,)*)) {
+          Err(s) => panic!("{}", s),
+          Ok(r) => r,
+        };
+      }
+    }
+  )
 }
-
-object_struct!(Device);
 
 #[allow(non_camel_case_types)]
 pub enum FeatureSet {
@@ -37,64 +46,134 @@ pub enum FeatureSet {
 
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct Size {
+pub struct MTLSize {
     pub width: usize,
     pub height: usize,
     pub depth: usize
 }
 
-impl Device {
-  pub fn all() -> Id<NSArray<Device>> {
-    unsafe {
-      let ptr = MTLCopyAllDevices();
+#[repr(C)]
+pub struct Id<T: ?Sized + 'static>(*mut c_void, PhantomData<&'static T>);
 
-      return Id::from_retained_ptr(ptr as *mut NSArray<Device>);
-    }
+impl<T: ?Sized> Id<T> {
+  pub fn new(ptr: *mut c_void) -> Self {
+    return Id(ptr, PhantomData);
   }
+}
 
-  pub fn system_default() -> Id<Self> {
+pub trait NSObject {
+  #[inline(always)]
+  fn ptr_to_self(&self) -> *mut c_void;
+
+  fn is_equal_to<T: NSObject>(&self, object: &T) -> bool where Self: Sized {
     unsafe {
-      let ptr = MTLCreateSystemDefaultDevice();
-
-      return Id::from_retained_ptr(ptr as *mut Device);
+      return msg_send!(self.ptr_to_self() as *mut Object, isEqualTo: object.ptr_to_self() as *mut Object);
     }
   }
 }
 
-pub trait IDevice : INSObject {
-  fn is_depth24_stencil8_pixel_format_supported(&self) -> bool {
-    return unsafe { msg_send![self, isDepth24Stencil8PixelFormatSupported] };
+impl NSObject for Id<NSObject> {
+  fn ptr_to_self(&self) -> *mut c_void {
+    return self.0;
+  }
+}
+
+pub trait NSArray<T: NSObject + ?Sized> : NSObject {
+  forward!(count, sel!(count), () -> usize);
+  forward!(object_at_index, sel!(objectAtIndex:), (i: usize) -> Id<T>);
+
+  // Rust Helpers
+
+  forward!(len, sel!(count), () -> usize);
+
+  fn to_vec(&self) -> Vec<Id<T>> {
+    let n = self.count();
+    let mut result = Vec::with_capacity(n);
+
+    for i in 0 .. n {
+      result.push(self.object_at_index(i) as Id<T>);
+    }
+
+    return result;
+  }
+}
+
+impl<T: NSObject + ?Sized> NSObject for Id<NSArray<T>> {
+  fn ptr_to_self(&self) -> *mut c_void {
+    return self.0;
+  }
+}
+
+impl<T: NSObject + ?Sized> NSArray<T> for Id<NSArray<T>> { }
+
+pub enum NSStringEncoding {
+  NSASCIIStringEncoding = 1,
+  NSNEXTSTEPStringEncoding = 2,
+  NSJapaneseEUCStringEncoding = 3,
+  NSUTF8StringEncoding = 4,
+  NSISOLatin1StringEncoding = 5,
+  NSSymbolStringEncoding = 6,
+  NSNonLossyASCIIStringEncoding = 7,
+  NSShiftJISStringEncoding = 8,
+  NSISOLatin2StringEncoding = 9,
+  NSUnicodeStringEncoding = 10,
+  NSWindowsCP1251StringEncoding = 11,
+  NSWindowsCP1252StringEncoding = 12,
+  NSWindowsCP1253StringEncoding = 13,
+  NSWindowsCP1254StringEncoding = 14,
+  NSWindowsCP1250StringEncoding = 15,
+  NSISO2022JPStringEncoding = 21,
+  NSMacOSRomanStringEncoding = 30,
+
+  NSUTF16BigEndianStringEncoding = 0x90000100,
+  NSUTF16LittleEndianStringEncoding = 0x94000100,
+
+  NSUTF32StringEncoding = 0x8c000100,
+  NSUTF32BigEndianStringEncoding = 0x98000100,
+  NSUTF32LittleEndianStringEncoding = 0x9c000100
+}
+
+pub trait NSString : NSObject {
+  forward!(length_of_bytes_using_encoding, sel!(lengthOfBytesUsingEncoding:), (encoding: NSStringEncoding) -> usize);
+  forward!(utf8_string, sel!(UTF8String), () -> *const u8);
+  
+  // Rust Helpers
+
+  fn len(&self) -> usize {
+    return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
   }
 
-  fn is_headless(&self) -> bool {
-    return unsafe { msg_send![self, isHeadless] };
-  }
+  fn as_str(&self) -> &str {
+    let bytes = self.utf8_string();
+    let len = self.len();
 
-  fn is_low_power(&self) -> bool {
-    return unsafe { msg_send![self, isLowPower] };
-  }
+    unsafe {
+      let bytes = slice::from_raw_parts(bytes, len);
 
-  fn max_threads_per_threadgroup(&self) -> Size {
-    return unsafe { msg_send![self, maxThreadsPerThreadgroup] };
+      str::from_utf8(bytes).unwrap()
+    }
   }
+}
 
-  fn name(&self) -> Id<NSString> {
-    return unsafe { Id::from_ptr(msg_send![self, name]) };
+impl NSObject for Id<NSString> {
+  fn ptr_to_self(&self) -> *mut c_void {
+    return self.0;
   }
+}
 
-  fn recommended_max_working_set_size(&self) -> u64 {
-    return unsafe { msg_send![self, recommendedMaxWorkingSetSize] };
-  }
+impl NSString for Id<NSString> { }
 
-  fn supports_feature_set(&self, feature_set: FeatureSet) -> bool {
-    return unsafe { msg_send![self, supportsFeatureSet: feature_set] };
-  }
+pub trait MTLDevice : NSObject {
+  forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
+  forward!(is_headless, sel!(isHeadless), () -> bool);
+  forward!(is_low_power, sel!(isLowPower), () -> bool);
+  forward!(max_threads_per_threadgroup, sel!(maxThreadsPerThreadgroup), () -> MTLSize);
+  forward!(name, sel!(name), () -> Id<NSString>);
+  forward!(recommended_max_working_set_size, sel!(recommendedMaxWorkingSetSize), () -> u64);
+  forward!(supports_feature_set, sel!(supportsFeatureSet:), (feature_set: FeatureSet) -> bool);
+  forward!(supports_texture_sample_count, sel!(supportsTextureSampleCount:), (i: usize) -> bool);
 
-  fn supports_texture_sample_count(&self, n: usize) -> bool {
-    return unsafe { msg_send![self, supportsTextureSampleCount: n] };
-  }
-
-  // Support methods
+  // Rust Helpers
 
   fn texture_sample_counts(&self) -> Vec<usize> {
     let mut result = Vec::new();
@@ -109,15 +188,65 @@ pub trait IDevice : INSObject {
   }
 }
 
-impl IDevice for Device { }
-
-#[cfg(test)]
-mod tests {
-  use super::Device;
-  use super::IDevice;
-
-  #[test]
-  fn it_finds_default_device() {
-    assert_eq!(Device::system_default().is_headless(), false);
+impl NSObject for Id<MTLDevice> {
+  fn ptr_to_self(&self) -> *mut c_void {
+    return self.0;
   }
 }
+
+impl MTLDevice for Id<MTLDevice> {}
+
+#[link(name = "Metal", kind = "framework")]
+extern {
+  fn MTLCopyAllDevices() -> *mut c_void;
+  fn MTLCreateSystemDefaultDevice() -> *mut c_void;
+}
+
+// #[allow(non_camel_case_types)]
+// pub enum FeatureSet {
+//   iOS_GPUFamily1_v1           = 00000,
+//   iOS_GPUFamily1_v2           = 00002,
+//   iOS_GPUFamily1_v3           = 00005,
+//   iOS_GPUFamily2_v1           = 00001,
+//   iOS_GPUFamily2_v2           = 00003,
+//   iOS_GPUFamily2_v3           = 00006,
+//   iOS_GPUFamily3_v1           = 00004,
+//   iOS_GPUFamily3_v2           = 00007,
+//   OSX_GPUFamily1_v1           = 10000,
+//   OSX_GPUFamily1_v2           = 10001,
+//   OSX_ReadWriteTextureTier2   = 10002,
+//   tvOS_GPUFamily1_v1          = 30000,
+//   tvOS_GPUFamily1_v2          = 30001
+// }
+//
+// #[repr(C)]
+// #[derive(Clone, Copy)]
+// pub struct Size {
+//     pub width: usize,
+//     pub height: usize,
+//     pub depth: usize
+// }
+//
+pub fn all_devices() -> Id<NSArray<MTLDevice>> {
+  unsafe {
+    return Id::new(MTLCopyAllDevices());
+  }
+}
+
+pub fn system_default_device() -> Id<MTLDevice> {
+  unsafe {
+    return Id::new(MTLCreateSystemDefaultDevice());
+  }
+}
+//
+// // ns_protocol!(MTLDevice, [NSObject], {
+// //   is_depth24_stencil8_pixel_format_supported(isDepth24Stencil8PixelFormatSupported, () -> bool),
+// //   is_headless(isHeadless, () -> bool),
+// //   is_low_power(isLowPower, () -> bool),
+// //   max_threads_per_threadgroup(maxThreadsPerThreadgroup, () -> MTLSize),
+// //   name(name, () -> NSString),
+// //   recommended_max_working_set_size(recommendedMaxWorkingSetSize, () -> u64),
+// //   supports_feature_set(supportsFeatureSet, (FeatureSet) -> bool),
+// //   supports_texture_sample_count(supportsTextureSampleCount, (usize) -> bool)
+// // })
+//

@@ -1,19 +1,17 @@
-extern crate objc_foundation;
 extern crate metal;
 
-use objc_foundation::{INSObject, INSArray, INSString};
+use metal::{Id, NSObject, NSArray, NSString, MTLDevice};
 
-use metal::IDevice;
-
-fn print_device_info(device: &metal::Device, default_device: bool) {
+fn print_device_info(device: &Id<MTLDevice>, default_device: bool) {
   println!("\tDevice name: {}{}", device.name().as_str(), if default_device { " (default)" } else { "" });
   println!("\tHeadless: {}", device.is_headless());
   println!("\tLow power: {}", device.is_low_power());
   println!("\tDepth 24 / Stencil 8: {}", device.is_depth24_stencil8_pixel_format_supported());
   println!("\tTexture sample counts: {:?}", device.texture_sample_counts());
-  
+  // println!("\tRecommended maximum working set size: {:?}", device.recommended_max_working_set_size()); 10.12+ only :C
+
   let max_tg_size = device.max_threads_per_threadgroup();
-  
+
   println!("\tMax threadgroup size: {} x {} x {}", max_tg_size.width, max_tg_size.height, max_tg_size.depth);
 
   println!("\tiOS GPUFamily1 v1: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily1_v1));
@@ -36,11 +34,11 @@ fn print_device_info(device: &metal::Device, default_device: bool) {
 }
 
 pub fn main() {
-  let devices = metal::Device::all();
-  let default_device = metal::Device::system_default();
+  let devices = metal::all_devices();
+  let default_device = metal::system_default_device();
 
-  println!("Devices ({} found)", devices.count());
+  println!("Devices ({} found)", devices.len());
   for device in devices.to_vec() {
-    print_device_info(&device, device.is_equal(&*default_device));
+    print_device_info(&device, default_device.is_equal_to(&device));
   }
 }
