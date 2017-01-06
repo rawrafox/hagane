@@ -12,6 +12,7 @@ use objc::runtime::Object;
 // pub mod core_graphics;
 // pub mod kit;
 
+#[export_macro]
 macro_rules! forward {
   ($fn_name:ident, $sel:expr, ($($name:ident : $arg_type:ty),*) -> $return_type:ty) => (
     fn $fn_name(&self, $($name: $arg_type),*) -> $return_type {
@@ -28,7 +29,7 @@ macro_rules! forward {
 }
 
 #[allow(non_camel_case_types)]
-pub enum FeatureSet {
+pub enum MTLFeatureSet {
   iOS_GPUFamily1_v1           = 00000,
   iOS_GPUFamily1_v2           = 00002,
   iOS_GPUFamily1_v3           = 00005,
@@ -170,7 +171,7 @@ pub trait MTLDevice : NSObject {
   forward!(max_threads_per_threadgroup, sel!(maxThreadsPerThreadgroup), () -> MTLSize);
   forward!(name, sel!(name), () -> Id<NSString>);
   forward!(recommended_max_working_set_size, sel!(recommendedMaxWorkingSetSize), () -> u64);
-  forward!(supports_feature_set, sel!(supportsFeatureSet:), (feature_set: FeatureSet) -> bool);
+  forward!(supports_feature_set, sel!(supportsFeatureSet:), (feature_set: MTLFeatureSet) -> bool);
   forward!(supports_texture_sample_count, sel!(supportsTextureSampleCount:), (i: usize) -> bool);
 
   // Rust Helpers
@@ -202,31 +203,6 @@ extern {
   fn MTLCreateSystemDefaultDevice() -> *mut c_void;
 }
 
-// #[allow(non_camel_case_types)]
-// pub enum FeatureSet {
-//   iOS_GPUFamily1_v1           = 00000,
-//   iOS_GPUFamily1_v2           = 00002,
-//   iOS_GPUFamily1_v3           = 00005,
-//   iOS_GPUFamily2_v1           = 00001,
-//   iOS_GPUFamily2_v2           = 00003,
-//   iOS_GPUFamily2_v3           = 00006,
-//   iOS_GPUFamily3_v1           = 00004,
-//   iOS_GPUFamily3_v2           = 00007,
-//   OSX_GPUFamily1_v1           = 10000,
-//   OSX_GPUFamily1_v2           = 10001,
-//   OSX_ReadWriteTextureTier2   = 10002,
-//   tvOS_GPUFamily1_v1          = 30000,
-//   tvOS_GPUFamily1_v2          = 30001
-// }
-//
-// #[repr(C)]
-// #[derive(Clone, Copy)]
-// pub struct Size {
-//     pub width: usize,
-//     pub height: usize,
-//     pub depth: usize
-// }
-//
 pub fn all_devices() -> Id<NSArray<MTLDevice>> {
   unsafe {
     return Id::new(MTLCopyAllDevices());
@@ -238,15 +214,3 @@ pub fn system_default_device() -> Id<MTLDevice> {
     return Id::new(MTLCreateSystemDefaultDevice());
   }
 }
-//
-// // ns_protocol!(MTLDevice, [NSObject], {
-// //   is_depth24_stencil8_pixel_format_supported(isDepth24Stencil8PixelFormatSupported, () -> bool),
-// //   is_headless(isHeadless, () -> bool),
-// //   is_low_power(isLowPower, () -> bool),
-// //   max_threads_per_threadgroup(maxThreadsPerThreadgroup, () -> MTLSize),
-// //   name(name, () -> NSString),
-// //   recommended_max_working_set_size(recommendedMaxWorkingSetSize, () -> u64),
-// //   supports_feature_set(supportsFeatureSet, (FeatureSet) -> bool),
-// //   supports_texture_sample_count(supportsTextureSampleCount, (usize) -> bool)
-// // })
-//

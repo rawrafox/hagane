@@ -14,23 +14,23 @@ fn print_device_info(device: &Id<MTLDevice>, default_device: bool) {
 
   println!("\tMax threadgroup size: {} x {} x {}", max_tg_size.width, max_tg_size.height, max_tg_size.depth);
 
-  println!("\tiOS GPUFamily1 v1: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily1_v1));
-  println!("\tiOS GPUFamily1 v2: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily1_v2));
-  println!("\tiOS GPUFamily1 v3: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily1_v3));
+  println!("\tiOS GPUFamily1 v1: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily1_v1));
+  println!("\tiOS GPUFamily1 v2: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily1_v2));
+  println!("\tiOS GPUFamily1 v3: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily1_v3));
 
-  println!("\tiOS GPUFamily2 v1: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily2_v1));
-  println!("\tiOS GPUFamily2 v2: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily2_v2));
-  println!("\tiOS GPUFamily2 v3: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily2_v3));
+  println!("\tiOS GPUFamily2 v1: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily2_v1));
+  println!("\tiOS GPUFamily2 v2: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily2_v2));
+  println!("\tiOS GPUFamily2 v3: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily2_v3));
 
-  println!("\tiOS GPUFamily3 v1: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily3_v1));
-  println!("\tiOS GPUFamily3 v2: {}", device.supports_feature_set(metal::FeatureSet::iOS_GPUFamily3_v2));
+  println!("\tiOS GPUFamily3 v1: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily3_v1));
+  println!("\tiOS GPUFamily3 v2: {}", device.supports_feature_set(metal::MTLFeatureSet::iOS_GPUFamily3_v2));
 
-  println!("\tOSX GPUFamily1 v1: {}", device.supports_feature_set(metal::FeatureSet::OSX_GPUFamily1_v1));
-  println!("\tOSX GPUFamily1 v2: {}", device.supports_feature_set(metal::FeatureSet::OSX_GPUFamily1_v2));
-  println!("\tOSX ReadWriteTexture Tier 2: {}", device.supports_feature_set(metal::FeatureSet::OSX_ReadWriteTextureTier2));
+  println!("\tOSX GPUFamily1 v1: {}", device.supports_feature_set(metal::MTLFeatureSet::OSX_GPUFamily1_v1));
+  println!("\tOSX GPUFamily1 v2: {}", device.supports_feature_set(metal::MTLFeatureSet::OSX_GPUFamily1_v2));
+  println!("\tOSX ReadWriteTexture Tier 2: {}", device.supports_feature_set(metal::MTLFeatureSet::OSX_ReadWriteTextureTier2));
 
-  println!("\ttvOS GPUFamily1 v1: {}", device.supports_feature_set(metal::FeatureSet::tvOS_GPUFamily1_v1));
-  println!("\ttvOS GPUFamily1 v2: {}", device.supports_feature_set(metal::FeatureSet::tvOS_GPUFamily1_v2));
+  println!("\ttvOS GPUFamily1 v1: {}", device.supports_feature_set(metal::MTLFeatureSet::tvOS_GPUFamily1_v1));
+  println!("\ttvOS GPUFamily1 v2: {}", device.supports_feature_set(metal::MTLFeatureSet::tvOS_GPUFamily1_v2));
 }
 
 pub fn main() {
