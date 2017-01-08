@@ -34,11 +34,11 @@ fn print_device_info(device: MTLDeviceID, default_device: bool) {
 }
 
 pub fn main() {
-  let devices = metal::all_devices();
+  let devices: Vec<MTLDeviceID> = metal::all_devices().to_vec();
   let default_device = metal::system_default_device();
 
   println!("Devices ({} found)", devices.len());
-  for device in devices.to_vec() {
-    print_device_info(device, default_device.is_equal_to(device));
+  for device in devices {
+    print_device_info(device.clone(), device.is_equal_to(default_device.clone()));
   }
 }

@@ -2,7 +2,7 @@
 
 #[macro_use] extern crate objc;
 
-#[macro_use] pub mod macros;
+#[macro_use] mod macros;
 
 pub mod cocoa;
 pub use cocoa::*;
@@ -37,4 +37,13 @@ pub trait ObjectiveC {
       panic!("Trying to convert nil into object")
     }
   }
+
+  #[inline] fn retain(self) -> Self where Self: 'static + Sized {
+    unsafe { msg_send![self.as_object(), retain] };
+
+    return self;
+  }
+
+  forward!(retain_count, sel!(retainCount), () -> usize);
+  forward!(release, sel!(release), () -> ());
 }

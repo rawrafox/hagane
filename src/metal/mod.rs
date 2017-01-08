@@ -3,7 +3,7 @@ use objc;
 
 use std::os::raw::c_void;
 
-use super::{CAMetalDrawable, NSArrayID, NSObject, NSErrorID, NSString, NSStringID};
+use super::{ObjectiveC, CAMetalDrawable, NSArrayID, NSObject, NSErrorID, NSString, NSStringID};
 
 #[link(name = "Metal", kind = "framework")]
 extern {
@@ -14,15 +14,32 @@ extern {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct MTLClearColor {
-    pub red: f64,
-    pub green: f64,
-    pub blue: f64,
-    pub alpha: f64
+  pub red: f64,
+  pub green: f64,
+  pub blue: f64,
+  pub alpha: f64
+}
+
+pub enum MTLCompareFunction {
+  MTLCompareFunctionNever = 0,
+  MTLCompareFunctionLess = 1,
+  MTLCompareFunctionEqual = 2,
+  MTLCompareFunctionLessEqual = 3,
+  MTLCompareFunctionGreater = 4,
+  MTLCompareFunctionNotEqual = 5,
+  MTLCompareFunctionGreaterEqual = 6,
+  MTLCompareFunctionAlways = 7
 }
 
 pub enum MTLCPUCacheMode {
   MTLCPUCacheModeDefaultCache = 0,
   MTLCPUCacheModeWriteCombined = 1
+}
+
+pub enum MTLCullMode {
+  MTLCullModeNone = 0,
+  MTLCullModeFront = 1,
+  MTLCullModeBack = 2,
 }
 
 #[allow(non_camel_case_types)]
@@ -43,6 +60,12 @@ pub enum MTLFeatureSet {
 }
 
 #[allow(non_camel_case_types)]
+pub enum MTLIndexType {
+  MTLIndexTypeUInt16 = 0,
+  MTLIndexTypeUInt32 = 1
+}
+
+#[allow(non_camel_case_types)]
 pub enum MTLPrimitiveType {
   MTLPrimitiveTypePoint = 0,
   MTLPrimitiveTypeLine = 1,
@@ -54,9 +77,9 @@ pub enum MTLPrimitiveType {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct MTLSize {
-    pub width: usize,
-    pub height: usize,
-    pub depth: usize
+  pub width: usize,
+  pub height: usize,
+  pub depth: usize
 }
 
 pub enum MTLStorageMode {
@@ -65,8 +88,13 @@ pub enum MTLStorageMode {
   MTLStorageModePrivate = 2
 }
 
+pub enum MTLWinding {
+  MTLWindingClockwise = 0,
+  MTLWindingCounterClockwise = 1,
+}
+
 pub trait MTLBuffer : NSObject {
-  
+  forward!(contents, sel!(contents), () -> *mut c_void);
 }
 
 id!(MTLBufferID, MTLBuffer);
@@ -76,7 +104,7 @@ impl NSObject for MTLBufferID {}
 pub trait MTLCommandBuffer : NSObject {
   forward!(commit, sel!(commit), () -> ());
   forward!(present_drawable, sel!(presentDrawable:), (drawable: T) -> (), <T: CAMetalDrawable>);
-  forward!(render_command_encoder_with_descriptor, sel!(renderCommandEncoderWithDescriptor:), (render_pass_descriptor: T) -> MTLCommandEncoderID, <T: MTLRenderPassDescriptor>);
+  forward!(render_command_encoder_with_descriptor, sel!(renderCommandEncoderWithDescriptor:), (render_pass_descriptor: T) -> MTLCommandEncoderID, <T: MTLRenderPassDescriptor>, retain);
 }
 
 id!(MTLCommandBufferID, MTLCommandBuffer);
@@ -85,7 +113,11 @@ impl NSObject for MTLCommandBufferID {}
 
 pub trait MTLCommandEncoder : NSObject {
   forward!(draw_primitives_vertex_start_vertex_count, sel!(drawPrimitives:vertexStart:vertexCount:), (primitive_type: MTLPrimitiveType, start: usize, count: usize) -> ());
+  forward!(draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset, sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type: MTLPrimitiveType, count: usize, index_type: MTLIndexType, index_buffer: T, offset: usize) -> (), <T: MTLBuffer>);
   forward!(end_encoding, sel!(endEncoding), () -> ());
+  forward!(set_cull_mode, sel!(setCullMode:), (mode: MTLCullMode) -> ());
+  forward!(set_depth_stencil_state, sel!(setDepthStencilState:), (state: T) -> (), <T: MTLDepthStencilState>);
+  forward!(set_front_facing_winding, sel!(setFrontFacingWinding:), (winding: MTLWinding) -> ());
   forward!(set_render_pipeline_state, sel!(setRenderPipelineState:), (pipeline_state: T) -> (), <T: MTLRenderPipelineState>);
   forward!(set_vertex_buffer_offset_at_index, sel!(setVertexBuffer:offset:atIndex:), (buffer: T, offset: usize, index: usize) -> (), <T: MTLBuffer>);
 }
@@ -95,21 +127,42 @@ id!(MTLCommandEncoderID, MTLCommandEncoder);
 impl NSObject for MTLCommandEncoderID {}
 
 pub trait MTLCommandQueue : NSObject {
-  forward!(command_buffer, sel!(commandBuffer), () -> MTLCommandBufferID);
+  forward!(command_buffer, sel!(commandBuffer), () -> MTLCommandBufferID, retain);
 }
 
 id!(MTLCommandQueueID, MTLCommandQueue);
 
 impl NSObject for MTLCommandQueueID {}
 
+pub trait MTLDepthStencilDescriptor : NSObject {
+  initializer!(init, sel!(init), ());
+
+  forward!(set_depth_compare_function, sel!(setDepthCompareFunction:), (compare_function: MTLCompareFunction) -> ());
+  forward!(set_depth_write_enabled, sel!(setDepthWriteEnabled:), (enabled: bool) -> ());
+}
+
+id!(MTLDepthStencilDescriptorID, MTLDepthStencilDescriptor, "MTLDepthStencilDescriptor");
+
+impl NSObject for MTLDepthStencilDescriptorID {}
+
+pub trait MTLDepthStencilState : NSObject {
+  
+}
+
+id!(MTLDepthStencilStateID, MTLDepthStencilState);
+
+impl NSObject for MTLDepthStencilStateID {}
+
 pub trait MTLDevice : NSObject {
   forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
   forward!(is_headless, sel!(isHeadless), () -> bool);
   forward!(is_low_power, sel!(isLowPower), () -> bool);
   forward!(max_threads_per_threadgroup, sel!(maxThreadsPerThreadgroup), () -> MTLSize);
-  forward!(name, sel!(name), () -> NSStringID);
+  forward!(name, sel!(name), () -> NSStringID, retain);
+  forward!(new_buffer_with_length_options, sel!(newBufferWithLength:options:), (length: usize, options: usize) -> MTLBufferID);
   forward!(new_buffer_with_bytes_length_options, sel!(newBufferWithBytes:length:options:), (bytes: *const c_void, length: usize, options: usize) -> MTLBufferID);
   forward!(new_command_queue, sel!(newCommandQueue), () -> MTLCommandQueueID);
+  forward!(new_depth_stencil_state_with_descriptor, sel!(newDepthStencilStateWithDescriptor:), (descriptor: T) -> MTLDepthStencilStateID, <T: MTLDepthStencilDescriptor>);
   forward!(recommended_max_working_set_size, sel!(recommendedMaxWorkingSetSize), () -> u64);
   forward!(supports_feature_set, sel!(supportsFeatureSet:), (feature_set: MTLFeatureSet) -> bool);
   forward!(supports_texture_sample_count, sel!(supportsTextureSampleCount:), (i: usize) -> bool);
@@ -144,7 +197,7 @@ pub trait MTLDevice : NSObject {
 
   // Rust Helpers
 
-  fn texture_sample_counts(&self) -> Vec<usize> where Self: Sized {
+  fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
     let mut result = Vec::new();
 
     for i in 1 .. 128 {
@@ -194,7 +247,7 @@ id!(MTLRenderPipelineColorAttachmentDescriptorID, MTLRenderPipelineColorAttachme
 impl NSObject for MTLRenderPipelineColorAttachmentDescriptorID {}
 
 pub trait MTLRenderPipelineColorAttachmentDescriptorArray : NSObject {
-  forward!(object_at_indexed_subscript, sel!(objectAtIndexedSubscript:), (i: usize) -> MTLRenderPipelineColorAttachmentDescriptorID);
+  forward!(object_at_indexed_subscript, sel!(objectAtIndexedSubscript:), (i: usize) -> MTLRenderPipelineColorAttachmentDescriptorID, retain);
 }
 
 id!(MTLRenderPipelineColorAttachmentDescriptorArrayID, MTLRenderPipelineColorAttachmentDescriptorArray, "MTLRenderPipelineColorAttachmentDescriptorArray");
@@ -202,8 +255,9 @@ id!(MTLRenderPipelineColorAttachmentDescriptorArrayID, MTLRenderPipelineColorAtt
 impl NSObject for MTLRenderPipelineColorAttachmentDescriptorArrayID {}
 
 pub trait MTLRenderPipelineDescriptor : NSObject {
-  forward!(color_attachments, sel!(colorAttachments), () -> MTLRenderPipelineColorAttachmentDescriptorArrayID);
-  forward!(init, sel!(init), () -> MTLRenderPipelineDescriptorID);
+  initializer!(init, sel!(init), ());
+
+  forward!(color_attachments, sel!(colorAttachments), () -> MTLRenderPipelineColorAttachmentDescriptorArrayID, retain);
   forward!(set_fragment_function, sel!(setFragmentFunction:), (function: T) -> (), <T: MTLFunction>);
   forward!(set_vertex_function, sel!(setVertexFunction:), (function: T) -> (), <T: MTLFunction>);
 }
@@ -228,6 +282,8 @@ pub fn all_devices() -> NSArrayID {
 
 pub fn system_default_device() -> MTLDeviceID {
   unsafe {
-    return MTLDeviceID::from_ptr(MTLCreateSystemDefaultDevice());
+    let device = MTLDeviceID::from_ptr(MTLCreateSystemDefaultDevice());
+
+    return device.retain();
   }
 }

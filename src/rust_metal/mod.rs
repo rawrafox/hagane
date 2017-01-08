@@ -37,9 +37,11 @@ impl RSMViewID {
         let renderer_ptr: &*mut i8 = this.get_ivar("renderer");
         let mut renderer = Box::from_raw(std::mem::transmute::<*mut i8, *mut Box<RSMRenderer>>(*renderer_ptr));
 
-        (**renderer).draw(view);
+        (**renderer).draw(view.clone());
 
         Box::into_raw(renderer);
+        
+        std::mem::forget(view);
       }
     }
 
@@ -59,10 +61,9 @@ impl RSMViewID {
   pub fn from_renderer<T: MTLDevice + 'static>(renderer: Box<RSMRenderer>, frame: CGRect, device: T) -> RSMViewID {
     let mut renderer = Box::new(renderer);
 
-    let view = RSMViewID::alloc();
-    view.init_with_frame_device(frame, device);
+    let view = RSMViewID::alloc().init_with_frame_device(frame, device);
 
-    (**renderer).initialize(view);
+    (**renderer).initialize(view.clone());
 
     unsafe {
       view.as_object().set_ivar("renderer", Box::into_raw(renderer) as *mut i8);

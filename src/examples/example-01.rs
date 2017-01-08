@@ -29,10 +29,9 @@ fn main() {
 
   let view = RSMViewID::from_renderer(Box::new(Example01Renderer { }), content_rect, metal::system_default_device());
 
-  let window = NSWindowID::alloc();
-  window.init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
+  let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 01"));
-  window.set_content_view(view);
+  window.set_content_view(view.clone());
   window.set_delegate(view);
   window.make_key_and_order_front(NSObjectID::nil());
 

@@ -15,7 +15,7 @@ static VERTICES: &'static [Vertex] = &[
 
 struct Example02Renderer {
   buffer: MTLBufferID,
-  pipeline: MTLRenderPipelineStateID
+  pipeline_state: MTLRenderPipelineStateID
 }
 
 impl RSMRenderer for Example02Renderer {
@@ -38,8 +38,7 @@ impl RSMRenderer for Example02Renderer {
     let vertex_function = library.new_function_with_name(NSStringID::from_str("vertex_main"));
     let fragment_function = library.new_function_with_name(NSStringID::from_str("fragment_main"));
 
-    let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc();
-    pipeline_descriptor.init();
+    let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
     pipeline_descriptor.set_vertex_function(vertex_function);
     pipeline_descriptor.set_fragment_function(fragment_function);
 
@@ -47,7 +46,7 @@ impl RSMRenderer for Example02Renderer {
     let color_attachment = color_attachments.object_at_indexed_subscript(0);
     color_attachment.set_pixel_format(80);
 
-    self.pipeline = match device.new_render_pipeline_state_with_descriptor(pipeline_descriptor) {
+    self.pipeline_state = match device.new_render_pipeline_state_with_descriptor(pipeline_descriptor) {
       Ok(p) => p,
       Err(_) => panic!("Error creating Metal pipeline")
     };
@@ -57,9 +56,9 @@ impl RSMRenderer for Example02Renderer {
     let command_queue = view.device().new_command_queue();
     let command_buffer = command_queue.command_buffer();
     let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
-    command_encoder.set_render_pipeline_state(self.pipeline);
-    command_encoder.set_vertex_buffer_offset_at_index(self.buffer, 0, 0);
-    command_encoder.draw_primitives_vertex_start_vertex_count(MTLPrimitiveType::MTLPrimitiveTypeTriangle, 0, 3);
+    command_encoder.set_render_pipeline_state(self.pipeline_state.clone());
+    command_encoder.set_vertex_buffer_offset_at_index(self.buffer.clone(), 0, 0);
+    command_encoder.draw_primitives_vertex_start_vertex_count(MTLPrimitiveType::MTLPrimitiveTypeTriangle, 0, VERTICES.len());
     command_encoder.end_encoding();
     command_buffer.present_drawable(view.current_drawable());
     command_buffer.commit();
@@ -73,15 +72,14 @@ fn main() {
 
   let renderer = Example02Renderer {
     buffer: MTLBufferID::nil(),
-    pipeline: MTLRenderPipelineStateID::nil()
+    pipeline_state: MTLRenderPipelineStateID::nil()
   };
 
   let view = RSMViewID::from_renderer(Box::new(renderer), content_rect, metal::system_default_device());
 
-  let window = NSWindowID::alloc();
-  window.init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 01"));
-  window.set_content_view(view);
+  let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
+  window.set_title(NSStringID::from_str("Metal Example 02"));
+  window.set_content_view(view.clone());
   window.set_delegate(view);
   window.make_key_and_order_front(NSObjectID::nil());
 

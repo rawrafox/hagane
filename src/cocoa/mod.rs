@@ -28,13 +28,13 @@ impl NSObject for NSApplicationID {}
 
 pub trait NSArray : NSObject {
   forward!(count, sel!(count), () -> usize);
-  forward!(object_at_index, sel!(objectAtIndex:), (i: usize) -> T, <T: ObjectiveC>);
+  forward!(object_at_index, sel!(objectAtIndex:), (i: usize) -> T, <T: ObjectiveC>, retain);
 
   // Rust Helpers
 
   forward!(len, sel!(count), () -> usize);
   
-  fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: Sized {
+  fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized {
     let n = self.count();
     let mut result = Vec::with_capacity(n);
 
@@ -86,13 +86,14 @@ pub enum NSStringEncoding {
 }
 
 pub trait NSString : ObjectiveC {
-  forward!(init_with_bytes_length_encoding, sel!(initWithBytes:length:encoding:), (bytes: *const std::os::raw::c_void, length: usize, encoding: NSStringEncoding) -> NSStringID);
+  initializer!(init_with_bytes_length_encoding, sel!(initWithBytes:length:encoding:), (bytes: *const std::os::raw::c_void, length: usize, encoding: NSStringEncoding));
+
   forward!(length_of_bytes_using_encoding, sel!(lengthOfBytesUsingEncoding:), (encoding: NSStringEncoding) -> usize);
   forward!(utf8_string, sel!(UTF8String), () -> *const u8);
 
   // Rust Helpers
 
-  fn as_str(&self) -> &str where Self: Sized {
+  fn as_str(&self) -> &str where Self: 'static + Sized {
     let bytes = self.utf8_string();
     let len = self.len();
 
@@ -103,7 +104,7 @@ pub trait NSString : ObjectiveC {
     }
   }
 
-  fn len(&self) -> usize where Self: Sized {
+  fn len(&self) -> usize where Self: 'static + Sized {
     return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
   }
 }
@@ -112,10 +113,9 @@ id!(NSStringID, NSString, "NSString");
 
 impl NSStringID {
   pub fn from_str(string: &str) -> NSStringID {
-    let result = Self::alloc();
     let bytes = string.as_ptr() as *const std::os::raw::c_void;
 
-    return result.init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
+    return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
   }
 }
 
@@ -129,7 +129,8 @@ id!(NSViewID, NSView, "NSView");
 impl NSObject for NSViewID {}
 
 pub trait NSWindow : NSObject {
-  forward!(init_with_content_rect_style_mask_backing_defer, sel!(initWithContentRect:styleMask:backing:defer:), (rect: CGRect, style_mask: usize, backing: usize, defer: bool) -> NSWindowID);
+  initializer!(init_with_content_rect_style_mask_backing_defer, sel!(initWithContentRect:styleMask:backing:defer:), (rect: CGRect, style_mask: usize, backing: usize, defer: bool));
+
   forward!(make_key_and_order_front, sel!(makeKeyAndOrderFront:), (sender: T) -> (), <T: ObjectiveC>);
   forward!(set_content_view, sel!(setContentView:), (view: T) -> (), <T: NSView>);
   forward!(set_delegate, sel!(setDelegate:), (delegate: T) -> (), <T: ObjectiveC>);
