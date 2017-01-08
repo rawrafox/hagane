@@ -120,7 +120,7 @@ module Bridge
     def prepare(node)
       @name = node["name"]
 
-      @inherits = node["inherits_mac"] || node["inherits"] || "ObjectiveC"
+      @inherits = node["inherits_mac"] || node["inherits"]
     end
 
     def prepare_child(node)
@@ -156,7 +156,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.block("pub trait #{self.name} : #{self.inherits}", pad: true) do |o|
+      o.block("pub trait #{self.name} : #{self.inherits || "ObjectiveC"}", pad: true) do |o|
         self.children.each { |c| c.to_rust(o) }
       end
       o.puts
@@ -166,7 +166,7 @@ module Bridge
         self.impl_for_self(o)
       end
       o.puts
-      o.puts("impl #{self.inherits} for #{self.name}ID {}")
+      o.puts("impl #{self.inherits} for #{self.name}ID {}") if self.inherits
       o.puts("impl #{self.name} for #{self.name}ID {}")
       o.puts
       o.block("impl Clone for #{self.name}ID") do |o|
@@ -325,14 +325,22 @@ module Bridge
       case node.name
       when "argument"
         Argument.new(node)
+      when "return"
+        Return.new(node)
       end
     end
 
     def to_rust(o)
+      generics = ["T0", "T1", "T2", "T3", "T4", "T5"]
+      
       arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
         case argument.kind
         when "protocol"
-          ["#{argument.name.underscore}: T", "T: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+          g = generics.pop
+
+          raise Exception, "ran out of generics" unless g
+
+          ["#{argument.name.underscore}: #{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
         when "type"
           ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
         else
@@ -340,12 +348,25 @@ module Bridge
         end
       end
 
+      return_values = self.children.select { |x| x.is_a? Return }.map do |return_value|
+        case return_value.kind
+        when "protocol"
+          [" -> #{return_value.protocol}", "#{return_value.protocol}ID"]
+        when "type"
+          [" -> #{return_value.type}", "#{return_value.type}"]
+        else
+          raise Exception, "unknown kind #{return_value.kind}"
+        end
+      end
+      
+      raise ArgumentError, "too many return values" if return_values.length > 1
+
       fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
       fn_args = (["self"] + arguments.map { |arg| arg[0] }).join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
-      return_value = ["", nil, "()"]
-      bounds_args = (arguments.map { |arg| arg[1] } + [return_value[1]]).compact.join(", ")
+      return_value = return_values[0] || ["", "()"]
+      bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
       o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value[0]} where Self: 'static + Sized", pad: true) do |o|
@@ -353,7 +374,7 @@ module Bridge
           o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
             o.puts("Err(s) => panic!(\"{}\", s),")
             o.block("Ok(r) =>") do |o|
-              o.puts("let result: #{return_value[2]} = r;")
+              o.puts("let result: #{return_value[1]} = r;")
               o.puts
               o.puts("return result;")
             end
@@ -462,6 +483,25 @@ module Bridge
     end
   end
 
+  class Return < Node
+    node "return"
+
+    attr_reader :kind, :protocol, :type
+
+    def prepare(node)
+      if node.has_attribute?('protocol')
+        @kind = 'protocol'
+        @protocol = node['protocol']
+      end
+
+      if node.has_attribute?('type')
+        raise ArgumentError, "multiple values defined" if @kind
+        @kind = 'type'
+        @type = node['type']
+      end
+    end
+  end
+
   class Use < Node
     attr_reader :use
 
@@ -479,12 +519,14 @@ module Bridge
       @node = node
     end
   end
+
+  def self.generate(from, output)
+    xml = Nokogiri::HTML.fragment(from).child
+
+    Bridge::Framework.new(xml).to_rust(output)
+  end
 end
 
-f = Bridge::Framework.new(Nokogiri::HTML.fragment(File.read(ARGV[0])).child)
-
-o = Bridge::Output.new(STDOUT)
-
-f.to_rust(o)
-
-puts
+if $0 == __FILE__
+  Bridge.generate(File.read(ARGV[0]), Bridge::Output.new(STDOUT))
+end

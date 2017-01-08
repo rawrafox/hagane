@@ -1,16 +1,10 @@
 use std;
 use objc;
 
-use super::{ObjectiveC, CGRect};
+use super::{ObjectiveC, CGRect, NSObject};
 
 pub type NSInteger = isize;
 pub type NSUInteger = usize;
-
-pub trait NSObject : ObjectiveC {
-  forward!(is_equal_to, sel!(isEqualTo:), (object: T) -> bool, <T: NSObject>);
-}
-
-id!(NSObjectID, NSObject, "NSObject");
 
 pub trait NSApplication : NSObject {
   forward!(run, sel!(run), () -> ());

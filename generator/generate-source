@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+load "#{__dir__}/objc-bridge-generator"
+
+Dir.glob("#{__dir__}/xml/*.xml") do |source|
+  target_dir = "#{File.dirname(__dir__)}/src/#{File.basename(source, ".xml")}"
+  target = "#{target_dir}/mod.rs"
+
+  puts "Generating #{target} from #{source}…"
+  FileUtils.mkdir_p(target_dir)
+  File.open(target, "w+") do |f|
+    Bridge.generate(File.read(source), Bridge::Output.new(f))
+  end
+end
+
+puts "Done!"

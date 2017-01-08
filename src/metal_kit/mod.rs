@@ -4,6 +4,7 @@ use super::ObjectiveC;
 use cocoa::*;
 use core_animation::*;
 use core_graphics::*;
+use foundation::*;
 use metal::*;
 
 #[link(name = "MetalKit", kind = "framework")]
@@ -525,7 +526,7 @@ unsafe impl objc::Encode for MTKViewID {
 }
 
 pub trait MTKViewDelegate : NSObject {
-  fn mtk_view_drawable_size_will_change<T: 'static + MTKView>(self, view: T, size: CGSize) where Self: 'static + Sized {
+  fn mtk_view_drawable_size_will_change<T5: 'static + MTKView>(self, view: T5, size: CGSize) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(mtkView:drawableSizeWillChange:), (view.as_ptr(), size)) {
         Err(s) => panic!("{}", s),
@@ -538,7 +539,7 @@ pub trait MTKViewDelegate : NSObject {
     }
   }
 
-  fn draw_in_mtk_view<T: 'static + MTKView>(self, view: T) where Self: 'static + Sized {
+  fn draw_in_mtk_view<T5: 'static + MTKView>(self, view: T5) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawInMTKView:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -606,4 +607,3 @@ unsafe impl objc::Encode for MTKViewDelegateID {
     return unsafe { objc::Encoding::from_str("@") };
   }
 }
-

@@ -13,6 +13,9 @@ pub use core_animation::*;
 pub mod core_graphics;
 pub use core_graphics::*;
 
+pub mod foundation;
+pub use foundation::*;
+
 pub mod metal;
 pub use metal::*;
 

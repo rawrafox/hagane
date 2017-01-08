@@ -39,6 +39,6 @@ pub fn main() {
 
   println!("Devices ({} found)", devices.len());
   for device in devices {
-    print_device_info(device.clone(), device.is_equal_to(default_device.clone()));
+    print_device_info(device.clone(), device.is_equal(default_device.clone()));
   }
 }

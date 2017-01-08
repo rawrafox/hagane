@@ -2,6 +2,7 @@
   <use>cocoa::*</use>
   <use>core_animation::*</use>
   <use>core_graphics::*</use>
+  <use>foundation::*</use>
   <use>metal::*</use>
 
   <extern framework="MetalKit" />
