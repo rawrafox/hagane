@@ -104,6 +104,8 @@ module Bridge
         Alias.new(node)
       when "class"
         Class.new(node)
+      when "enumeration"
+        Enumeration.new(node)
       when "extern"
         Extern.new(node)
       when "protocol"
@@ -130,7 +132,10 @@ module Bridge
     def prepare(node)
       @name = node["name"]
 
-      @inherits = node["inherits_mac"] || node["inherits"]
+      specific = node["inherits_mac"].try(:split, ",") || []
+      generic = node["inherits"].try(:split, ",") || []
+
+      @inherits = (specific + generic).map(&:strip)
     end
 
     def prepare_child(node)
@@ -167,7 +172,9 @@ module Bridge
     end
 
     def to_rust(o)
-      o.block("pub trait #{self.name} : #{self.inherits || "ObjectiveC"}", pad: true) do |o|
+      inheritance = self.inherits.length == 0 ? "ObjectiveC" : self.inherits.join(" + ")
+
+      o.block("pub trait #{self.name} : #{inheritance}", pad: true) do |o|
         self.children.each { |c| c.to_rust(o) }
         self.children.select { |x| x.is_a?(Script) && x.type == "trait" }.each do |script|
           o.puts
@@ -185,7 +192,9 @@ module Bridge
         end
       end
       o.puts
-      o.puts("impl #{self.inherits} for #{self.name}ID {}") if self.inherits
+      self.inherits.each do |inherit|
+        o.puts("impl #{inherit} for #{self.name}ID {}")
+      end
       o.puts("impl #{self.name} for #{self.name}ID {}")
       o.puts
       o.block("impl Clone for #{self.name}ID") do |o|
@@ -249,7 +258,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("pub type #{self.name} = #{self.type};", group: :alias)
+      o.puts("pub type #{self.name} = #{self.type};", group: "alias")
     end
   end
 
@@ -271,6 +280,40 @@ module Bridge
         raise ArgumentError, "multiple values defined" if @kind
         @kind = 'type'
         @type = node['type']
+      end
+    end
+  end
+
+  class Enumeration < Node
+    node "enumeration"
+
+    attr_reader :name, :type
+
+    def prepare(node)
+      @name = node['name']
+      @type = node['type']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "value"
+        Value.new(node)
+      end
+    end
+
+    def to_rust(o)
+      length = case self.type
+      when 'u64', 'NSUInteger' then 'u64' # TODO: People still make 32-bit apps
+      when 'u32' then 'u32'
+      when 'u16' then 'u16'
+      when 'u8' then 'u8'
+      else
+        raise ArgumentError, "unknown type #{self.type}"
+      end
+
+      o.puts("#[repr(#{length})]", pad: true, group: "enumeration")
+      o.block("pub enum #{self.name}") do |o|
+        self.children.each { |c| c.to_rust(o) }
       end
     end
   end
@@ -575,7 +618,20 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("use #{self.use};", group: :use)
+      o.puts("use #{self.use};", group: "use")
+    end
+  end
+
+  class Value < Node
+    attr_reader :name, :value
+
+    def prepare(node)
+      @name = node["name"]
+      @value = node["value"]
+    end
+
+    def to_rust(o)
+      o.puts("#{self.name} = #{self.value},")
     end
   end
 

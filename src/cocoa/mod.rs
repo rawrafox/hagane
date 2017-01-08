@@ -1,16 +1,70 @@
 use std;
 use objc;
+use super::ObjectiveC;
 
-use super::{ObjectiveC, CGRect, NSObject, NSString};
+use core_graphics::*;
+use foundation::*;
+
+pub type NSRect = CGRect;
+
+#[link(name = "Cocoa", kind = "framework")]
+extern {}
 
 pub trait NSApplication : NSObject {
-  forward!(run, sel!(run), () -> ());
-  forward!(terminate, sel!(terminate:), (sender: T) -> (), <T: ObjectiveC>);
+  fn run(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(run), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn terminate<T5: 'static + ObjectiveC>(&self, sender: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(terminate:), (sender.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
-id!(NSApplicationID, NSApplication, "NSApplication");
+pub struct NSApplicationID(*mut std::os::raw::c_void);
 
 impl NSApplicationID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSApplicationID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSApplicationID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSApplicationID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSApplication").unwrap();
+  }
+
   pub fn shared_application() -> Self {
     unsafe {
       return msg_send![NSApplicationID::class(), sharedApplication];
@@ -19,50 +73,337 @@ impl NSApplicationID {
 }
 
 impl NSObject for NSApplicationID {}
+impl NSApplication for NSApplicationID {}
 
-pub enum NSStringEncoding {
-  NSASCIIStringEncoding = 1,
-  NSNEXTSTEPStringEncoding = 2,
-  NSJapaneseEUCStringEncoding = 3,
-  NSUTF8StringEncoding = 4,
-  NSISOLatin1StringEncoding = 5,
-  NSSymbolStringEncoding = 6,
-  NSNonLossyASCIIStringEncoding = 7,
-  NSShiftJISStringEncoding = 8,
-  NSISOLatin2StringEncoding = 9,
-  NSUnicodeStringEncoding = 10,
-  NSWindowsCP1251StringEncoding = 11,
-  NSWindowsCP1252StringEncoding = 12,
-  NSWindowsCP1253StringEncoding = 13,
-  NSWindowsCP1254StringEncoding = 14,
-  NSWindowsCP1250StringEncoding = 15,
-  NSISO2022JPStringEncoding = 21,
-  NSMacOSRomanStringEncoding = 30,
+impl Clone for NSApplicationID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
 
-  NSUTF16BigEndianStringEncoding = 0x90000100,
-  NSUTF16LittleEndianStringEncoding = 0x94000100,
-
-  NSUTF32StringEncoding = 0x8c000100,
-  NSUTF32BigEndianStringEncoding = 0x98000100,
-  NSUTF32LittleEndianStringEncoding = 0x9c000100
+    return Self::from_ptr(ptr).retain();
+  }
 }
 
-pub trait NSView : ObjectiveC {
+impl Drop for NSApplicationID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
 }
 
-id!(NSViewID, NSView, "NSView");
+impl ObjectiveC for NSApplicationID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSApplicationID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSApplicationID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+pub trait NSView : NSObject {
+}
+
+pub struct NSViewID(*mut std::os::raw::c_void);
+
+impl NSViewID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSViewID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSViewID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSViewID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSView").unwrap();
+  }
+}
 
 impl NSObject for NSViewID {}
+impl NSView for NSViewID {}
 
-pub trait NSWindow : NSObject {
-  initializer!(init_with_content_rect_style_mask_backing_defer, sel!(initWithContentRect:styleMask:backing:defer:), (rect: CGRect, style_mask: usize, backing: usize, defer: bool));
+impl Clone for NSViewID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
 
-  forward!(make_key_and_order_front, sel!(makeKeyAndOrderFront:), (sender: T) -> (), <T: ObjectiveC>);
-  forward!(set_content_view, sel!(setContentView:), (view: T) -> (), <T: NSView>);
-  forward!(set_delegate, sel!(setDelegate:), (delegate: T) -> (), <T: ObjectiveC>);
-  forward!(set_title, sel!(setTitle:), (title: T) -> (), <T: NSString>);
+    return Self::from_ptr(ptr).retain();
+  }
 }
 
-id!(NSWindowID, NSWindow, "NSWindow");
+impl Drop for NSViewID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for NSViewID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSViewID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSViewID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+pub trait NSWindow : NSObject {
+  fn init_with_content_rect_style_mask_backing_defer(self, content_rect: NSRect, style: usize, buffering_type: usize, flag: bool) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithContentRect:styleMask:backing:defer:), (content_rect, style, buffering_type, flag)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn make_key_and_order_front<T5: 'static + ObjectiveC>(&self, sender: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(makeKeyAndOrderFront:), (sender.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn content_view(&self) -> NSViewID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(contentView), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSViewID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_content_view<T: 'static + ObjectiveC + NSView>(&self, content_view: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setContentView:), (content_view.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn delegate(&self) -> NSWindowDelegateID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(delegate), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSWindowDelegateID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_delegate<T: 'static + ObjectiveC + NSWindowDelegate>(&self, delegate: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDelegate:), (delegate.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn title(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(title), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_title<T: 'static + ObjectiveC + NSString>(&self, title: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setTitle:), (title.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct NSWindowID(*mut std::os::raw::c_void);
+
+impl NSWindowID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSWindowID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSWindowID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSWindowID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSWindow").unwrap();
+  }
+}
 
 impl NSObject for NSWindowID {}
+impl NSWindow for NSWindowID {}
+
+impl Clone for NSWindowID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for NSWindowID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for NSWindowID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSWindowID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSWindowID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+pub trait NSWindowDelegate : NSObject {
+}
+
+pub struct NSWindowDelegateID(*mut std::os::raw::c_void);
+
+impl NSWindowDelegateID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSWindowDelegateID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSWindowDelegateID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSWindowDelegateID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSWindowDelegate").unwrap();
+  }
+}
+
+impl NSObject for NSWindowDelegateID {}
+impl NSWindowDelegate for NSWindowDelegateID {}
+
+impl Clone for NSWindowDelegateID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for NSWindowDelegateID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for NSWindowDelegateID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSWindowDelegateID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSWindowDelegateID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}

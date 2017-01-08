@@ -13,7 +13,7 @@
   <!-- TODO: MTKMeshBufferAllocator -->
   <!-- TODO: MTKSubmesh -->
   <!-- TODO: MTKTextureLoader -->
-  <class name="MTKView" inherits_mac="NSView" inherits_ios="UIView">
+  <class name="MTKView" inherits_mac="NSView" inherits_ios="UIView" inherits="NSObject">
     <!-- Initialization -->
     <initializer selector="initWithCoder:">
       <argument name="coder" protocol="NSCoder" />
@@ -25,7 +25,7 @@
     </initializer>
 
     <!-- Delegate -->
-    <property name="delegate" protocol="MTKViewDelegate" weak />
+    <property name="delegate" protocol="MTKViewDelegate" />
     
     <!-- Device -->
     <property name="device" protocol="MTLDevice" />

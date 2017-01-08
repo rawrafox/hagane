@@ -11,7 +11,7 @@ use metal::*;
 #[link(name = "MetalKit", kind = "framework")]
 extern {}
 
-pub trait MTKView : NSView {
+pub trait MTKView : NSView + NSObject {
   fn init_with_coder<T: 'static + NSCoder>(self, coder: T) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithCoder:), (coder.as_ptr(),)) {
@@ -492,6 +492,7 @@ impl MTKViewID {
 }
 
 impl NSView for MTKViewID {}
+impl NSObject for MTKViewID {}
 impl MTKView for MTKViewID {}
 
 impl Clone for MTKViewID {

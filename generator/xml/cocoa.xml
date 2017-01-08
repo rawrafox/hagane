@@ -1,0 +1,43 @@
+<framework module="cocoa">
+  <use>core_graphics::*</use>
+  <use>foundation::*</use>
+
+  <alias name="NSRect" type="CGRect" />
+
+  <extern framework="Cocoa" />
+
+  <class name="NSApplication" inherits="NSObject">
+    <method selector="run" />
+    <method selector="terminate:">
+      <argument name="sender" protocol="ObjectiveC" />
+    </method>
+    
+    <script type="id">
+pub fn shared_application() -> Self {
+  unsafe {
+    return msg_send![NSApplicationID::class(), sharedApplication];
+  }
+}
+    </script>
+  </class>
+
+  <class name="NSView" inherits="NSObject" />
+  
+  <class name="NSWindow" inherits="NSObject">
+    <initializer selector="initWithContentRect:styleMask:backing:defer:">
+      <argument name="contentRect" type="NSRect" />
+      <argument name="style" type="usize" /> <!-- TODO: NSWindowStyleMask -->
+      <argument name="bufferingType" type="usize" /> <!-- TODO: NSBackingStoreType -->
+      <argument name="flag" type="bool" />
+    </initializer>
+    <method selector="makeKeyAndOrderFront:">
+      <argument name="sender" protocol="ObjectiveC" />
+    </method>
+    <property name="contentView" protocol="NSView" />
+    <property name="delegate" protocol="NSWindowDelegate" />
+    <property name="title" protocol="NSString" />
+    
+  </class>
+
+  <class name="NSWindowDelegate" inherits="NSObject" />
+</framework>

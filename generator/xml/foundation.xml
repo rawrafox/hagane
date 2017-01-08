@@ -1,6 +1,4 @@
 <framework module="foundation">
-  <use>cocoa::*</use>
-
   <extern framework="Foundation" />
   <!-- Foundation Data Types -->
   <!-- TODO: NSCalendarIdentifier -->
@@ -83,6 +81,38 @@
   <!-- TODO: NSURLUbiquitousItemDownloadingStatus -->
   <!-- TODO: NSValueTransformerName -->
   <!-- TODO: unichar -->
+
+  <!-- Enumerations -->
+  <!-- TODO: Missing -->
+
+  <enumeration name="NSStringEncoding" type="NSUInteger">
+    <value name="NSASCIIStringEncoding" value="1" />
+    <value name="NSNEXTSTEPStringEncoding" value="2" />
+    <value name="NSJapaneseEUCStringEncoding" value="3" />
+    <value name="NSUTF8StringEncoding" value="4" />
+    <value name="NSISOLatin1StringEncoding" value="5" />
+    <value name="NSSymbolStringEncoding" value="6" />
+    <value name="NSNonLossyASCIIStringEncoding" value="7" />
+    <value name="NSShiftJISStringEncoding" value="8" />
+    <value name="NSISOLatin2StringEncoding" value="9" />
+    <value name="NSUnicodeStringEncoding" value="10" />
+    <value name="NSWindowsCP1251StringEncoding" value="11" />
+    <value name="NSWindowsCP1252StringEncoding" value="12" />
+    <value name="NSWindowsCP1253StringEncoding" value="13" />
+    <value name="NSWindowsCP1254StringEncoding" value="14" />
+    <value name="NSWindowsCP1250StringEncoding" value="15" />
+    <value name="NSISO2022JPStringEncoding" value="21" />
+    <value name="NSMacOSRomanStringEncoding" value="30" />
+
+    <value name="NSUTF16BigEndianStringEncoding" value="0x90000100" />
+    <value name="NSUTF16LittleEndianStringEncoding" value="0x94000100" />
+
+    <value name="NSUTF32StringEncoding" value="0x8c000100" />
+    <value name="NSUTF32BigEndianStringEncoding" value="0x98000100" />
+    <value name="NSUTF32LittleEndianStringEncoding" value="0x9c000100" />
+  </enumeration>
+
+  <!-- TODO: More missing -->
 
   <!-- Classes -->
   <!-- TODO: NSAffineTransform -->

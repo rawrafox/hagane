@@ -4,7 +4,7 @@ use objc;
 use objc::declare::ClassDecl;
 use objc::runtime::{Object, Sel};
 
-use super::{ObjectiveC, CGRect, NSApplication, NSApplicationID, NSObject, NSObjectID, NSView, MTKView, MTKViewID, MTLDevice};
+use super::{ObjectiveC, CGRect, NSApplication, NSApplicationID, NSObject, NSObjectID, NSView, NSWindowDelegate, MTKView, MTKViewID, MTLDevice};
 
 pub trait RSMRenderer {
   fn initialize(&mut self, view: RSMViewID);
@@ -76,3 +76,4 @@ impl RSMViewID {
 impl NSObject for RSMViewID {}
 impl NSView for RSMViewID {}
 impl MTKView for RSMViewID {}
+impl NSWindowDelegate for RSMViewID {}
