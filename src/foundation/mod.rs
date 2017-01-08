@@ -1,10 +1,14 @@
 use std;
 use objc;
 use super::ObjectiveC;
+
 use cocoa::*;
 
 #[link(name = "Foundation", kind = "framework")]
 extern {}
+
+pub type NSInteger = isize;
+pub type NSUInteger = usize;
 
 pub trait NSArray : NSObject {
   fn count(&self) -> NSUInteger where Self: 'static + Sized {

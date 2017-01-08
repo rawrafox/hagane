@@ -13,9 +13,17 @@ module Bridge
       @n_indent = 0
       @indent = "  "
       @pre_padded = true
+      @last_group = nil
     end
 
-    def puts(line = nil, comment: nil, pad: false)
+    def puts(line = nil, comment: nil, pad: false, group: nil)
+      if group
+        if @last_group != group
+          @last_group = group
+          @stream.puts
+        end
+      end
+
       if pad
         if @pre_padded
           @pre_padded = false
@@ -92,6 +100,8 @@ module Bridge
 
     def prepare_child(node)
       case node.name
+      when "alias"
+        Alias.new(node)
       when "class"
         Class.new(node)
       when "extern"
@@ -225,6 +235,21 @@ module Bridge
       o.block("pub fn class() -> &'static objc::runtime::Class") do |o|
         o.puts("return objc::runtime::Class::get(\"#{self.name}\").unwrap();")
       end
+    end
+  end
+
+  class Alias < Node
+    node "alias"
+
+    attr_reader :name, :type
+
+    def prepare(node)
+      @name = node['name']
+      @type = node['type']
+    end
+
+    def to_rust(o)
+      o.puts("pub type #{self.name} = #{self.type};", group: :alias)
     end
   end
 
@@ -369,9 +394,9 @@ module Bridge
           [" -> #{type_name}", nil, type_name]
         when "generic"
           g = generics.pop
-          
+
           raise Exception, "ran out of generics" unless g
-          
+
           [" -> #{g}", "#{g}: 'static + #{return_value.generic}", g]
         else
           raise Exception, "unknown kind #{return_value.kind}"
@@ -550,7 +575,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts "use #{self.use};"
+      o.puts("use #{self.use};", group: :use)
     end
   end
 

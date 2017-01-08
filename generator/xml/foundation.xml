@@ -2,6 +2,87 @@
   <use>cocoa::*</use>
 
   <extern framework="Foundation" />
+  <!-- Foundation Data Types -->
+  <!-- TODO: NSCalendarIdentifier -->
+  <!-- TODO: NSDistributedNotificationCenterType -->
+  <!-- TODO: NSFileAttributeKey -->
+  <!-- TODO: NSFileAttributeType -->
+  <!-- TODO: NSFileProtectionType -->
+  <!-- TODO: NSHTTPCookiePropertyKey -->
+  <!-- TODO: NSKeyValueOperator -->
+  <!-- TODO: NSLocaleKey -->
+  <!-- TODO: NSAppleEventManagerSuspensionID -->
+  <!-- TODO: NSBackgroundActivityCompletionHandler -->
+  <!-- TODO: NSComparator -->
+  <!-- TODO: NSDecimal -->
+  <!-- TODO: NSErrorDomain -->
+  <!-- TODO: NSExceptionName -->
+  <!-- TODO: NSHashEnumerator -->
+  <!-- TODO: NSHashTable -->
+  <!-- TODO: NSHashTableCallBacks -->
+  <!-- TODO: NSHashTableOptions -->
+
+  <alias name="NSInteger" type="isize" />
+
+  <!-- TODO: NSItemProviderCompletionHandler -->
+  <!-- TODO: NSItemProviderLoadHandler -->
+  <!-- TODO: NSKeyValueChangeKey -->
+  <!-- TODO: NSMapEnumerator -->
+  <!-- TODO: NSMapTable -->
+  <!-- TODO: NSMapTableKeyCallBacks -->
+  <!-- TODO: NSMapTableOptions -->
+  <!-- TODO: NSMapTableValueCallBacks -->
+  <!-- TODO: NSNotificationName -->
+  <!-- TODO: NSPoint -->
+  <!-- TODO: NSPointArray -->
+  <!-- TODO: NSPointPointer -->
+  <!-- TODO: NSProgressPublishingHandler -->
+  <!-- TODO: NSProgressUnpublishingHandler -->
+  <!-- TODO: NSPropertyListReadOptions -->
+  <!-- TODO: NSPropertyListWriteOptions -->
+  <!-- TODO: NSRange -->
+  <!-- TODO: NSRangePointer -->
+  <!-- TODO: NSRect -->
+  <!-- TODO: NSRectArray -->
+  <!-- TODO: NSRectPointer -->
+  <!-- TODO: NSSize -->
+  <!-- TODO: NSSizeArray -->
+  <!-- TODO: NSSizePointer -->
+  <!-- TODO: NSSocketNativeHandle -->
+  <!-- TODO: NSStringEncoding -->
+  <!-- TODO: NSSwappedDouble -->
+  <!-- TODO: NSSwappedFloat -->
+  <!-- TODO: NSTextCheckingTypes -->
+  <!-- TODO: NSTimeInterval -->
+
+  <alias name="NSUInteger" type="usize" />
+
+  <!-- TODO: NSURLBookmarkFileCreationOptions -->
+  <!-- TODO: NSUncaughtExceptionHandler -->
+  <!-- TODO: NSUncaughtExceptionHandler -->
+  <!-- TODO: NSUserAppleScriptTaskCompletionHandler -->
+  <!-- TODO: NSUserAutomatorTaskCompletionHandler -->
+  <!-- TODO: NSUserScriptTaskCompletionHandler -->
+  <!-- TODO: NSUserUnixTaskCompletionHandler -->
+  <!-- TODO: NSZone -->
+  <!-- TODO: NSProgressFileOperationKind -->
+  <!-- TODO: NSProgressKind -->
+  <!-- TODO: NSProgressUserInfoKey -->
+  <!-- TODO: NSRunLoopMode -->
+  <!-- TODO: NSStreamPropertyKey -->
+  <!-- TODO: NSStreamNetworkServiceTypeValue -->
+  <!-- TODO: NSStreamSOCKSProxyConfiguration -->
+  <!-- TODO: NSStreamSOCKSProxyVersion -->
+  <!-- TODO: NSStreamSocketSecurityLevel -->
+  <!-- TODO: NSStringEncodingDetectionOptionsKey -->
+  <!-- TODO: NSStringTransform -->
+  <!-- TODO: NSURLFileProtectionType -->
+  <!-- TODO: NSURLFileResourceType -->
+  <!-- TODO: NSURLResourceKey -->
+  <!-- TODO: NSURLThumbnailDictionaryItem -->
+  <!-- TODO: NSURLUbiquitousItemDownloadingStatus -->
+  <!-- TODO: NSValueTransformerName -->
+  <!-- TODO: unichar -->
 
   <!-- Classes -->
   <!-- TODO: NSAffineTransform -->
@@ -9,7 +90,7 @@
   <!-- TODO: NSAppleEventManager -->
   <!-- TODO: NSAppleScript -->
   <!-- TODO: NSArchiver -->
-  
+
   <class name="NSArray" inherits="NSObject">
     <!-- TODO: Loads missing -->
 
@@ -46,7 +127,7 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
 }
     </script>
   </class>
-  
+
   <!-- TODO: NSAssertionHandler -->
   <!-- TODO: NSAttributedString -->
   <!-- TODO: NSAutoreleasePool -->

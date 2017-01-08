@@ -3,9 +3,6 @@ use objc;
 
 use super::{ObjectiveC, CGRect, NSObject, NSString};
 
-pub type NSInteger = isize;
-pub type NSUInteger = usize;
-
 pub trait NSApplication : NSObject {
   forward!(run, sel!(run), () -> ());
   forward!(terminate, sel!(terminate:), (sender: T) -> (), <T: ObjectiveC>);
