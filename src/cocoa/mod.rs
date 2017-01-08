@@ -3,6 +3,9 @@ use objc;
 
 use super::{ObjectiveC, CGRect};
 
+pub type NSInteger = isize;
+pub type NSUInteger = usize;
+
 pub trait NSObject : ObjectiveC {
   forward!(is_equal_to, sel!(isEqualTo:), (object: T) -> bool, <T: NSObject>);
 }
@@ -49,6 +52,14 @@ pub trait NSArray : NSObject {
 id!(NSArrayID, NSArray, "NSArray");
 
 impl NSObject for NSArrayID {}
+
+pub trait NSCoder : NSObject {
+  
+}
+
+id!(NSCoderID, NSCoder);
+
+impl NSObject for NSCoderID {}
 
 pub trait NSError : NSObject {
   

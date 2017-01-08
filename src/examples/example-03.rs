@@ -46,8 +46,8 @@ struct Example03Renderer {
 
 impl RSMRenderer for Example03Renderer {
   fn initialize(&mut self, view: RSMViewID) {
-    view.set_color_pixel_format(80); // MTLPixelFormatBGRA8Unorm
-    view.set_depth_stencil_pixel_format(252); // MTLPixelFormatDepth32Float
+    view.set_color_pixel_format(MTLPixelFormat::MTLPixelFormatBGRA8Unorm);
+    view.set_depth_stencil_pixel_format(MTLPixelFormat::MTLPixelFormatDepth32Float);
 
     view.set_preferred_frames_per_second(60);
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
