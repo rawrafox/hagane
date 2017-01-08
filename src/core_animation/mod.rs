@@ -1,10 +1,63 @@
 use std;
 use objc;
+use super::ObjectiveC;
 
-use super::NSObject;
+use foundation::*;
 
-pub trait CAMetalDrawable : NSObject {}
+pub trait CAMetalDrawable : NSObject {
+}
 
-id!(CAMetalDrawableID, CAMetalDrawable);
+pub struct CAMetalDrawableID(*mut std::os::raw::c_void);
+
+impl CAMetalDrawableID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return CAMetalDrawableID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return CAMetalDrawableID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return CAMetalDrawableID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+}
 
 impl NSObject for CAMetalDrawableID {}
+impl CAMetalDrawable for CAMetalDrawableID {}
+
+impl Clone for CAMetalDrawableID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for CAMetalDrawableID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for CAMetalDrawableID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return CAMetalDrawableID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for CAMetalDrawableID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}

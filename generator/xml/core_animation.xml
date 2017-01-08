@@ -1,0 +1,5 @@
+<framework module="cocoa">
+  <use>foundation::*</use>
+
+  <protocol name="CAMetalDrawable" inherits="NSObject" />
+</framework>
