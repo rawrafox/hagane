@@ -1,0 +1,490 @@
+#!/usr/bin/env ruby
+
+require "active_support"
+require "active_support/core_ext"
+require "nokogiri"
+
+module Bridge
+  class Output
+    attr_accessor :indent
+
+    def initialize(stream)
+      @stream = stream
+      @n_indent = 0
+      @indent = "  "
+      @pre_padded = true
+    end
+
+    def puts(line = nil, comment: nil, pad: false)
+      if pad
+        if @pre_padded
+          @pre_padded = false
+        else
+          @stream.puts
+        end
+      end
+
+      if line
+        line = line + " // #{comment}" if comment
+        @stream.puts(@indent * @n_indent + line)
+      else
+        @stream.puts(comment ? "#{@indent * @n_indent}// #{comment}" : '')
+      end
+    end
+
+    def indent
+      @n_indent += 1
+      yield self
+      @n_indent -= 1
+    end
+
+    def block(line, comment: nil, pad: false, &block)
+      self.puts(line + ' {', comment: comment, pad: pad)
+      old, @pre_padded = @pre_padded, true
+      self.indent(&block)
+      @pre_padded = old
+      self.puts("}\n")
+    end
+  end
+
+  class Node
+    def initialize(node)
+      if class_node_name = self.class.node
+        unless class_node_name == node.name
+          raise ArgumentError, "expected node name '#{class_node_name}' but got '#{node.name}'"
+        end
+      end
+
+      self.prepare(node)
+
+      children = node.children.map do |child|
+        self.prepare_child(child)
+      end.compact
+
+      @children = children if children.length > 0
+    end
+
+    def children
+      @children || []
+    end
+
+    def prepare_child(_)
+    end
+
+    def to_rust(_)
+    end
+
+    def self.node(value = nil)
+      if value
+        @node = value
+      else
+        @node
+      end
+    end
+  end
+
+  class Framework < Node
+    node "framework"
+
+    def prepare(node)
+      @module = node['module']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "class"
+        Class.new(node)
+      when "extern"
+        Extern.new(node)
+      when "protocol"
+        Protocol.new(node)
+      when "use"
+        Use.new(node)
+      end
+    end
+
+    def to_rust(o)
+      o.puts("use std;", pad: true)
+      o.puts("use objc;")
+      o.puts("use super::ObjectiveC;")
+
+      self.children.each { |c| c.to_rust(o) }
+    end
+  end
+
+  class Protocol < Node
+    node "protocol"
+
+    attr_reader :name, :inherits
+
+    def prepare(node)
+      @name = node["name"]
+
+      @inherits = node["inherits_mac"] || node["inherits"] || "ObjectiveC"
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "inherits"
+      when "initializer"
+        Initializer.new(node)
+      when "method"
+        Method.new(node)
+      when "property"
+        Property.new(node)
+      when "text"
+        Text.new(node)
+      end
+    end
+
+    def impl_for_self(o)
+      o.block("pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self") do |o|
+        o.puts("return #{self.name}ID(ptr);")
+      end
+      o.puts
+      o.block("pub fn from_object(obj: &mut objc::runtime::Object) -> Self") do |o|
+        o.puts("return #{self.name}ID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);")
+      end
+      o.puts
+      o.block("pub fn nil() -> Self") do |o|
+        o.puts("return #{self.name}ID(0 as *mut std::os::raw::c_void);")
+      end
+      o.puts
+      o.block("pub fn is_nil(&self) -> bool") do |o|
+        o.puts("return self.0 as usize == 0;")
+      end
+    end
+
+    def to_rust(o)
+      o.block("pub trait #{self.name} : #{self.inherits}", pad: true) do |o|
+        self.children.each { |c| c.to_rust(o) }
+      end
+      o.puts
+      o.puts("pub struct #{self.name}ID(*mut std::os::raw::c_void);")
+      o.puts
+      o.block("impl #{self.name}ID") do |o|
+        self.impl_for_self(o)
+      end
+      o.puts
+      o.puts("impl #{self.inherits} for #{self.name}ID {}")
+      o.puts("impl #{self.name} for #{self.name}ID {}")
+      o.puts
+      o.block("impl Clone for #{self.name}ID") do |o|
+        o.block("fn clone(&self) -> Self") do |o|
+          o.puts "let ptr = self.as_ptr();"
+          o.puts
+          o.puts "return Self::from_ptr(ptr).retain();"
+        end
+      end
+      o.puts
+      o.block("impl Drop for #{self.name}ID") do |o|
+        o.block("fn drop(&mut self)") do |o|
+          o.block("if !self.is_nil()") do |o|
+            o.puts "self.release();"
+          end
+        end
+      end
+      o.puts
+      o.block("impl ObjectiveC for #{self.name}ID") do |o|
+        o.block("fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self") do |o|
+          o.puts("return #{self.name}ID::from_ptr(ptr);")
+        end
+        o.puts
+        o.block("fn as_ptr(&self) -> *mut std::os::raw::c_void") do |o|
+          o.puts("return self.0;")
+        end
+      end
+      o.puts
+      o.block("unsafe impl objc::Encode for #{self.name}ID") do |o|
+        o.block("fn encode() -> objc::Encoding") do |o|
+          o.puts("return unsafe { objc::Encoding::from_str(\"@\") };")
+        end
+      end
+    end
+  end
+
+  class Class < Protocol
+    node "class"
+
+    def impl_for_self(o)
+      super(o)
+      o.puts
+      o.block("pub fn alloc() -> Self") do |o|
+        o.puts("return unsafe { msg_send![Self::class(), alloc] };")
+      end
+      o.puts
+      o.block("pub fn class() -> &'static objc::runtime::Class") do |o|
+        o.puts("return objc::runtime::Class::get(\"#{self.name}\").unwrap();")
+      end
+    end
+  end
+
+  class Argument < Node
+    node "argument"
+
+    attr_reader :name
+    attr_reader :kind, :protocol, :type
+
+    def prepare(node)
+      @name = node['name']
+      
+      if node.has_attribute?('protocol')
+        @kind = 'protocol'
+        @protocol = node['protocol']
+      end
+
+      if node.has_attribute?('type')
+        raise ArgumentError, "multiple values defined" if @kind
+        @kind = 'type'
+        @type = node['type']
+      end
+    end
+  end
+
+  class Extern < Node
+    node "extern"
+
+    attr_reader :framework
+
+    def prepare(node)
+      @framework = node['framework']
+    end
+
+    def to_rust(o)
+      o.puts("#[link(name = \"#{self.framework}\", kind = \"framework\")]", pad: true)
+      if self.children.length > 0
+        o.block("extern") do |o|
+          self.children.each { |c| c.to_rust(o) }
+        end
+      else
+        o.puts("extern {}")
+      end
+    end
+  end
+
+  class Initializer < Node
+    node "initializer"
+
+    attr_reader :selector
+
+    def prepare(node)
+      @selector = node['selector']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "argument"
+        Argument.new(node)
+      end
+    end
+
+    def to_rust(o)
+      arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
+        case argument.kind
+        when "protocol"
+          ["#{argument.name.underscore}: T", "T: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+        when "type"
+          ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
+        else
+          raise Exception, "unknown kind #{argument.kind}"
+        end
+      end
+
+      fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
+      fn_args = (["self"] + arguments.map { |arg| arg[0] }).join(", ")
+      msg_args = arguments.map { |arg| arg[2] }
+      msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
+      bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
+      bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
+
+      o.block("fn #{fn_name}#{bounds_args}(#{fn_args}) -> Self where Self: 'static + Sized", pad: true) do |o|
+        o.block("unsafe") do |o|
+          o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
+            o.puts("Err(s) => panic!(\"{}\", s),")
+            o.block("Ok(result) =>") do |o|
+              o.puts("std::mem::forget(self);")
+              o.puts
+              o.puts("return result;")
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  class Method < Node
+    node "method"
+    
+    attr_reader :selector
+
+    def prepare(node)
+      @selector = node['selector']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "argument"
+        Argument.new(node)
+      end
+    end
+
+    def to_rust(o)
+      arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
+        case argument.kind
+        when "protocol"
+          ["#{argument.name.underscore}: T", "T: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+        when "type"
+          ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
+        else
+          raise Exception, "unknown kind #{argument.kind}"
+        end
+      end
+
+      fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
+      fn_args = (["self"] + arguments.map { |arg| arg[0] }).join(", ")
+      msg_args = arguments.map { |arg| arg[2] }
+      msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
+      return_value = ["", nil, "()"]
+      bounds_args = (arguments.map { |arg| arg[1] } + [return_value[1]]).compact.join(", ")
+      bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
+
+      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value[0]} where Self: 'static + Sized", pad: true) do |o|
+        o.block("unsafe") do |o|
+          o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
+            o.puts("Err(s) => panic!(\"{}\", s),")
+            o.block("Ok(r) =>") do |o|
+              o.puts("let result: #{return_value[2]} = r;")
+              o.puts
+              o.puts("return result;")
+            end
+          end
+        end
+      end
+    end
+  end
+
+  class Property < Node
+    node "property"
+
+    attr_reader :name
+    attr_reader :kind, :protocol, :type
+    attr_reader :getter, :setter
+
+    def read_only?
+      @read_only
+    end
+    
+    def weak?
+      @weak
+    end
+
+    def prepare(node)
+      @name = node['name']
+
+      if node.has_attribute?('protocol')
+        @kind = 'protocol'
+        @protocol = node['protocol']
+      end
+
+      if node.has_attribute?('type')
+        raise ArgumentError, "multiple values defined" if @kind
+        @kind = 'type'
+        @type = node['type']
+      end
+
+      raise ArgumentError, "no value defined" unless @kind
+
+      @read_only = true if node.has_attribute?('read-only')
+      @weak = true if node.has_attribute?('weak')
+
+      @getter = node['getter'] || @name
+      @setter = node['setter'] || "set#{@name.upcase_first}"
+
+    end
+
+    def to_rust(o)
+      case self.kind
+      when "type"
+        o.block("fn #{self.getter.underscore}(&self) -> #{self.type} where Self: 'static + Sized", pad: true) do |o|
+          o.block("unsafe") do |o|
+            o.puts("let target = self.as_object();")
+            o.puts
+            o.block("return match objc::__send_message(target, sel!(#{self.getter}), ())") do |o|
+              o.puts("Err(s) => panic!(\"{}\", s),")
+              o.puts("Ok(r) => r")
+            end
+          end
+        end
+        unless self.read_only?
+          o.puts
+          o.block("fn #{self.setter.underscore}(&self, #{self.name.underscore}: #{self.type}) where Self: 'static + Sized") do |o|
+            o.block("unsafe") do |o|
+              o.puts("let target = self.as_object();")
+              o.puts
+              o.block("return match objc::__send_message(target, sel!(#{self.setter}:), (#{self.name.underscore},))") do |o|
+                o.puts("Err(s) => panic!(\"{}\", s),")
+                o.puts("Ok(()) => ()")
+              end
+            end
+          end
+        end
+      when "protocol"
+        o.block("fn #{self.getter.underscore}(&self) -> #{self.protocol}ID where Self: 'static + Sized", pad: true) do |o|
+          o.block("unsafe") do |o|
+            o.puts("let target = self.as_object();")
+            o.puts
+            o.block("match objc::__send_message(target, sel!(#{self.getter}), ())") do |o|
+              o.puts("Err(s) => panic!(\"{}\", s),")
+              o.block("Ok(r) =>") do |o|
+                o.puts("let r: #{self.protocol}ID = r;")
+                o.puts
+                o.puts("return r.retain();")
+              end
+            end
+          end
+        end
+        unless self.read_only?
+          o.puts
+          o.block("fn #{self.setter.underscore}<T: 'static + ObjectiveC + #{self.protocol}>(&self, #{self.name.underscore}: T) where Self: 'static + Sized") do |o|
+            o.block("unsafe") do |o|
+              o.puts("let target = self.as_object();")
+              o.puts
+              o.block("return match objc::__send_message(target, sel!(#{self.setter}:), (#{self.name.underscore}.as_ptr(),))") do |o|
+                o.puts("Err(s) => panic!(\"{}\", s),")
+                o.puts("Ok(()) => ()")
+              end
+            end
+          end
+        end
+      else
+        raise Exception, "unknown kind #{self.kind}"
+      end
+    end
+  end
+
+  class Use < Node
+    attr_reader :use
+
+    def prepare(node)
+      @use = node.text
+    end
+
+    def to_rust(o)
+      o.puts "use #{self.use};"
+    end
+  end
+
+  class Text < Node
+    def prepare(node)
+      @node = node
+    end
+  end
+end
+
+f = Bridge::Framework.new(Nokogiri::HTML.fragment(File.read(ARGV[0])).child)
+
+o = Bridge::Output.new(STDOUT)
+
+f.to_rust(o)
+
+puts

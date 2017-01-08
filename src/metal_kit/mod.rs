@@ -36,6 +36,32 @@ pub trait MTKView : NSView {
     }
   }
 
+  fn delegate(&self) -> MTKViewDelegateID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(delegate), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTKViewDelegateID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_delegate<T: 'static + ObjectiveC + MTKViewDelegate>(&self, delegate: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDelegate:), (delegate.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
   fn device(&self) -> MTLDeviceID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -305,6 +331,19 @@ pub trait MTKView : NSView {
     }
   }
 
+  fn draw(self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(draw), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn auto_resize_drawable(&self) -> bool where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -407,6 +446,19 @@ pub trait MTKView : NSView {
       }
     }
   }
+
+  fn release_drawables(self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(releaseDrawables), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
 pub struct MTKViewID(*mut std::os::raw::c_void);
@@ -467,6 +519,89 @@ impl ObjectiveC for MTKViewID {
 }
 
 unsafe impl objc::Encode for MTKViewID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+pub trait MTKViewDelegate : NSObject {
+  fn mtk_view_drawable_size_will_change<T: 'static + MTKView>(self, view: T, size: CGSize) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(mtkView:drawableSizeWillChange:), (view.as_ptr(), size)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn draw_in_mtk_view<T: 'static + MTKView>(self, view: T) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(drawInMTKView:), (view.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+}
+
+pub struct MTKViewDelegateID(*mut std::os::raw::c_void);
+
+impl MTKViewDelegateID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKViewDelegateID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKViewDelegateID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKViewDelegateID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+}
+
+impl NSObject for MTKViewDelegateID {}
+impl MTKViewDelegate for MTKViewDelegateID {}
+
+impl Clone for MTKViewDelegateID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKViewDelegateID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for MTKViewDelegateID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKViewDelegateID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKViewDelegateID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
   }

@@ -1,0 +1,79 @@
+<framework module="metal_kit">
+  <use>cocoa::*</use>
+  <use>core_animation::*</use>
+  <use>core_graphics::*</use>
+  <use>metal::*</use>
+
+  <extern framework="MetalKit" />
+
+  <!-- Classes -->
+  <!-- TODO: MTKMesh -->
+  <!-- TODO: MTKMeshBuffer -->
+  <!-- TODO: MTKMeshBufferAllocator -->
+  <!-- TODO: MTKSubmesh -->
+  <!-- TODO: MTKTextureLoader -->
+  <class name="MTKView" inherits_mac="NSView" inherits_ios="UIView">
+    <!-- Initialization -->
+    <initializer selector="initWithCoder:">
+      <argument name="coder" protocol="NSCoder" />
+    </initializer>
+    
+    <initializer selector="initWithFrame:device:">
+      <argument name="frameRect" type="CGRect" />
+      <argument name="device" protocol="MTLDevice" />
+    </initializer>
+
+    <!-- Delegate -->
+    <property name="delegate" protocol="MTKViewDelegate" weak />
+    
+    <!-- Device -->
+    <property name="device" protocol="MTLDevice" />
+
+    <!-- Configuring the Render Target Properties -->
+    <property name="clearColor" type="MTLClearColor" />
+    <property name="clearDepth" type="f64" />
+    <property name="clearStencil" type="u32" />
+    <property name="colorPixelFormat" type="MTLPixelFormat" />
+    <property name="depthStencilPixelFormat" type="MTLPixelFormat" />
+    <property name="sampleCount" type="NSUInteger" />
+
+    <!-- Generated Render Target Objects -->
+    <property name="currentRenderPassDescriptor" protocol="MTLRenderPassDescriptor" read-only />
+    <property name="depthStencilTexture" protocol="MTLTexture" read-only />
+    <property name="multisampleColorTexture" protocol="MTLTexture" read-only />
+
+    <!-- Configuring and Querying the Frame Rate -->
+    <property name="preferredFramesPerSecond" type="NSInteger" />
+
+    <!-- Controlling Frame Updates -->
+    <property name="paused" getter="isPaused" type="bool" />
+    
+    <!-- Drawing Your View’s Contents -->
+    <property name="enableSetNeedsDisplay" type="bool" />
+    <method selector="draw" />
+
+    <!-- Managing Your Render Target -->
+    <property name="autoResizeDrawable" type="bool" />
+    <property name="currentDrawable" protocol="CAMetalDrawable" read-only />
+    <property name="drawableSize" type="CGSize" />
+    <property name="framebufferOnly" type="bool" />
+    <property name="presentsWithTransaction" type="bool" />
+    <method selector="releaseDrawables" />
+
+    <!-- Instance Properties -->
+    <object-property name="colorspace" type="CGColorSpaceRef" />
+  </class>
+  
+  <protocol name="MTKViewDelegate" inherits="NSObject">
+    <!-- Changing the View’s Layout -->
+    <method selector="mtkView:drawableSizeWillChange:">
+      <argument name="view" protocol="MTKView" />
+      <argument name="size" type="CGSize" />
+    </method>
+
+    <!-- Drawing the View’s Contents -->
+    <method selector="drawInMTKView:">
+      <argument name="view" protocol="MTKView" />
+    </method>
+  </protocol>
+</framework>
