@@ -1,7 +1,7 @@
 use std;
 use objc;
 
-use super::{ObjectiveC, CGRect, NSObject};
+use super::{ObjectiveC, CGRect, NSObject, NSString};
 
 pub type NSInteger = isize;
 pub type NSUInteger = usize;
@@ -22,46 +22,6 @@ impl NSApplicationID {
 }
 
 impl NSObject for NSApplicationID {}
-
-pub trait NSArray : NSObject {
-  forward!(count, sel!(count), () -> usize);
-  forward!(object_at_index, sel!(objectAtIndex:), (i: usize) -> T, <T: ObjectiveC>, retain);
-
-  // Rust Helpers
-
-  forward!(len, sel!(count), () -> usize);
-  
-  fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized {
-    let n = self.count();
-    let mut result = Vec::with_capacity(n);
-
-    for i in 0 .. n {
-      result.push(self.object_at_index::<T>(i));
-    }
-
-    return result;
-  }
-}
-
-id!(NSArrayID, NSArray, "NSArray");
-
-impl NSObject for NSArrayID {}
-
-pub trait NSCoder : NSObject {
-  
-}
-
-id!(NSCoderID, NSCoder);
-
-impl NSObject for NSCoderID {}
-
-pub trait NSError : NSObject {
-  
-}
-
-id!(NSErrorID, NSError, "NSError");
-
-impl NSObject for NSErrorID {}
 
 pub enum NSStringEncoding {
   NSASCIIStringEncoding = 1,
@@ -89,42 +49,6 @@ pub enum NSStringEncoding {
   NSUTF32BigEndianStringEncoding = 0x98000100,
   NSUTF32LittleEndianStringEncoding = 0x9c000100
 }
-
-pub trait NSString : ObjectiveC {
-  initializer!(init_with_bytes_length_encoding, sel!(initWithBytes:length:encoding:), (bytes: *const std::os::raw::c_void, length: usize, encoding: NSStringEncoding));
-
-  forward!(length_of_bytes_using_encoding, sel!(lengthOfBytesUsingEncoding:), (encoding: NSStringEncoding) -> usize);
-  forward!(utf8_string, sel!(UTF8String), () -> *const u8);
-
-  // Rust Helpers
-
-  fn as_str(&self) -> &str where Self: 'static + Sized {
-    let bytes = self.utf8_string();
-    let len = self.len();
-
-    unsafe {
-      let bytes = std::slice::from_raw_parts(bytes, len);
-
-      std::str::from_utf8(bytes).unwrap()
-    }
-  }
-
-  fn len(&self) -> usize where Self: 'static + Sized {
-    return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
-  }
-}
-
-id!(NSStringID, NSString, "NSString");
-
-impl NSStringID {
-  pub fn from_str(string: &str) -> NSStringID {
-    let bytes = string.as_ptr() as *const std::os::raw::c_void;
-
-    return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
-  }
-}
-
-impl NSObject for NSStringID {}
 
 pub trait NSView : ObjectiveC {
 }

@@ -125,13 +125,14 @@ module Bridge
 
     def prepare_child(node)
       case node.name
-      when "inherits"
       when "initializer"
         Initializer.new(node)
       when "method"
         Method.new(node)
       when "property"
         Property.new(node)
+      when "script"
+        Script.new(node)
       when "text"
         Text.new(node)
       end
@@ -158,12 +159,20 @@ module Bridge
     def to_rust(o)
       o.block("pub trait #{self.name} : #{self.inherits || "ObjectiveC"}", pad: true) do |o|
         self.children.each { |c| c.to_rust(o) }
+        self.children.select { |x| x.is_a?(Script) && x.type == "trait" }.each do |script|
+          o.puts
+          script.content.lines.each { |line| o.puts(line) }
+        end
       end
       o.puts
       o.puts("pub struct #{self.name}ID(*mut std::os::raw::c_void);")
       o.puts
       o.block("impl #{self.name}ID") do |o|
         self.impl_for_self(o)
+        self.children.select { |x| x.is_a?(Script) && x.type == "id" }.each do |script|
+          o.puts
+          script.content.lines.each { |line| o.puts(line) }
+        end
       end
       o.puts
       o.puts("impl #{self.inherits} for #{self.name}ID {}") if self.inherits
@@ -227,7 +236,7 @@ module Bridge
 
     def prepare(node)
       @name = node['name']
-      
+
       if node.has_attribute?('protocol')
         @kind = 'protocol'
         @protocol = node['protocol']
@@ -279,7 +288,7 @@ module Bridge
     end
 
     def to_rust(o)
-      arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
+      arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         case argument.kind
         when "protocol"
           ["#{argument.name.underscore}: T", "T: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
@@ -311,10 +320,10 @@ module Bridge
       end
     end
   end
-  
+
   class Method < Node
     node "method"
-    
+
     attr_reader :selector
 
     def prepare(node)
@@ -332,7 +341,7 @@ module Bridge
 
     def to_rust(o)
       generics = ["T0", "T1", "T2", "T3", "T4", "T5"]
-      
+
       arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
         case argument.kind
         when "protocol"
@@ -351,22 +360,32 @@ module Bridge
       return_values = self.children.select { |x| x.is_a? Return }.map do |return_value|
         case return_value.kind
         when "protocol"
-          [" -> #{return_value.protocol}", "#{return_value.protocol}ID"]
+          id_name = "#{return_value.protocol}ID"
+
+          [" -> #{id_name}", nil, id_name]
         when "type"
-          [" -> #{return_value.type}", "#{return_value.type}"]
+          type_name = return_value.type.to_s
+
+          [" -> #{type_name}", nil, type_name]
+        when "generic"
+          g = generics.pop
+          
+          raise Exception, "ran out of generics" unless g
+          
+          [" -> #{g}", "#{g}: 'static + #{return_value.generic}", g]
         else
           raise Exception, "unknown kind #{return_value.kind}"
         end
       end
-      
+
       raise ArgumentError, "too many return values" if return_values.length > 1
 
       fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
-      fn_args = (["self"] + arguments.map { |arg| arg[0] }).join(", ")
+      fn_args = (["&self"] + arguments.map { |arg| arg[0] }).join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
-      return_value = return_values[0] || ["", "()"]
-      bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
+      return_value = return_values[0] || ["", nil, "()"]
+      bounds_args = (arguments.map { |arg| arg[1] } + [return_value[1]]).compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
       o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value[0]} where Self: 'static + Sized", pad: true) do |o|
@@ -374,7 +393,7 @@ module Bridge
           o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
             o.puts("Err(s) => panic!(\"{}\", s),")
             o.block("Ok(r) =>") do |o|
-              o.puts("let result: #{return_value[1]} = r;")
+              o.puts("let result: #{return_value[2]} = r;")
               o.puts
               o.puts("return result;")
             end
@@ -394,7 +413,7 @@ module Bridge
     def read_only?
       @read_only
     end
-    
+
     def weak?
       @weak
     end
@@ -450,14 +469,16 @@ module Bridge
           end
         end
       when "protocol"
-        o.block("fn #{self.getter.underscore}(&self) -> #{self.protocol}ID where Self: 'static + Sized", pad: true) do |o|
+        id_name = "#{self.protocol}ID"
+
+        o.block("fn #{self.getter.underscore}(&self) -> #{id_name} where Self: 'static + Sized", pad: true) do |o|
           o.block("unsafe") do |o|
             o.puts("let target = self.as_object();")
             o.puts
             o.block("match objc::__send_message(target, sel!(#{self.getter}), ())") do |o|
               o.puts("Err(s) => panic!(\"{}\", s),")
               o.block("Ok(r) =>") do |o|
-                o.puts("let r: #{self.protocol}ID = r;")
+                o.puts("let r: #{id_name} = r;")
                 o.puts
                 o.puts("return r.retain();")
               end
@@ -486,7 +507,7 @@ module Bridge
   class Return < Node
     node "return"
 
-    attr_reader :kind, :protocol, :type
+    attr_reader :kind, :protocol, :type, :generic
 
     def prepare(node)
       if node.has_attribute?('protocol')
@@ -499,6 +520,25 @@ module Bridge
         @kind = 'type'
         @type = node['type']
       end
+
+      if node.has_attribute?('generic')
+        raise ArgumentError, "multiple values defined" if @kind
+        @kind = 'generic'
+        @generic = node['generic']
+      end
+
+      raise ArgumentError, "no value defined" unless @kind
+    end
+  end
+
+  class Script < Node
+    node "script"
+
+    attr_reader :type, :content
+
+    def prepare(node)
+      @type = node['type']
+      @content = node.text.strip
     end
   end
 

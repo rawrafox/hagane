@@ -9,7 +9,44 @@
   <!-- TODO: NSAppleEventManager -->
   <!-- TODO: NSAppleScript -->
   <!-- TODO: NSArchiver -->
-  <!-- TODO: NSArray -->
+  
+  <class name="NSArray" inherits="NSObject">
+    <!-- TODO: Loads missing -->
+
+    <!-- Querying an Array -->
+    <!-- TODO: containsObject: -->
+    <property name="count" type="NSUInteger" read-only />
+    <!-- TODO: getObjects:range: -->
+    <!-- <property name="firstObject" protocol="ObjectiveC" read-only generic /> -->
+    <!-- <property name="lastObject" protocol="ObjectiveC" read-only generic /> -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return generic="ObjectiveC" />
+    </method>
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return generic="ObjectiveC" />
+    </method>
+    <!-- TODO: objectAtIndexes: -->
+    <!-- TODO: objectEnumerator -->
+    <!-- TODO: reverseObjectEnumerator -->
+
+    <!-- TODO: More missing -->
+
+    <script type="trait">
+fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized {
+  let n = self.count();
+  let mut result = Vec::with_capacity(n);
+
+  for i in 0 .. n {
+    result.push(self.object_at_index::<T>(i));
+  }
+
+  return result;
+}
+    </script>
+  </class>
+  
   <!-- TODO: NSAssertionHandler -->
   <!-- TODO: NSAttributedString -->
   <!-- TODO: NSAutoreleasePool -->
@@ -24,7 +61,11 @@
   <!-- TODO: NSCharacterSet -->
   <!-- TODO: NSClassDescription -->
   <!-- TODO: NSCloneCommand -->
-  <!-- TODO: NSCoder, really a protocol from before protocols -->
+
+  <protocol name="NSCoder" inherits="NSObject">
+    <!-- TODO: All… -->
+  </protocol>
+
   <!-- TODO: NSComparisonPredicate -->
   <!-- TODO: NSCompoundPredicate -->
   <!-- TODO: NSCondition -->
@@ -53,7 +94,11 @@
   <!-- TODO: NSDistributedNotificationCenter -->
   <!-- TODO: NSEnergyFormatter -->
   <!-- TODO: NSEnumerator -->
-  <!-- TODO: NSError -->
+
+  <class name="NSError" inherits="NSObject">
+    <!-- TODO: All… -->
+  </class>
+
   <!-- TODO: NSException -->
   <!-- TODO: NSExistsCommand -->
   <!-- TODO: NSExpression -->
@@ -170,7 +215,71 @@
   <!-- TODO: NSSpecifierTest -->
   <!-- TODO: NSSpellServer -->
   <!-- TODO: NSStream -->
-  <!-- TODO: NSString -->
+
+  <class name="NSString" inherits="NSObject">
+    <initializer selector="init" />
+    <initializer selector="initWithBytes:length:encoding:">
+      <argument name="bytes" type="*const std::os::raw::c_void" />
+      <argument name="len" type="NSUInteger" />
+      <argument name="encoding" type="NSStringEncoding" />
+    </initializer>
+
+    <!-- Getting a String's Length -->
+    <property name="length" type="NSUInteger" read-only />
+    <method selector="lengthOfBytesUsingEncoding:">
+      <argument name="enc" type="NSStringEncoding" />
+      <return type="NSUInteger" />
+    </method>
+    <method selector="maximumLengthOfBytesUsingEncoding:">
+      <argument name="enc" type="NSStringEncoding" />
+      <return type="NSUInteger" />
+    </method>
+
+    <!-- TODO: Missing… -->
+
+    <!-- Getting C Strings -->
+    <method selector="getCStringUsing:encoding:">
+      <argument name="encoding" type="NSStringEncoding" />
+      <return type="*const std::os::raw::c_char" />
+    </method>
+    <method selector="getCString:maxLength:encoding:">
+      <argument name="buffer" type="*mut std::os::raw::c_char" />
+      <argument name="maxBufferCount" type="NSUInteger" />
+      <argument name="encoding" type="NSStringEncoding" />
+      <return type="bool" />
+    </method>
+    <property name="UTF8String" type="*const std::os::raw::c_char" read-only />
+
+    <!-- TODO: All others… -->
+
+    <script type="id">
+pub fn from_str(string: &str) -> NSStringID {
+  let bytes = string.as_ptr() as *const std::os::raw::c_void;
+
+  return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
+}
+    </script>
+
+    <script type="trait">
+fn as_str(&self) -> &str where Self: 'static + Sized {
+  let bytes = self.utf8_string() as *const u8;
+  let len = self.len();
+
+  unsafe {
+    let bytes = std::slice::from_raw_parts(bytes, len);
+
+    return std::str::from_utf8(bytes).unwrap();
+  }
+}
+    </script>
+
+    <script type="trait">
+fn len(&self) -> usize where Self: 'static + Sized {
+  return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
+}
+    </script>
+  </class>
+
   <!-- TODO: NSTask -->
   <!-- TODO: NSTextCheckingResult -->
   <!-- TODO: NSThread -->

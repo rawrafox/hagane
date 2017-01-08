@@ -332,7 +332,7 @@ pub trait MTKView : NSView {
     }
   }
 
-  fn draw(self) where Self: 'static + Sized {
+  fn draw(&self) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(draw), ()) {
         Err(s) => panic!("{}", s),
@@ -448,7 +448,7 @@ pub trait MTKView : NSView {
     }
   }
 
-  fn release_drawables(self) where Self: 'static + Sized {
+  fn release_drawables(&self) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(releaseDrawables), ()) {
         Err(s) => panic!("{}", s),
@@ -526,7 +526,7 @@ unsafe impl objc::Encode for MTKViewID {
 }
 
 pub trait MTKViewDelegate : NSObject {
-  fn mtk_view_drawable_size_will_change<T5: 'static + MTKView>(self, view: T5, size: CGSize) where Self: 'static + Sized {
+  fn mtk_view_drawable_size_will_change<T5: 'static + MTKView>(&self, view: T5, size: CGSize) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(mtkView:drawableSizeWillChange:), (view.as_ptr(), size)) {
         Err(s) => panic!("{}", s),
@@ -539,7 +539,7 @@ pub trait MTKViewDelegate : NSObject {
     }
   }
 
-  fn draw_in_mtk_view<T5: 'static + MTKView>(self, view: T5) where Self: 'static + Sized {
+  fn draw_in_mtk_view<T5: 'static + MTKView>(&self, view: T5) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawInMTKView:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
