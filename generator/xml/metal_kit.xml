@@ -4,6 +4,7 @@
   <use>core_graphics::*</use>
   <use>foundation::*</use>
   <use>metal::*</use>
+  <use>legacy_metal::*</use>
 
   <extern framework="MetalKit" />
 

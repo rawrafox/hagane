@@ -1,0 +1,47 @@
+<framework module="metal">
+  <enumeration name="MTLCompareFunction" type="NSUInteger">
+    <value name="MTLCompareFunctionNever" value="0" />
+    <value name="MTLCompareFunctionLess" value="1" />
+    <value name="MTLCompareFunctionEqual" value="2" />
+    <value name="MTLCompareFunctionLessEqual" value="3" />
+    <value name="MTLCompareFunctionGreater" value="4" />
+    <value name="MTLCompareFunctionNotEqual" value="5" />
+    <value name="MTLCompareFunctionGreaterEqual" value="6" />
+    <value name="MTLCompareFunctionAlways" value="7" />
+  </enumeration>
+
+  <enumeration name="MTLCPUCacheMode" type="NSUInteger">
+    <value name="MTLCPUCacheModeDefaultCache" value="0" />
+    <value name="MTLCPUCacheModeWriteCombined" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLCullMode" type="NSUInteger">
+    <value name="MTLCullModeNone" value="0" />
+    <value name="MTLCullModeFront" value="1" />
+    <value name="MTLCullModeBack" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLIndexType" type="NSUInteger">
+    <value name="MTLIndexTypeUInt16" value="0" />
+    <value name="MTLIndexTypeUInt32" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLPrimitiveType" type="NSUInteger">
+    <value name="MTLPrimitiveTypePoint" value="0" />
+    <value name="MTLPrimitiveTypeLine" value="1" />
+    <value name="MTLPrimitiveTypeLineStrip" value="2" />
+    <value name="MTLPrimitiveTypeTriangle" value="3" />
+    <value name="MTLPrimitiveTypeTriangleStrip" value="4" />
+  </enumeration>
+
+  <enumeration name="MTLStorageMode" type="NSUInteger">
+    <value name="MTLStorageModeShared" value="0" />
+    <value name="MTLStorageModeManaged" value="1" />
+    <value name="MTLStorageModePrivate" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLWinding" type="NSUInteger">
+    <value name="MTLWindingClockwise" value="0" />
+    <value name="MTLWindingCounterClockwise" value="1" />
+  </enumeration>
+</framework>

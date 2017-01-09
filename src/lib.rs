@@ -19,6 +19,9 @@ pub use foundation::*;
 pub mod metal;
 pub use metal::*;
 
+pub mod legacy_metal;
+pub use legacy_metal::*;
+
 pub mod metal_kit;
 pub use metal_kit::*;
 

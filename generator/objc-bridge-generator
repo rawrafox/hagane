@@ -18,7 +18,9 @@ module Bridge
 
     def puts(line = nil, comment: nil, pad: false, group: nil)
       if group
-        if @last_group != group
+        case @last_group
+        when nil, group
+        else
           @last_group = group
           @stream.puts
         end
@@ -116,7 +118,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("use std;", pad: true)
+      o.puts("use std;", pad: true, group: "prelude")
       o.puts("use objc;")
       o.puts("use super::ObjectiveC;")
 

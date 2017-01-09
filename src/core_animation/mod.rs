@@ -1,7 +1,6 @@
 use std;
 use objc;
 use super::ObjectiveC;
-
 use foundation::*;
 
 pub trait CAMetalDrawable : NSObject {

@@ -1,10 +1,8 @@
 use std;
 use objc;
 use super::ObjectiveC;
-
 use core_graphics::*;
 use foundation::*;
-
 pub type NSRect = CGRect;
 
 #[link(name = "Cocoa", kind = "framework")]
