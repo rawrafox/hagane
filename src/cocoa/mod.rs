@@ -1,3 +1,5 @@
+#![allow(non_upper_case_globals)]
+
 use std;
 use objc;
 use super::ObjectiveC;
@@ -105,6 +107,12 @@ unsafe impl objc::Encode for NSApplicationID {
   }
 }
 
+impl std::fmt::Debug for NSApplicationID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait NSView : NSObject {
 }
 
@@ -168,6 +176,12 @@ impl ObjectiveC for NSViewID {
 unsafe impl objc::Encode for NSViewID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSViewID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
 
@@ -340,6 +354,12 @@ unsafe impl objc::Encode for NSWindowID {
   }
 }
 
+impl std::fmt::Debug for NSWindowID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait NSWindowDelegate : NSObject {
 }
 
@@ -403,5 +423,11 @@ impl ObjectiveC for NSWindowDelegateID {
 unsafe impl objc::Encode for NSWindowDelegateID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSWindowDelegateID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }

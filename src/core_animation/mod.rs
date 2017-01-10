@@ -1,3 +1,5 @@
+#![allow(non_upper_case_globals)]
+
 use std;
 use objc;
 use super::ObjectiveC;
@@ -58,5 +60,11 @@ impl ObjectiveC for CAMetalDrawableID {
 unsafe impl objc::Encode for CAMetalDrawableID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for CAMetalDrawableID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }

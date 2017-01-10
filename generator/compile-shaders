@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "shellwords"
+
+Dir.glob("#{__dir__}/../src/examples/*.metal") do |source|
+  target_dir = File.dirname(source)
+  intermediate = "#{target_dir}/#{File.basename(source, ".metal")}.metalir"
+  target = "#{target_dir}/#{File.basename(source, ".metal")}.metallib"
+
+  puts "Generating #{intermediate} from #{source}…"
+  system("xcrun metal -o #{intermediate.shellescape} #{source.shellescape}") or exit
+  puts "Generating #{target} from #{intermediate}…"
+  system("xcrun metallib -o #{target.shellescape} #{intermediate.shellescape}") or exit
+  system("rm #{intermediate.shellescape}") or exit
+end
+
+puts "Done!"

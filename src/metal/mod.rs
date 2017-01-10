@@ -1,56 +1,59 @@
+#![allow(non_upper_case_globals)]
+
 use std;
 use objc;
 use super::ObjectiveC;
-
-#[repr(u64)]
-pub enum MTLCompareFunction {
-  MTLCompareFunctionNever = 0,
-  MTLCompareFunctionLess = 1,
-  MTLCompareFunctionEqual = 2,
-  MTLCompareFunctionLessEqual = 3,
-  MTLCompareFunctionGreater = 4,
-  MTLCompareFunctionNotEqual = 5,
-  MTLCompareFunctionGreaterEqual = 6,
-  MTLCompareFunctionAlways = 7,
+use foundation::*;
+bitflags! {
+  pub flags MTLCompareFunction: NSUInteger {
+    const MTLCompareFunctionNever = 0,
+    const MTLCompareFunctionLess = 1,
+    const MTLCompareFunctionEqual = 2,
+    const MTLCompareFunctionLessEqual = 3,
+    const MTLCompareFunctionGreater = 4,
+    const MTLCompareFunctionNotEqual = 5,
+    const MTLCompareFunctionGreaterEqual = 6,
+    const MTLCompareFunctionAlways = 7,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLCPUCacheMode {
-  MTLCPUCacheModeDefaultCache = 0,
-  MTLCPUCacheModeWriteCombined = 1,
+bitflags! {
+  pub flags MTLCPUCacheMode: NSUInteger {
+    const MTLCPUCacheModeDefaultCache = 0,
+    const MTLCPUCacheModeWriteCombined = 1,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLCullMode {
-  MTLCullModeNone = 0,
-  MTLCullModeFront = 1,
-  MTLCullModeBack = 2,
+bitflags! {
+  pub flags MTLCullMode: NSUInteger {
+    const MTLCullModeNone = 0,
+    const MTLCullModeFront = 1,
+    const MTLCullModeBack = 2,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLIndexType {
-  MTLIndexTypeUInt16 = 0,
-  MTLIndexTypeUInt32 = 1,
+bitflags! {
+  pub flags MTLIndexType: NSUInteger {
+    const MTLIndexTypeUInt16 = 0,
+    const MTLIndexTypeUInt32 = 1,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLPrimitiveType {
-  MTLPrimitiveTypePoint = 0,
-  MTLPrimitiveTypeLine = 1,
-  MTLPrimitiveTypeLineStrip = 2,
-  MTLPrimitiveTypeTriangle = 3,
-  MTLPrimitiveTypeTriangleStrip = 4,
+bitflags! {
+  pub flags MTLPrimitiveType: NSUInteger {
+    const MTLPrimitiveTypePoint = 0,
+    const MTLPrimitiveTypeLine = 1,
+    const MTLPrimitiveTypeLineStrip = 2,
+    const MTLPrimitiveTypeTriangle = 3,
+    const MTLPrimitiveTypeTriangleStrip = 4,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLStorageMode {
-  MTLStorageModeShared = 0,
-  MTLStorageModeManaged = 1,
-  MTLStorageModePrivate = 2,
+bitflags! {
+  pub flags MTLStorageMode: NSUInteger {
+    const MTLStorageModeShared = 0,
+    const MTLStorageModeManaged = 1,
+    const MTLStorageModePrivate = 2,
+  }
 }
-
-#[repr(u64)]
-pub enum MTLWinding {
-  MTLWindingClockwise = 0,
-  MTLWindingCounterClockwise = 1,
+bitflags! {
+  pub flags MTLWinding: NSUInteger {
+    const MTLWindingClockwise = 0,
+    const MTLWindingCounterClockwise = 1,
+  }
 }

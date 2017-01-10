@@ -1,4 +1,6 @@
 <framework module="metal">
+  <use>foundation::*</use>
+
   <enumeration name="MTLCompareFunction" type="NSUInteger">
     <value name="MTLCompareFunctionNever" value="0" />
     <value name="MTLCompareFunctionLess" value="1" />

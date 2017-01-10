@@ -2,6 +2,7 @@
 
 use metal::*;
 
+#[allow(dead_code)]
 struct Vertex {
   position: [f32; 4],
   color: [f32; 4]
@@ -58,7 +59,7 @@ impl RSMRenderer for Example02Renderer {
     let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
     command_encoder.set_render_pipeline_state(self.pipeline_state.clone());
     command_encoder.set_vertex_buffer_offset_at_index(self.buffer.clone(), 0, 0);
-    command_encoder.draw_primitives_vertex_start_vertex_count(MTLPrimitiveType::MTLPrimitiveTypeTriangle, 0, VERTICES.len());
+    command_encoder.draw_primitives_vertex_start_vertex_count(MTLPrimitiveTypeTriangle, 0, VERTICES.len());
     command_encoder.end_encoding();
     command_buffer.present_drawable(view.current_drawable());
     command_buffer.commit();

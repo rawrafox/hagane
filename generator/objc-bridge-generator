@@ -118,7 +118,9 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("use std;", pad: true, group: "prelude")
+      o.puts("#![allow(non_upper_case_globals)]", pad: true, group: "prelude")
+      o.puts
+      o.puts("use std;")
       o.puts("use objc;")
       o.puts("use super::ObjectiveC;")
 
@@ -230,6 +232,12 @@ module Bridge
           o.puts("return unsafe { objc::Encoding::from_str(\"@\") };")
         end
       end
+      o.puts
+      o.block("impl std::fmt::Debug for #{self.name}ID") do |o|
+        o.block("fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result") do |o|
+          o.puts("return write!(f, \"{}\", self.debug_description().as_str());")
+        end
+      end
     end
   end
 
@@ -304,18 +312,10 @@ module Bridge
     end
 
     def to_rust(o)
-      length = case self.type
-      when 'u64', 'NSUInteger' then 'u64' # TODO: People still make 32-bit apps
-      when 'u32' then 'u32'
-      when 'u16' then 'u16'
-      when 'u8' then 'u8'
-      else
-        raise ArgumentError, "unknown type #{self.type}"
-      end
-
-      o.puts("#[repr(#{length})]", pad: true, group: "enumeration")
-      o.block("pub enum #{self.name}") do |o|
-        self.children.each { |c| c.to_rust(o) }
+      o.block("bitflags!") do |o|
+        o.block("pub flags #{self.name}: #{self.type}") do |o|
+          self.children.each { |c| c.to_rust(o) }
+        end
       end
     end
   end
@@ -358,10 +358,14 @@ module Bridge
     end
 
     def to_rust(o)
+      generics = ["T0", "T1", "T2", "T3", "T4", "T5"]
+
       arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
+        g = generics.pop
+
         case argument.kind
         when "protocol"
-          ["#{argument.name.underscore}: T", "T: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+          ["#{argument.name.underscore}: #{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
         when "type"
           ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
         else
@@ -633,7 +637,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("#{self.name} = #{self.value},")
+      o.puts("const #{self.name} = #{self.value},")
     end
   end
 

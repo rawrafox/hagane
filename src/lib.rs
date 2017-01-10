@@ -1,5 +1,6 @@
 #![allow(unknown_lints, needless_return, zero_prefixed_literal, enum_clike_unportable_variant, len_without_is_empty, expl_impl_clone_on_copy)]
 
+#[macro_use] extern crate bitflags;
 #[macro_use] extern crate objc;
 
 #[macro_use] mod macros;
@@ -24,6 +25,9 @@ pub use legacy_metal::*;
 
 pub mod metal_kit;
 pub use metal_kit::*;
+
+pub mod model_io;
+pub use model_io::*;
 
 pub mod rust_metal;
 pub use rust_metal::*;

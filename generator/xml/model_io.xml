@@ -1,0 +1,172 @@
+<framework module="model_io">
+  <use>foundation::*</use>
+
+  <extern framework="ModelIO" />
+
+  <enumeration name="MDLGeometryType" type="NSInteger">
+    <value name="MDLGeometryTypePoints" value="0" />
+    <value name="MDLGeometryTypeLines" value="1" />
+    <value name="MDLGeometryTypeTriangles" value="2" />
+    <value name="MDLGeometryTypeTriangleStrips" value="3" />
+    <value name="MDLGeometryTypeQuads" value="4" />
+    <value name="MDLGeometryTypeVariableTopology" value="5" />
+  </enumeration>
+
+  <enumeration name="MDLIndexBitDepth" type="NSUInteger">
+    <value name="MDLIndexBitDepthInvalid" value="0" />
+    <value name="MDLIndexBitDepthUInt8" value="8" />
+    <value name="MDLIndexBitDepthUInt16" value="16" />
+    <value name="MDLIndexBitDepthUInt32" value="32" />
+  </enumeration>
+
+  <enumeration name="MDLVertexFormat" type="NSUInteger">
+    <value name="MDLVertexFormatInvalid" value="0" />
+    <value name="MDLVertexFormatPackedBit" value="0x1000" />
+    <value name="MDLVertexFormatUCharBits" value="0x10000" />
+    <value name="MDLVertexFormatCharBits" value="0x20000" />
+    <value name="MDLVertexFormatUCharNormalizedBits" value="0x30000" />
+    <value name="MDLVertexFormatCharNormalizedBits" value="0x40000" />
+    <value name="MDLVertexFormatUShortBits" value="0x50000" />
+    <value name="MDLVertexFormatShortBits" value="0x60000" />
+    <value name="MDLVertexFormatUShortNormalizedBits" value="0x70000" />
+    <value name="MDLVertexFormatShortNormalizedBits" value="0x80000" />
+    <value name="MDLVertexFormatUIntBits" value="0x90000" />
+    <value name="MDLVertexFormatIntBits" value="0xA0000" />
+    <value name="MDLVertexFormatHalfBits" value="0xB0000" />
+    <value name="MDLVertexFormatFloatBits" value="0xC0000" />
+    <value name="MDLVertexFormatUChar" value="MDLVertexFormatUCharBits.bits | 1" />
+    <value name="MDLVertexFormatUChar2" value="MDLVertexFormatUCharBits.bits | 2" />
+    <value name="MDLVertexFormatUChar3" value="MDLVertexFormatUCharBits.bits | 3" />
+    <value name="MDLVertexFormatUChar4" value="MDLVertexFormatUCharBits.bits | 4" />
+    <value name="MDLVertexFormatChar" value="MDLVertexFormatCharBits.bits | 1" />
+    <value name="MDLVertexFormatChar2" value="MDLVertexFormatCharBits.bits | 2" />
+    <value name="MDLVertexFormatChar3" value="MDLVertexFormatCharBits.bits | 3" />
+    <value name="MDLVertexFormatChar4" value="MDLVertexFormatCharBits.bits | 4" />
+    <value name="MDLVertexFormatUCharNormalized" value="MDLVertexFormatUCharNormalizedBits.bits | 1" />
+    <value name="MDLVertexFormatUChar2Normalized" value="MDLVertexFormatUCharNormalizedBits.bits | 2" />
+    <value name="MDLVertexFormatUChar3Normalized" value="MDLVertexFormatUCharNormalizedBits.bits | 3" />
+    <value name="MDLVertexFormatUChar4Normalized" value="MDLVertexFormatUCharNormalizedBits.bits | 4" />
+    <value name="MDLVertexFormatCharNormalized" value="MDLVertexFormatCharNormalizedBits.bits | 1" />
+    <value name="MDLVertexFormatChar2Normalized" value="MDLVertexFormatCharNormalizedBits.bits | 2" />
+    <value name="MDLVertexFormatChar3Normalized" value="MDLVertexFormatCharNormalizedBits.bits | 3" />
+    <value name="MDLVertexFormatChar4Normalized" value="MDLVertexFormatCharNormalizedBits.bits | 4" />
+    <value name="MDLVertexFormatUShort" value="MDLVertexFormatUShortBits.bits | 1" />
+    <value name="MDLVertexFormatUShort2" value="MDLVertexFormatUShortBits.bits | 2" />
+    <value name="MDLVertexFormatUShort3" value="MDLVertexFormatUShortBits.bits | 3" />
+    <value name="MDLVertexFormatUShort4" value="MDLVertexFormatUShortBits.bits | 4" />
+    <value name="MDLVertexFormatShort" value="MDLVertexFormatShortBits.bits | 1" />
+    <value name="MDLVertexFormatShort2" value="MDLVertexFormatShortBits.bits | 2" />
+    <value name="MDLVertexFormatShort3" value="MDLVertexFormatShortBits.bits | 3" />
+    <value name="MDLVertexFormatShort4" value="MDLVertexFormatShortBits.bits | 4" />
+    <value name="MDLVertexFormatUShortNormalized" value="MDLVertexFormatUShortNormalizedBits.bits | 1" />
+    <value name="MDLVertexFormatUShort2Normalized" value="MDLVertexFormatUShortNormalizedBits.bits | 2" />
+    <value name="MDLVertexFormatUShort3Normalized" value="MDLVertexFormatUShortNormalizedBits.bits | 3" />
+    <value name="MDLVertexFormatUShort4Normalized" value="MDLVertexFormatUShortNormalizedBits.bits | 4" />
+    <value name="MDLVertexFormatShortNormalized" value="MDLVertexFormatShortNormalizedBits.bits | 1" />
+    <value name="MDLVertexFormatShort2Normalized" value="MDLVertexFormatShortNormalizedBits.bits | 2" />
+    <value name="MDLVertexFormatShort3Normalized" value="MDLVertexFormatShortNormalizedBits.bits | 3" />
+    <value name="MDLVertexFormatShort4Normalized" value="MDLVertexFormatShortNormalizedBits.bits | 4" />
+    <value name="MDLVertexFormatUInt" value="MDLVertexFormatUIntBits.bits | 1" />
+    <value name="MDLVertexFormatUInt2" value="MDLVertexFormatUIntBits.bits | 2" />
+    <value name="MDLVertexFormatUInt3" value="MDLVertexFormatUIntBits.bits | 3" />
+    <value name="MDLVertexFormatUInt4" value="MDLVertexFormatUIntBits.bits | 4" />
+    <value name="MDLVertexFormatInt" value="MDLVertexFormatIntBits.bits | 1" />
+    <value name="MDLVertexFormatInt2" value="MDLVertexFormatIntBits.bits | 2" />
+    <value name="MDLVertexFormatInt3" value="MDLVertexFormatIntBits.bits | 3" />
+    <value name="MDLVertexFormatInt4" value="MDLVertexFormatIntBits.bits | 4" />
+    <value name="MDLVertexFormatHalf" value="MDLVertexFormatHalfBits.bits | 1" />
+    <value name="MDLVertexFormatHalf2" value="MDLVertexFormatHalfBits.bits | 2" />
+    <value name="MDLVertexFormatHalf3" value="MDLVertexFormatHalfBits.bits | 3" />
+    <value name="MDLVertexFormatHalf4" value="MDLVertexFormatHalfBits.bits | 4" />
+    <value name="MDLVertexFormatFloat" value="MDLVertexFormatFloatBits.bits | 1" />
+    <value name="MDLVertexFormatFloat2" value="MDLVertexFormatFloatBits.bits | 2" />
+    <value name="MDLVertexFormatFloat3" value="MDLVertexFormatFloatBits.bits | 3" />
+    <value name="MDLVertexFormatFloat4" value="MDLVertexFormatFloatBits.bits | 4" />
+    <value name="MDLVertexFormatInt1010102Normalized" value="MDLVertexFormatIntBits.bits | MDLVertexFormatPackedBit.bits | 4" />
+    <value name="MDLVertexFormatUInt1010102Normalized" value="MDLVertexFormatUIntBits.bits | MDLVertexFormatPackedBit.bits | 4" />
+  </enumeration>
+
+  <class name="MDLAsset" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+
+    <initializer selector="initWithURL:">
+      <argument name="URL" protocol="NSURL" />
+    </initializer>
+
+    <initializer selector="initWithURL:vertexDescriptor:bufferAllocator:">
+      <argument name="URL" protocol="NSURL" />
+      <argument name="vertexDescriptor" protocol="MDLVertexDescriptor" />
+      <argument name="bufferAllocator" protocol="MDLMeshBufferAllocator" />
+    </initializer>
+
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return generic="MDLObject" />
+    </method>
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return generic="MDLObject" />
+    </method>
+    <property name="count" type="NSUInteger" read-only />
+  </class>
+
+  <class name="MDLMesh" inherits="MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+
+    <property name="submeshes" protocol="NSMutableArray" element="MDLSubmesh" />
+    <property name="vertexBuffers" protocol="NSArray" element="MDLMeshBuffer" />
+    <property name="vertexCount" type="NSUInteger" />
+    <property name="vertexDescriptor" protocol="MDLVertexDescriptor" />
+  </class>
+
+  <class name="MDLMeshBufferData" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMeshBufferMap" inherits="NSObject">
+    <!-- TODO: initWithBytes:deallocator: -->
+    <property name="bytes" type="*const std::os::raw::c_void" read-only />
+  </class>
+
+  <class name="MDLObject" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLSubmesh" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+
+    <property name="indexBuffer" protocol="MDLMeshBuffer" read-only />
+    <property name="indexCount" type="NSUInteger" read-only />
+    <property name="indexType" type="MDLIndexBitDepth" read-only />
+    <property name="geometryType" type="MDLGeometryType" read-only />
+  </class>
+
+  <class name="MDLVertexAttribute" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+
+    <property name="name" protocol="NSString" />
+    <property name="format" type="MDLVertexFormat" />
+    <property name="offset" type="NSUInteger" />
+    <property name="bufferIndex" type="NSUInteger" />
+    <property name="initializationValue" type="[f32; 4]" />
+  </class>
+
+  <class name="MDLVertexDescriptor" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+
+    <property name="attributes" protocol="NSMutableArray" element="MDLVertexAttribute" />
+  </class>
+
+  <class name="MDLMeshBuffer" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+
+    <method selector="map">
+      <return protocol="MDLMeshBufferMap" />
+    </method>
+    <property name="length" type="NSUInteger" />
+  </class>
+
+  <protocol name="MDLMeshBufferAllocator" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+</framework>

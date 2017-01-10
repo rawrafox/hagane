@@ -23,9 +23,11 @@ path = "src/examples/example-02.rs"
 name = "example-03"
 path = "src/examples/example-03.rs"
 
+[[bin]]
+name = "example-05"
+path = "src/examples/example-05.rs"
+
 [dependencies]
-libc = "0.2.19"
-objc = "0.2.2"
-objc_id = "0.1.0"
-objc-foundation = "0.1.1"
+bitflags = "0.7.0"
 nalgebra = "0.10.*"
+objc = "0.2.2"

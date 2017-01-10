@@ -6,47 +6,22 @@ use std::ops::Mul;
 use metal::*;
 use nalgebra::ToHomogeneous;
 
-#[allow(dead_code)]
 struct Uniform {
-  model_view_projection: [f32; 16]
+  model_view_projection: [f32; 16],
+  model_view: [f32; 16],
+  normal: [f32; 9]
 }
 
-#[allow(dead_code)]
-struct Vertex {
-  position: [f32; 4],
-  color: [f32; 4]
-}
-
-static VERTICES: &'static [Vertex] = &[
-  Vertex { position: [-1.0,  1.0,  1.0, 1.0], color: [0.0, 1.0, 1.0, 1.0] },
-  Vertex { position: [-1.0, -1.0,  1.0, 1.0], color: [0.0, 0.0, 1.0, 1.0] },
-  Vertex { position: [ 1.0, -1.0,  1.0, 1.0], color: [1.0, 0.0, 1.0, 1.0] },
-  Vertex { position: [ 1.0,  1.0,  1.0, 1.0], color: [1.0, 1.0, 1.0, 1.0] },
-  Vertex { position: [-1.0,  1.0, -1.0, 1.0], color: [0.0, 1.0, 0.0, 1.0] },
-  Vertex { position: [-1.0, -1.0, -1.0, 1.0], color: [0.0, 0.0, 0.0, 1.0] },
-  Vertex { position: [ 1.0, -1.0, -1.0, 1.0], color: [1.0, 0.0, 0.0, 1.0] },
-  Vertex { position: [ 1.0,  1.0, -1.0, 1.0], color: [1.0, 1.0, 0.0, 1.0] }
-];
-
-static INDICES: &'static [u16] = &[
-  3, 2, 6, 6, 7, 3,
-  4, 5, 1, 1, 0, 4,
-  4, 0, 3, 3, 7, 4,
-  1, 5, 6, 6, 2, 1,
-  0, 1, 2, 2, 3, 0,
-  7, 6, 5, 5, 4, 7
-];
-
-struct Example03Renderer {
+struct Example04Renderer {
   time: std::time::Instant,
-  index_buffer: MTLBufferID,
+  index_buffers: Vec<(MTLBufferID, usize)>,
   uniform_buffer: MTLBufferID,
   vertex_buffer: MTLBufferID,
   depth_stencil_state: MTLDepthStencilStateID,
   pipeline_state: MTLRenderPipelineStateID
 }
 
-impl RSMRenderer for Example03Renderer {
+impl RSMRenderer for Example04Renderer {
   fn initialize(&mut self, view: RSMViewID) {
     view.set_color_pixel_format(MTLPixelFormat::MTLPixelFormatBGRA8Unorm);
     view.set_depth_stencil_pixel_format(MTLPixelFormat::MTLPixelFormatDepth32Float);
@@ -62,25 +37,41 @@ impl RSMRenderer for Example03Renderer {
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
 
-    let index_size = std::mem::size_of::<u16>();
-    let buffer_size = INDICES.len() * index_size;
-    self.index_buffer = device.new_buffer_with_bytes_length_options(INDICES.as_ptr() as *const std::os::raw::c_void, buffer_size, 0);
+    let asset = MDLAssetID::alloc().init_with_url(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")));
 
-    let uniform_size = std::mem::size_of::<Uniform>();
-    let buffer_size = 1 * uniform_size;
-    self.uniform_buffer = device.new_buffer_with_length_options(buffer_size, 0);
+    if (asset.count() != 1) {
+      panic!("Not a single mesh in file");
+    }
 
-    let vertex_size = std::mem::size_of::<Vertex>();
-    let buffer_size = VERTICES.len() * vertex_size;
-    self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, 0);
+    let mesh = asset.object_at_index::<MDLMeshID>(0);
 
-    let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-03.metallib")) {
+    let submeshes = mesh.submeshes().to_vec::<MDLSubmeshID>();
+
+    self.index_buffers = submeshes.into_iter().map(|submesh| {
+      let index_buffer = submesh.index_buffer();
+      let index_buffer = device.new_buffer_with_bytes_length_options(index_buffer.map().bytes(), index_buffer.length(), 0);
+
+      (index_buffer, submesh.index_count())
+    }).collect();
+
+    self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), 0);
+
+    let vertex_buffers = mesh.vertex_buffers();
+
+    if (vertex_buffers.count() != 1) {
+      panic!("Not one vertex buffer in file");
+    }
+
+    let vertex_buffer = mesh.vertex_buffers().object_at_index::<MDLMeshBufferID>(0);
+    self.vertex_buffer = device.new_buffer_with_bytes_length_options(vertex_buffer.map().bytes(), vertex_buffer.length(), 0);
+
+    let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-05.metallib")) {
       Ok(l) => l,
       Err(_) => panic!("Error loading Metal library")
     };
 
-    let vertex_function = library.new_function_with_name(NSStringID::from_str("vertex_project"));
-    let fragment_function = library.new_function_with_name(NSStringID::from_str("fragment_flatcolor"));
+    let vertex_function = library.new_function_with_name(NSStringID::from_str("vertex_main"));
+    let fragment_function = library.new_function_with_name(NSStringID::from_str("fragment_main"));
 
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
     pipeline_descriptor.set_vertex_function(vertex_function);
@@ -103,7 +94,7 @@ impl RSMRenderer for Example03Renderer {
 
     let rotation_x = seconds * std::f32::consts::FRAC_PI_2;
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = (5.0f32 * seconds).sin() * 0.25f32 + 1.0f32;
+    let scale_factor = ((5.0f32 * seconds).sin() * 0.25f32 + 1.0f32) * 0.01f32;
 
     let rotation = nalgebra::Rotation3::from_euler_angles(rotation_x, rotation_y, 0.0);
 
@@ -115,13 +106,20 @@ impl RSMRenderer for Example03Renderer {
     let camera_matrix = nalgebra::Isometry3::new_observer_frame(&camera, &origin, &nalgebra::Vector3::new(0.0f32, 1.0f32, 0.0f32));
     let projection_matrix = nalgebra::PerspectiveMatrix3::new(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
 
-    let view_model_matrix = camera_matrix.mul(model_matrix);
-    let matrix = (*projection_matrix.as_matrix()).mul(view_model_matrix.to_homogeneous());
-    
-    unsafe {
-      let slice: [f32; 16] = std::mem::transmute(matrix);
+    let model_view = camera_matrix.mul(model_matrix);
+    let model_view_matrix = model_view.to_homogeneous();
+    let matrix = (*projection_matrix.as_matrix()).mul(model_view_matrix);
 
-      std::intrinsics::copy(&slice, self.uniform_buffer.contents() as *mut [f32; 16], 1);
+    unsafe {
+      let mv: [f32; 16] = std::mem::transmute(model_view_matrix);
+
+      let uniform = Uniform {
+        model_view_projection: std::mem::transmute(matrix),
+        model_view: mv,
+        normal: [mv[0], mv[1], mv[2], mv[4], mv[5], mv[6], mv[8], mv[9], mv[10]]
+      };
+
+      std::intrinsics::copy(&uniform, self.uniform_buffer.contents() as *mut Uniform, 1);
     }
 
     let drawable = view.current_drawable();
@@ -135,7 +133,11 @@ impl RSMRenderer for Example03Renderer {
     command_encoder.set_cull_mode(MTLCullModeBack);
     command_encoder.set_vertex_buffer_offset_at_index(self.vertex_buffer.clone(), 0, 0);
     command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
-    command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, INDICES.len(), MTLIndexTypeUInt16, self.index_buffer.clone(), 0);
+
+    for &(ref buffer, ref count) in &self.index_buffers {
+      command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, *count, MTLIndexTypeUInt32, buffer.clone(), 0);
+    }
+
     command_encoder.end_encoding();
     command_buffer.present_drawable(drawable);
     command_buffer.commit();
@@ -147,9 +149,9 @@ fn main() {
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
 
-  let renderer = Example03Renderer {
+  let renderer = Example04Renderer {
     time: std::time::Instant::now(),
-    index_buffer: MTLBufferID::nil(),
+    index_buffers: vec![],
     uniform_buffer: MTLBufferID::nil(),
     vertex_buffer: MTLBufferID::nil(),
     depth_stencil_state: MTLDepthStencilStateID::nil(),
@@ -159,7 +161,7 @@ fn main() {
   let view = RSMViewID::from_renderer(Box::new(renderer), content_rect, metal::system_default_device());
 
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 03"));
+  window.set_title(NSStringID::from_str("Metal Example 05"));
   window.set_content_view(view.clone());
   window.set_delegate(view);
   window.make_key_and_order_front(NSObjectID::nil());

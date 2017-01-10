@@ -260,7 +260,11 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
   <!-- TODO: NSMethodSignature -->
   <!-- TODO: NSMiddleSpecifier -->
   <!-- TODO: NSMoveCommand -->
-  <!-- TODO: NSMutableArray -->
+  
+  <class name="NSMutableArray" inherits="NSArray, NSObject">
+    <!-- TODO: NSMutableArray -->
+  </class>
+  
   <!-- TODO: NSMutableAttributedString -->
   <!-- TODO: NSMutableCharacterSet -->
   <!-- TODO: NSMutableData -->
@@ -367,7 +371,7 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
 pub fn from_str(string: &str) -> NSStringID {
   let bytes = string.as_ptr() as *const std::os::raw::c_void;
 
-  return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
+  return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSUTF8StringEncoding);
 }
     </script>
 
@@ -386,7 +390,7 @@ fn as_str(&self) -> &str where Self: 'static + Sized {
 
     <script type="trait">
 fn len(&self) -> usize where Self: 'static + Sized {
-  return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
+  return self.length_of_bytes_using_encoding(NSUTF8StringEncoding);
 }
     </script>
   </class>
@@ -397,6 +401,13 @@ fn len(&self) -> usize where Self: 'static + Sized {
   <!-- TODO: NSTimeZone -->
   <!-- TODO: NSTimer -->
   <!-- TODO: NSURL -->
+  
+  <class name="NSURL" inherits="NSObject">
+    <initializer selector="initWithString:">
+      <argument name="URLString" protocol="NSString" />
+    </initializer>
+  </class>
+  
   <!-- TODO: NSURLAuthenticationChallenge -->
   <!-- TODO: NSURLCache -->
   <!-- TODO: NSURLComponents -->

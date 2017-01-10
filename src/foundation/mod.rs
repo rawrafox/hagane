@@ -1,3 +1,5 @@
+#![allow(non_upper_case_globals)]
+
 use std;
 use objc;
 use super::ObjectiveC;
@@ -6,31 +8,31 @@ use super::ObjectiveC;
 extern {}
 pub type NSInteger = isize;
 pub type NSUInteger = usize;
-
-#[repr(u64)]
-pub enum NSStringEncoding {
-  NSASCIIStringEncoding = 1,
-  NSNEXTSTEPStringEncoding = 2,
-  NSJapaneseEUCStringEncoding = 3,
-  NSUTF8StringEncoding = 4,
-  NSISOLatin1StringEncoding = 5,
-  NSSymbolStringEncoding = 6,
-  NSNonLossyASCIIStringEncoding = 7,
-  NSShiftJISStringEncoding = 8,
-  NSISOLatin2StringEncoding = 9,
-  NSUnicodeStringEncoding = 10,
-  NSWindowsCP1251StringEncoding = 11,
-  NSWindowsCP1252StringEncoding = 12,
-  NSWindowsCP1253StringEncoding = 13,
-  NSWindowsCP1254StringEncoding = 14,
-  NSWindowsCP1250StringEncoding = 15,
-  NSISO2022JPStringEncoding = 21,
-  NSMacOSRomanStringEncoding = 30,
-  NSUTF16BigEndianStringEncoding = 0x90000100,
-  NSUTF16LittleEndianStringEncoding = 0x94000100,
-  NSUTF32StringEncoding = 0x8c000100,
-  NSUTF32BigEndianStringEncoding = 0x98000100,
-  NSUTF32LittleEndianStringEncoding = 0x9c000100,
+bitflags! {
+  pub flags NSStringEncoding: NSUInteger {
+    const NSASCIIStringEncoding = 1,
+    const NSNEXTSTEPStringEncoding = 2,
+    const NSJapaneseEUCStringEncoding = 3,
+    const NSUTF8StringEncoding = 4,
+    const NSISOLatin1StringEncoding = 5,
+    const NSSymbolStringEncoding = 6,
+    const NSNonLossyASCIIStringEncoding = 7,
+    const NSShiftJISStringEncoding = 8,
+    const NSISOLatin2StringEncoding = 9,
+    const NSUnicodeStringEncoding = 10,
+    const NSWindowsCP1251StringEncoding = 11,
+    const NSWindowsCP1252StringEncoding = 12,
+    const NSWindowsCP1253StringEncoding = 13,
+    const NSWindowsCP1254StringEncoding = 14,
+    const NSWindowsCP1250StringEncoding = 15,
+    const NSISO2022JPStringEncoding = 21,
+    const NSMacOSRomanStringEncoding = 30,
+    const NSUTF16BigEndianStringEncoding = 0x90000100,
+    const NSUTF16LittleEndianStringEncoding = 0x94000100,
+    const NSUTF32StringEncoding = 0x8c000100,
+    const NSUTF32BigEndianStringEncoding = 0x98000100,
+    const NSUTF32LittleEndianStringEncoding = 0x9c000100,
+  }
 }
 
 pub trait NSArray : NSObject {
@@ -146,6 +148,12 @@ unsafe impl objc::Encode for NSArrayID {
   }
 }
 
+impl std::fmt::Debug for NSArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait NSCoder : NSObject {
 }
 
@@ -201,6 +209,12 @@ impl ObjectiveC for NSCoderID {
 unsafe impl objc::Encode for NSCoderID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSCoderID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
 
@@ -267,6 +281,85 @@ impl ObjectiveC for NSErrorID {
 unsafe impl objc::Encode for NSErrorID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSErrorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait NSMutableArray : NSArray + NSObject {
+}
+
+pub struct NSMutableArrayID(*mut std::os::raw::c_void);
+
+impl NSMutableArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSMutableArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSMutableArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSMutableArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSMutableArray").unwrap();
+  }
+}
+
+impl NSArray for NSMutableArrayID {}
+impl NSObject for NSMutableArrayID {}
+impl NSMutableArray for NSMutableArrayID {}
+
+impl Clone for NSMutableArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for NSMutableArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for NSMutableArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSMutableArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSMutableArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSMutableArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
 
@@ -383,7 +476,7 @@ pub trait NSString : NSObject {
   }
 
   fn len(&self) -> usize where Self: 'static + Sized {
-    return self.length_of_bytes_using_encoding(NSStringEncoding::NSUTF8StringEncoding);
+    return self.length_of_bytes_using_encoding(NSUTF8StringEncoding);
   }
 }
 
@@ -417,7 +510,7 @@ impl NSStringID {
   pub fn from_str(string: &str) -> NSStringID {
     let bytes = string.as_ptr() as *const std::os::raw::c_void;
   
-    return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSStringEncoding::NSUTF8StringEncoding);
+    return Self::alloc().init_with_bytes_length_encoding(bytes, string.len(), NSUTF8StringEncoding);
   }
 }
 
@@ -453,6 +546,96 @@ impl ObjectiveC for NSStringID {
 unsafe impl objc::Encode for NSStringID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSStringID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait NSURL : NSObject {
+  fn init_with_string<T5: 'static + NSString>(self, url_string: T5) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithString:), (url_string.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+}
+
+pub struct NSURLID(*mut std::os::raw::c_void);
+
+impl NSURLID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSURLID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return NSURLID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return NSURLID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSURL").unwrap();
+  }
+}
+
+impl NSObject for NSURLID {}
+impl NSURL for NSURLID {}
+
+impl Clone for NSURLID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for NSURLID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      self.release();
+    }
+  }
+}
+
+impl ObjectiveC for NSURLID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return NSURLID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for NSURLID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSURLID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
 
@@ -576,5 +759,11 @@ impl ObjectiveC for NSObjectID {
 unsafe impl objc::Encode for NSObjectID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for NSObjectID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }

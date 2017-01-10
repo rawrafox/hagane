@@ -1,3 +1,5 @@
+#![allow(non_upper_case_globals)]
+
 use std;
 use objc;
 use super::ObjectiveC;
@@ -12,7 +14,7 @@ use legacy_metal::*;
 extern {}
 
 pub trait MTKView : NSView + NSObject {
-  fn init_with_coder<T: 'static + NSCoder>(self, coder: T) -> Self where Self: 'static + Sized {
+  fn init_with_coder<T5: 'static + NSCoder>(self, coder: T5) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithCoder:), (coder.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -25,7 +27,7 @@ pub trait MTKView : NSView + NSObject {
     }
   }
 
-  fn init_with_frame_device<T: 'static + MTLDevice>(self, frame_rect: CGRect, device: T) -> Self where Self: 'static + Sized {
+  fn init_with_frame_device<T4: 'static + MTLDevice>(self, frame_rect: CGRect, device: T4) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithFrame:device:), (frame_rect, device.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -527,6 +529,12 @@ unsafe impl objc::Encode for MTKViewID {
   }
 }
 
+impl std::fmt::Debug for MTKViewID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait MTKViewDelegate : NSObject {
   fn mtk_view_drawable_size_will_change<T5: 'static + MTKView>(&self, view: T5, size: CGSize) where Self: 'static + Sized {
     unsafe {
@@ -607,5 +615,11 @@ impl ObjectiveC for MTKViewDelegateID {
 unsafe impl objc::Encode for MTKViewDelegateID {
   fn encode() -> objc::Encoding {
     return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKViewDelegateID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
