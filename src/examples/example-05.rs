@@ -6,6 +6,7 @@ use std::ops::Mul;
 use metal::*;
 use nalgebra::ToHomogeneous;
 
+#[allow(dead_code)]
 struct Uniform {
   model_view_projection: [f32; 16],
   model_view: [f32; 16],
@@ -39,8 +40,8 @@ impl RSMRenderer for Example04Renderer {
 
     let asset = MDLAssetID::alloc().init_with_url(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")));
 
-    if (asset.count() != 1) {
-      panic!("Not a single mesh in file");
+    if asset.count() != 1 {
+      panic!("Not one single mesh in file");
     }
 
     let mesh = asset.object_at_index::<MDLMeshID>(0);
@@ -58,7 +59,7 @@ impl RSMRenderer for Example04Renderer {
 
     let vertex_buffers = mesh.vertex_buffers();
 
-    if (vertex_buffers.count() != 1) {
+    if vertex_buffers.count() != 1 {
       panic!("Not one vertex buffer in file");
     }
 
