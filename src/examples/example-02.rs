@@ -1,6 +1,7 @@
 #[macro_use] extern crate metal;
 
 use metal::*;
+use metal::rust_metal::*;
 
 #[allow(dead_code)]
 struct Vertex {
@@ -67,21 +68,18 @@ impl RSMRenderer for Example02Renderer {
 }
 
 fn main() {
-  RSMViewID::load_class();
+  rust_metal::load_classes();
 
-  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-
-  let renderer = Example02Renderer {
+  let renderer = Box::new(Example02Renderer {
     buffer: MTLBufferID::nil(),
     pipeline_state: MTLRenderPipelineStateID::nil()
-  };
+  });
 
-  let view = RSMViewID::from_renderer(Box::new(renderer), content_rect, metal::system_default_device());
-
+  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 02"));
-  window.set_content_view(view.clone());
-  window.set_delegate(view);
+  window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
+  window.set_delegate(RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

@@ -726,6 +726,14 @@ impl NSObjectID {
   pub fn is_nil(&self) -> bool {
     return self.0 as usize == 0;
   }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("NSObject").unwrap();
+  }
 }
 
 impl NSObject for NSObjectID {}

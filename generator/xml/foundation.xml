@@ -506,7 +506,7 @@ fn len(&self) -> usize where Self: 'static + Sized {
   <!-- TODO: NSMetadataQueryDelegate -->
   <!-- TODO: NSMutableCopying -->
 
-  <protocol name="NSObject">
+  <class name="NSObject">
     <!-- Identifying Classes -->
     <!-- TODO: class -->
     <!-- TODO: superclass -->

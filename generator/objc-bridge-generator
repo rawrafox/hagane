@@ -98,6 +98,7 @@ module Bridge
 
     def prepare(node)
       @module = node['module']
+      @no_prelude = true if node.has_attribute?('no-prelude')
     end
 
     def prepare_child(node)
@@ -120,9 +121,12 @@ module Bridge
     def to_rust(o)
       o.puts("#![allow(non_upper_case_globals)]", pad: true, group: "prelude")
       o.puts
-      o.puts("use std;")
-      o.puts("use objc;")
-      o.puts("use super::ObjectiveC;")
+
+      unless @no_prelude
+        o.puts("use std;")
+        o.puts("use objc;")
+        o.puts("use super::ObjectiveC;")
+      end
 
       self.children.each { |c| c.to_rust(o) }
     end

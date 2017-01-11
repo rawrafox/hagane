@@ -206,14 +206,6 @@ pub struct MTLSize {
   pub depth: usize
 }
 
-pub trait MTLBuffer : NSObject {
-  forward!(contents, sel!(contents), () -> *mut c_void);
-}
-
-id!(MTLBufferID, MTLBuffer);
-
-impl NSObject for MTLBufferID {}
-
 pub trait MTLCommandBuffer : NSObject {
   forward!(commit, sel!(commit), () -> ());
   forward!(present_drawable, sel!(presentDrawable:), (drawable: T) -> (), <T: CAMetalDrawable>);
@@ -257,14 +249,6 @@ pub trait MTLDepthStencilDescriptor : NSObject {
 id!(MTLDepthStencilDescriptorID, MTLDepthStencilDescriptor, "MTLDepthStencilDescriptor");
 
 impl NSObject for MTLDepthStencilDescriptorID {}
-
-pub trait MTLDepthStencilState : NSObject {
-  
-}
-
-id!(MTLDepthStencilStateID, MTLDepthStencilState);
-
-impl NSObject for MTLDepthStencilStateID {}
 
 pub trait MTLDevice : NSObject {
   forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
@@ -378,22 +362,6 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
 id!(MTLRenderPipelineDescriptorID, MTLRenderPipelineDescriptor, "MTLRenderPipelineDescriptor");
 
 impl NSObject for MTLRenderPipelineDescriptorID {}
-
-pub trait MTLRenderPipelineState {
-
-}
-
-id!(MTLRenderPipelineStateID, MTLRenderPipelineState);
-
-impl NSObject for MTLRenderPipelineStateID {}
-
-pub trait MTLTexture {
-
-}
-
-id!(MTLTextureID, MTLTexture);
-
-impl NSObject for MTLTextureID {}
 
 pub fn all_devices() -> NSArrayID {
   unsafe {

@@ -1,5 +1,7 @@
 <framework module="metal">
+  <use>core_foundation::*</use>
   <use>foundation::*</use>
+  <use>legacy_metal::*</use>
 
   <enumeration name="MTLCompareFunction" type="NSUInteger">
     <value name="MTLCompareFunctionNever" value="0" />
@@ -46,4 +48,80 @@
     <value name="MTLWindingClockwise" value="0" />
     <value name="MTLWindingCounterClockwise" value="1" />
   </enumeration>
+
+  <!-- TODO: Missing -->
+
+  <!-- Protocols -->
+
+  <protocol name="MTLBlitCommandEncoder" inherits="MTLCommandEncoder, NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLBuffer" inherits="MTLResource, NSObject">
+    <!-- Creating a Texture That Shares Buffer Data -->
+    <!-- TODO: newTextureWithDescriptor:offset:bytesPerRow: -->
+
+    <!-- Locating the Buffer’s Storage -->
+    <method selector="contents">
+      <return type="*mut std::os::raw::c_void" />
+    </method>
+    
+    <!-- Invalidating the Buffer’s Storage -->
+    <!-- TODO: Fix NSRange
+    <method selector="didModifyRange:">
+      <argument name="range" type="NSRange" />
+    </method>
+    -->
+
+    <!-- Properties -->
+    <property name="length" type="NSUInteger" read-only />
+    
+    <!-- Instance Methods -->
+    <!-- TODO: Fix NSRange
+    <method selector="addDebugMarker:range:">
+      <argument name="marker" protocol="NSString" />
+      <argument name="range" type="NSRange" />
+    </method>
+    -->
+    <method selector="removeAllDebugMarkers" />
+  </protocol>
+
+  <!-- TODO: MTLCommandBuffer -->
+  <!-- TODO: MTLCommandEncoder -->
+  <!-- TODO: MTLCommandQueue -->
+
+  <protocol name="MTLComputeCommandEncoder" inherits="MTLCommandEncoder, NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLComputePipelineState" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLDepthStencilState" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <!-- TODO: MTLDevice -->
+
+  <protocol name="MTLDrawable" inherits="NSObject">
+    <method selector="present" />
+    <method selector="presentAtTime:">
+      <argument name="presentationTime" type="CFTimeInterval" />
+    </method>
+  </protocol>
+
+  <protocol name="MTLRenderPipelineState" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLResource" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <!-- TODO: More missing -->
+
+  <protocol name="MTLTexture" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
 </framework>

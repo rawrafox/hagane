@@ -34,7 +34,7 @@ pub fn shared_application() -> Self {
       <argument name="sender" protocol="ObjectiveC" />
     </method>
     <property name="contentView" protocol="NSView" />
-    <property name="delegate" protocol="NSWindowDelegate" />
+    <property name="delegate" protocol="NSWindowDelegate" weak />
     <property name="title" protocol="NSString" />
     
   </class>

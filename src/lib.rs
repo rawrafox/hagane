@@ -11,6 +11,9 @@ pub use cocoa::*;
 pub mod core_animation;
 pub use core_animation::*;
 
+pub mod core_foundation;
+pub use core_foundation::*;
+
 pub mod core_graphics;
 pub use core_graphics::*;
 
@@ -30,7 +33,6 @@ pub mod model_io;
 pub use model_io::*;
 
 pub mod rust_metal;
-pub use rust_metal::*;
 
 pub trait ObjectiveC {
   fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self;

@@ -4,8 +4,9 @@ use std;
 use objc;
 use super::ObjectiveC;
 use foundation::*;
+use metal::*;
 
-pub trait CAMetalDrawable : NSObject {
+pub trait CAMetalDrawable : MTLDrawable + NSObject {
 }
 
 pub struct CAMetalDrawableID(*mut std::os::raw::c_void);
@@ -28,6 +29,7 @@ impl CAMetalDrawableID {
   }
 }
 
+impl MTLDrawable for CAMetalDrawableID {}
 impl NSObject for CAMetalDrawableID {}
 impl CAMetalDrawable for CAMetalDrawableID {}
 

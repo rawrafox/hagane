@@ -1,6 +1,7 @@
 #[macro_use] extern crate metal;
 
 use metal::*;
+use metal::rust_metal::*;
 
 struct Example01Renderer { }
 
@@ -10,7 +11,7 @@ impl RSMRenderer for Example01Renderer {
     view.set_preferred_frames_per_second(60);
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
   }
-  
+
   fn draw(&mut self, view: RSMViewID) {
     let command_queue = view.device().new_command_queue();
     let command_buffer = command_queue.command_buffer();
@@ -23,16 +24,15 @@ impl RSMRenderer for Example01Renderer {
 }
 
 fn main() {
-  RSMViewID::load_class();
+  rust_metal::load_classes();
+
+  let renderer = Box::new(Example01Renderer { });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-
-  let view = RSMViewID::from_renderer(Box::new(Example01Renderer { }), content_rect, metal::system_default_device());
-
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 01"));
-  window.set_content_view(view.clone());
-  window.set_delegate(view);
+  window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
+  window.set_delegate(RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

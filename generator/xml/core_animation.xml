@@ -1,5 +1,6 @@
 <framework module="cocoa">
   <use>foundation::*</use>
+  <use>metal::*</use>
 
-  <protocol name="CAMetalDrawable" inherits="NSObject" />
+  <protocol name="CAMetalDrawable" inherits="MTLDrawable, NSObject" />
 </framework>

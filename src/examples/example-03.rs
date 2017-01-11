@@ -4,6 +4,8 @@ extern crate nalgebra;
 use std::ops::Mul;
 
 use metal::*;
+use metal::rust_metal::*;
+
 use nalgebra::ToHomogeneous;
 
 #[allow(dead_code)]
@@ -143,25 +145,22 @@ impl RSMRenderer for Example03Renderer {
 }
 
 fn main() {
-  RSMViewID::load_class();
+  rust_metal::load_classes();
 
-  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-
-  let renderer = Example03Renderer {
+  let renderer = Box::new(Example03Renderer {
     time: std::time::Instant::now(),
     index_buffer: MTLBufferID::nil(),
     uniform_buffer: MTLBufferID::nil(),
     vertex_buffer: MTLBufferID::nil(),
     depth_stencil_state: MTLDepthStencilStateID::nil(),
     pipeline_state: MTLRenderPipelineStateID::nil()
-  };
+  });
 
-  let view = RSMViewID::from_renderer(Box::new(renderer), content_rect, metal::system_default_device());
-
+  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 03"));
-  window.set_content_view(view.clone());
-  window.set_delegate(view);
+  window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
+  window.set_delegate(RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

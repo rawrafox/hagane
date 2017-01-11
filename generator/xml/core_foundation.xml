@@ -1,0 +1,3 @@
+<framework module="core_foundation" no-prelude>
+  <alias name="CFTimeInterval" type="f64" />
+</framework>
