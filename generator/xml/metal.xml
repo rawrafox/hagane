@@ -69,9 +69,152 @@
     <value name="MTLDepthClipModeClamp" value="1" />
   </enumeration>
 
+  <enumeration name="MTLFeatureSet" type="NSUInteger">
+    <value name="MTLFeatureSet_iOS_GPUFamily1_v1" value="0" />
+    <value name="MTLFeatureSet_iOS_GPUFamily1_v2" value="2" />
+    <value name="MTLFeatureSet_iOS_GPUFamily1_v3" value="5" />
+    <value name="MTLFeatureSet_iOS_GPUFamily2_v1" value="1" />
+    <value name="MTLFeatureSet_iOS_GPUFamily2_v2" value="3" />
+    <value name="MTLFeatureSet_iOS_GPUFamily2_v3" value="6" />
+    <value name="MTLFeatureSet_iOS_GPUFamily3_v1" value="4" />
+    <value name="MTLFeatureSet_iOS_GPUFamily3_v2" value="7" />
+    <value name="MTLFeatureSet_OSX_GPUFamily1_v1" value="10000" />
+    <value name="MTLFeatureSet_OSX_GPUFamily1_v2" value="10001" />
+    <value name="MTLFeatureSet_OSX_ReadWriteTextureTier2" value="10002" />
+    <value name="MTLFeatureSet_tvOS_GPUFamily1_v1" value="30000" />
+    <value name="MTLFeatureSet_tvOS_GPUFamily1_v2" value="30001" />
+  </enumeration>
+
   <enumeration name="MTLIndexType" type="NSUInteger">
     <value name="MTLIndexTypeUInt16" value="0" />
     <value name="MTLIndexTypeUInt32" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLPixelFormat" type="NSUInteger">
+    <value name="MTLPixelFormatInvalid" value="0" />
+    <value name="MTLPixelFormatA8Unorm" value="1" />
+    <value name="MTLPixelFormatR8Unorm" value="10" />
+    <value name="MTLPixelFormatR8Unorm_sRGB" value="11" />
+    <value name="MTLPixelFormatR8Snorm" value="12" />
+    <value name="MTLPixelFormatR8Uint" value="13" />
+    <value name="MTLPixelFormatR8Sint" value="14" />
+    <value name="MTLPixelFormatR16Unorm" value="20" />
+    <value name="MTLPixelFormatR16Snorm" value="22" />
+    <value name="MTLPixelFormatR16Uint" value="23" />
+    <value name="MTLPixelFormatR16Sint" value="24" />
+    <value name="MTLPixelFormatR16Float" value="25" />
+    <value name="MTLPixelFormatRG8Unorm" value="30" />
+    <value name="MTLPixelFormatRG8Unorm_sRGB" value="31" />
+    <value name="MTLPixelFormatRG8Snorm" value="32" />
+    <value name="MTLPixelFormatRG8Uint" value="33" />
+    <value name="MTLPixelFormatRG8Sint" value="34" />
+    <value name="MTLPixelFormatB5G6R5Unorm" value="40" />
+    <value name="MTLPixelFormatA1BGR5Unorm" value="41" />
+    <value name="MTLPixelFormatABGR4Unorm" value="42" />
+    <value name="MTLPixelFormatBGR5A1Unorm" value="43" />
+    <value name="MTLPixelFormatR32Uint" value="53" />
+    <value name="MTLPixelFormatR32Sint" value="54" />
+    <value name="MTLPixelFormatR32Float" value="55" />
+    <value name="MTLPixelFormatRG16Unorm" value="60" />
+    <value name="MTLPixelFormatRG16Snorm" value="62" />
+    <value name="MTLPixelFormatRG16Uint" value="63" />
+    <value name="MTLPixelFormatRG16Sint" value="64" />
+    <value name="MTLPixelFormatRG16Float" value="65" />
+    <value name="MTLPixelFormatRGBA8Unorm" value="70" />
+    <value name="MTLPixelFormatRGBA8Unorm_sRGB" value="71" />
+    <value name="MTLPixelFormatRGBA8Snorm" value="72" />
+    <value name="MTLPixelFormatRGBA8Uint" value="73" />
+    <value name="MTLPixelFormatRGBA8Sint" value="74" />
+    <value name="MTLPixelFormatBGRA8Unorm" value="80" />
+    <value name="MTLPixelFormatBGRA8Unorm_sRGB" value="81" />
+    <value name="MTLPixelFormatRGB10A2Unorm" value="90" />
+    <value name="MTLPixelFormatRGB10A2Uint" value="91" />
+    <value name="MTLPixelFormatRG11B10Float" value="92" />
+    <value name="MTLPixelFormatRGB9E5Float" value="93" />
+    <value name="MTLPixelFormatBGR10_XR" value="554" />
+    <value name="MTLPixelFormatBGR10_XR_sRGB" value="555" />
+    <value name="MTLPixelFormatRG32Uint" value="103" />
+    <value name="MTLPixelFormatRG32Sint" value="104" />
+    <value name="MTLPixelFormatRG32Float" value="105" />
+    <value name="MTLPixelFormatRGBA16Unorm" value="110" />
+    <value name="MTLPixelFormatRGBA16Snorm" value="112" />
+    <value name="MTLPixelFormatRGBA16Uint" value="113" />
+    <value name="MTLPixelFormatRGBA16Sint" value="114" />
+    <value name="MTLPixelFormatRGBA16Float" value="115" />
+    <value name="MTLPixelFormatBGRA10_XR" value="552" />
+    <value name="MTLPixelFormatBGRA10_XR_sRGB" value="553" />
+    <value name="MTLPixelFormatRGBA32Uint" value="123" />
+    <value name="MTLPixelFormatRGBA32Sint" value="124" />
+    <value name="MTLPixelFormatRGBA32Float" value="125" />
+    <value name="MTLPixelFormatBC1_RGBA" value="130" />
+    <value name="MTLPixelFormatBC1_RGBA_sRGB" value="131" />
+    <value name="MTLPixelFormatBC2_RGBA" value="132" />
+    <value name="MTLPixelFormatBC2_RGBA_sRGB" value="133" />
+    <value name="MTLPixelFormatBC3_RGBA" value="134" />
+    <value name="MTLPixelFormatBC3_RGBA_sRGB" value="135" />
+    <value name="MTLPixelFormatBC4_RUnorm" value="140" />
+    <value name="MTLPixelFormatBC4_RSnorm" value="141" />
+    <value name="MTLPixelFormatBC5_RGUnorm" value="142" />
+    <value name="MTLPixelFormatBC5_RGSnorm" value="143" />
+    <value name="MTLPixelFormatBC6H_RGBFloat" value="150" />
+    <value name="MTLPixelFormatBC6H_RGBUfloat" value="151" />
+    <value name="MTLPixelFormatBC7_RGBAUnorm" value="152" />
+    <value name="MTLPixelFormatBC7_RGBAUnorm_sRGB" value="153" />
+    <value name="MTLPixelFormatPVRTC_RGB_2BPP" value="160" />
+    <value name="MTLPixelFormatPVRTC_RGB_2BPP_sRGB" value="161" />
+    <value name="MTLPixelFormatPVRTC_RGB_4BPP" value="162" />
+    <value name="MTLPixelFormatPVRTC_RGB_4BPP_sRGB" value="163" />
+    <value name="MTLPixelFormatPVRTC_RGBA_2BPP" value="164" />
+    <value name="MTLPixelFormatPVRTC_RGBA_2BPP_sRGB" value="165" />
+    <value name="MTLPixelFormatPVRTC_RGBA_4BPP" value="166" />
+    <value name="MTLPixelFormatPVRTC_RGBA_4BPP_sRGB" value="167" />
+    <value name="MTLPixelFormatEAC_R11Unorm" value="170" />
+    <value name="MTLPixelFormatEAC_R11Snorm" value="172" />
+    <value name="MTLPixelFormatEAC_RG11Unorm" value="174" />
+    <value name="MTLPixelFormatEAC_RG11Snorm" value="176" />
+    <value name="MTLPixelFormatEAC_RGBA8" value="178" />
+    <value name="MTLPixelFormatEAC_RGBA8_sRGB" value="179" />
+    <value name="MTLPixelFormatETC2_RGB8" value="180" />
+    <value name="MTLPixelFormatETC2_RGB8_sRGB" value="181" />
+    <value name="MTLPixelFormatETC2_RGB8A1" value="182" />
+    <value name="MTLPixelFormatETC2_RGB8A1_sRGB" value="183" />
+    <value name="MTLPixelFormatASTC_4x4_sRGB" value="186" />
+    <value name="MTLPixelFormatASTC_5x4_sRGB" value="187" />
+    <value name="MTLPixelFormatASTC_5x5_sRGB" value="188" />
+    <value name="MTLPixelFormatASTC_6x5_sRGB" value="189" />
+    <value name="MTLPixelFormatASTC_6x6_sRGB" value="190" />
+    <value name="MTLPixelFormatASTC_8x5_sRGB" value="192" />
+    <value name="MTLPixelFormatASTC_8x6_sRGB" value="193" />
+    <value name="MTLPixelFormatASTC_8x8_sRGB" value="194" />
+    <value name="MTLPixelFormatASTC_10x5_sRGB" value="195" />
+    <value name="MTLPixelFormatASTC_10x6_sRGB" value="196" />
+    <value name="MTLPixelFormatASTC_10x8_sRGB" value="197" />
+    <value name="MTLPixelFormatASTC_10x10_sRGB" value="198" />
+    <value name="MTLPixelFormatASTC_12x10_sRGB" value="199" />
+    <value name="MTLPixelFormatASTC_12x12_sRGB" value="200" />
+    <value name="MTLPixelFormatASTC_4x4_LDR" value="204" />
+    <value name="MTLPixelFormatASTC_5x4_LDR" value="205" />
+    <value name="MTLPixelFormatASTC_5x5_LDR" value="206" />
+    <value name="MTLPixelFormatASTC_6x5_LDR" value="207" />
+    <value name="MTLPixelFormatASTC_6x6_LDR" value="208" />
+    <value name="MTLPixelFormatASTC_8x5_LDR" value="210" />
+    <value name="MTLPixelFormatASTC_8x6_LDR" value="211" />
+    <value name="MTLPixelFormatASTC_8x8_LDR" value="212" />
+    <value name="MTLPixelFormatASTC_10x5_LDR" value="213" />
+    <value name="MTLPixelFormatASTC_10x6_LDR" value="214" />
+    <value name="MTLPixelFormatASTC_10x8_LDR" value="215" />
+    <value name="MTLPixelFormatASTC_10x10_LDR" value="216" />
+    <value name="MTLPixelFormatASTC_12x10_LDR" value="217" />
+    <value name="MTLPixelFormatASTC_12x12_LDR" value="218" />
+    <value name="MTLPixelFormatGBGR422" value="240" />
+    <value name="MTLPixelFormatBGRG422" value="241" />
+    <value name="MTLPixelFormatDepth16Unorm" value="250" />
+    <value name="MTLPixelFormatDepth32Float" value="252" />
+    <value name="MTLPixelFormatStencil8" value="253" />
+    <value name="MTLPixelFormatDepth24Unorm_Stencil8" value="255" />
+    <value name="MTLPixelFormatDepth32Float_Stencil8" value="260" />
+    <value name="MTLPixelFormatX32_Stencil8" value="261" />
+    <value name="MTLPixelFormatX24_Stencil8" value="262" />
   </enumeration>
 
   <enumeration name="MTLPrimitiveType" type="NSUInteger">
@@ -103,6 +246,13 @@
     <value name="MTLWindingClockwise" value="0" />
     <value name="MTLWindingCounterClockwise" value="1" />
   </enumeration>
+
+  <struct name="MTLClearColor">
+    <field name="red" type="f64" />
+    <field name="green" type="f64" />
+    <field name="blue" type="f64" />
+    <field name="alpha" type="f64" />
+  </struct>
 
   <!-- Classes -->
   <class name="MTLArgument" inherits="NSObject">

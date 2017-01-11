@@ -22,7 +22,7 @@ struct Example02Renderer {
 
 impl RSMRenderer for Example02Renderer {
   fn initialize(&mut self, view: RSMViewID) {
-    view.set_color_pixel_format(MTLPixelFormat::MTLPixelFormatBGRA8Unorm);
+    view.set_color_pixel_format(MTLPixelFormatBGRA8Unorm);
     view.set_preferred_frames_per_second(60);
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
 
@@ -46,7 +46,7 @@ impl RSMRenderer for Example02Renderer {
 
     let color_attachments = pipeline_descriptor.color_attachments();
     let color_attachment = color_attachments.object_at_indexed_subscript(0);
-    color_attachment.set_pixel_format(MTLPixelFormat::MTLPixelFormatBGRA8Unorm);
+    color_attachment.set_pixel_format(MTLPixelFormatBGRA8Unorm);
 
     self.pipeline_state = match device.new_render_pipeline_state_with_descriptor(pipeline_descriptor) {
       Ok(p) => p,
