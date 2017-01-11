@@ -38,11 +38,11 @@ pub trait ObjectiveC {
   fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self;
 
   #[inline] fn as_ptr(&self) -> *mut std::os::raw::c_void;
-  
+
 
   fn as_object(&self) -> &mut objc::runtime::Object {
     let ptr = self.as_ptr() as *mut objc::runtime::Object;
-    
+
     if ptr as usize != 0 {
       return unsafe { &mut *ptr };
     } else {
@@ -56,6 +56,11 @@ pub trait ObjectiveC {
     return self;
   }
 
-  forward!(retain_count, sel!(retainCount), () -> usize);
-  forward!(release, sel!(release), () -> ());
+  #[inline] fn retain_count(&self) -> usize where Self: 'static + Sized {
+    return unsafe { msg_send![self.as_object(), retainCount] };
+  }
+
+  #[inline] unsafe fn release(&self) where Self: 'static + Sized {
+    msg_send![self.as_object(), release];
+  }
 }

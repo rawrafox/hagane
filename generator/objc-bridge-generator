@@ -216,7 +216,7 @@ module Bridge
       o.block("impl Drop for #{self.name}ID") do |o|
         o.block("fn drop(&mut self)") do |o|
           o.block("if !self.is_nil()") do |o|
-            o.puts "self.release();"
+            o.puts "unsafe { self.release() };"
           end
         end
       end
@@ -435,22 +435,24 @@ module Bridge
         end
       end
 
+      owned = self.selector.match(/\A(alloc|new|copy|mutableCopy)/)
+
       return_values = self.children.select { |x| x.is_a? Return }.map do |return_value|
         case return_value.kind
         when "protocol"
           id_name = "#{return_value.protocol}ID"
 
-          [" -> #{id_name}", nil, id_name]
+          [" -> #{id_name}", nil, id_name, owned ? "result" : "result.retain()"]
         when "type"
           type_name = return_value.type.to_s
 
-          [" -> #{type_name}", nil, type_name]
+          [" -> #{type_name}", nil, type_name, "result"]
         when "generic"
           g = generics.pop
 
           raise Exception, "ran out of generics" unless g
 
-          [" -> #{g}", "#{g}: 'static + #{return_value.generic}", g]
+          [" -> #{g}", "#{g}: 'static + #{return_value.generic}", g, owned ? "result" : "result.retain()"]
         else
           raise Exception, "unknown kind #{return_value.kind}"
         end
@@ -462,7 +464,7 @@ module Bridge
       fn_args = (["&self"] + arguments.map { |arg| arg[0] }).join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
-      return_value = return_values[0] || ["", nil, "()"]
+      return_value = return_values[0] || ["", nil, "()", "result"]
       bounds_args = (arguments.map { |arg| arg[1] } + [return_value[1]]).compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
@@ -473,7 +475,7 @@ module Bridge
             o.block("Ok(r) =>") do |o|
               o.puts("let result: #{return_value[2]} = r;")
               o.puts
-              o.puts("return result;")
+              o.puts("return #{return_value[3]};")
             end
           end
         end

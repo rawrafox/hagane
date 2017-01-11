@@ -128,7 +128,7 @@ pub trait MDLAsset : NSObject {
         Ok(r) => {
           let result: T5 = r;
 
-          return result;
+          return result.retain();
         }
       }
     }
@@ -141,7 +141,7 @@ pub trait MDLAsset : NSObject {
         Ok(r) => {
           let result: T5 = r;
 
-          return result;
+          return result.retain();
         }
       }
     }
@@ -201,7 +201,7 @@ impl Clone for MDLAssetID {
 impl Drop for MDLAssetID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -373,7 +373,7 @@ impl Clone for MDLMeshID {
 impl Drop for MDLMeshID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -445,7 +445,7 @@ impl Clone for MDLMeshBufferDataID {
 impl Drop for MDLMeshBufferDataID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -527,7 +527,7 @@ impl Clone for MDLMeshBufferMapID {
 impl Drop for MDLMeshBufferMapID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -599,7 +599,7 @@ impl Clone for MDLObjectID {
 impl Drop for MDLObjectID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -718,7 +718,7 @@ impl Clone for MDLSubmeshID {
 impl Drop for MDLSubmeshID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -903,7 +903,7 @@ impl Clone for MDLVertexAttributeID {
 impl Drop for MDLVertexAttributeID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -1000,7 +1000,7 @@ impl Clone for MDLVertexDescriptorID {
 impl Drop for MDLVertexDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -1035,7 +1035,7 @@ pub trait MDLMeshBuffer : NSObject {
         Ok(r) => {
           let result: MDLMeshBufferMapID = r;
 
-          return result;
+          return result.retain();
         }
       }
     }
@@ -1106,7 +1106,7 @@ impl Clone for MDLMeshBufferID {
 impl Drop for MDLMeshBufferID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -1170,7 +1170,7 @@ impl Clone for MDLMeshBufferAllocatorID {
 impl Drop for MDLMeshBufferAllocatorID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }

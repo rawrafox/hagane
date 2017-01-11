@@ -160,7 +160,7 @@ fn main() {
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 03"));
+  window.set_title(NSStringID::from_str("Metal Example 04"));
   window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
   window.set_delegate(RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(NSObjectID::nil());

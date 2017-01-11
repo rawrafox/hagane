@@ -86,7 +86,7 @@ impl Clone for NSApplicationID {
 impl Drop for NSApplicationID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -158,7 +158,7 @@ impl Clone for NSViewID {
 impl Drop for NSViewID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -333,7 +333,7 @@ impl Clone for NSWindowID {
 impl Drop for NSWindowID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -405,7 +405,7 @@ impl Clone for NSWindowDelegateID {
 impl Drop for NSWindowDelegateID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }

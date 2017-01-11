@@ -44,7 +44,7 @@ impl Clone for CAMetalDrawableID {
 impl Drop for CAMetalDrawableID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }

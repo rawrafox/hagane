@@ -49,10 +49,16 @@
     <value name="MTLWindingCounterClockwise" value="1" />
   </enumeration>
 
+  <!-- Classes -->
   <!-- TODO: Missing -->
 
-  <!-- Protocols -->
+  <class name="MTLRenderPassDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
 
+  <!-- TODO: More missing -->
+
+  <!-- Protocols -->
   <protocol name="MTLBlitCommandEncoder" inherits="MTLCommandEncoder, NSObject">
     <!-- TODO: All missing -->
   </protocol>
@@ -65,7 +71,7 @@
     <method selector="contents">
       <return type="*mut std::os::raw::c_void" />
     </method>
-    
+
     <!-- Invalidating the Buffer’s Storage -->
     <!-- TODO: Fix NSRange
     <method selector="didModifyRange:">
@@ -75,7 +81,7 @@
 
     <!-- Properties -->
     <property name="length" type="NSUInteger" read-only />
-    
+
     <!-- Instance Methods -->
     <!-- TODO: Fix NSRange
     <method selector="addDebugMarker:range:">
@@ -86,9 +92,71 @@
     <method selector="removeAllDebugMarkers" />
   </protocol>
 
-  <!-- TODO: MTLCommandBuffer -->
+  <protocol name="MTLCommandBuffer" inherits="NSObject">
+    <!-- Creating Command Encoders -->
+    <method selector="renderCommandEncoderWithDescriptor:">
+      <argument name="renderPassDescriptor" protocol="MTLRenderPassDescriptor" />
+      <return protocol="MTLRenderCommandEncoder" />
+    </method>
+    <method selector="computeCommandEncoder">
+      <return protocol="MTLComputeCommandEncoder" />
+    </method>
+    <method selector="blitCommandEncoder">
+      <return protocol="MTLBlitCommandEncoder" />
+    </method>
+    <method selector="parallelRenderCommandEncoderWithDescriptor:">
+      <argument name="renderPassDescriptor" protocol="MTLRenderPassDescriptor" />
+      <return protocol="MTLParallelRenderCommandEncoder" />
+    </method>
+
+    <!-- Scheduling and Executing Commands -->
+    <method selector="enqueue" />
+    <method selector="commit" />
+    <!-- TODO: addScheduledHandler: -->
+    <!-- TODO: addCompletedHandler: -->
+    <method selector="presentDrawable:">
+      <argument name="drawable" protocol="MTLDrawable" />
+    </method>
+    <method selector="presentDrawable:atTime:">
+      <argument name="drawable" protocol="MTLDrawable" />
+      <argument name="time" type="CFTimeInterval" />
+    </method>
+    <method selector="waitUntilScheduled" />
+    <method selector="waitUntilCompleted" />
+
+    <!-- Monitoring Command Buffer Execution -->
+    <!-- TODO: status -->
+    <!-- TODO: error -->
+
+    <!-- Determining Whether to Keep Strong References to Associated Resource Objects -->
+    <property name="retainedReferences" type="bool" read-only />
+
+    <!-- Identifying the Command Buffer -->
+    <property name="device" protocol="MTLDevice" read-only />
+    <property name="commandQueue" protocol="MTLCommandQueue" read-only />
+    <property name="label" protocol="NSString" />
+
+  </protocol>
+
   <!-- TODO: MTLCommandEncoder -->
-  <!-- TODO: MTLCommandQueue -->
+
+  <protocol name="MTLCommandQueue" inherits="NSObject">
+    <!-- Creating Command Buffers -->
+    <method selector="commandBuffer">
+      <return protocol="MTLCommandBuffer" />
+    </method>
+
+    <method selector="commandBufferWithUnretainedReferences">
+      <return protocol="MTLCommandBuffer" />
+    </method>
+
+    <!-- Debugging with Xcode -->
+    <method selector="insertDebugCaptureBoundary" />
+
+    <!-- Identifying Properties -->
+    <property name="device" protocol="MTLDevice" read-only />
+    <property name="label" protocol="NSString" />
+  </protocol>
 
   <protocol name="MTLComputeCommandEncoder" inherits="MTLCommandEncoder, NSObject">
     <!-- TODO: All missing -->
@@ -111,6 +179,47 @@
     </method>
   </protocol>
 
+  <protocol name="MTLFence" inherits="NSObject">
+    <!-- Properties -->
+    <property name="device" protocol="MTLDevice" read-only />
+    <property name="label" protocol="NSString" />
+  </protocol>
+
+  <protocol name="MTLFunction" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLHeap" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLLibrary" inherits="NSObject">
+    <!-- Fetch a Non-Specialized Function -->
+    <method selector="newFunctionWithName:">
+      <argument name="functionName" protocol="NSString" />
+      <return protocol="MTLFunction" />
+    </method>
+
+    <!-- Compile a Specialized Function -->
+    <!-- TODO: newFunctionWithName:constantValues:completionHandler: -->
+    <!-- TODO: newFunctionWithName:constantValues:error: -->
+
+    <!-- Querying Library Contents -->
+    <property name="functionNames" protocol="NSArray" element="NSString" read-only />
+
+    <!-- Identifying Properties -->
+    <property name="device" protocol="MTLDevice" read-only />
+    <property name="label" protocol="NSString" />
+  </protocol>
+
+  <protocol name="MTLParallelRenderCommandEncoder" inherits="MTLCommandEncoder, NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
+  <protocol name="MTLRenderCommandEncoder" inherits="MTLCommandEncoder, NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
+
   <protocol name="MTLRenderPipelineState" inherits="NSObject">
     <!-- TODO: All missing -->
   </protocol>
@@ -119,7 +228,9 @@
     <!-- TODO: All missing -->
   </protocol>
 
-  <!-- TODO: More missing -->
+  <protocol name="MTLSamplerState" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </protocol>
 
   <protocol name="MTLTexture" inherits="NSObject">
     <!-- TODO: All missing -->

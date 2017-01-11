@@ -47,7 +47,8 @@ macro_rules! id {
 
         if !self.is_nil() {
           // println!("Releasing {}: current retain count is {}", stringify!($id_name), self.retain_count());
-          self.release();
+
+          unsafe { self.release() };
         }
       }
     }

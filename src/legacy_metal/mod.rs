@@ -5,7 +5,7 @@ use std::os::raw::c_void;
 
 use metal::*;
 
-use super::{ObjectiveC, CAMetalDrawable, NSArrayID, NSObject, NSErrorID, NSString, NSStringID};
+use super::{ObjectiveC, NSArrayID, NSObject, NSErrorID, NSString, NSStringID};
 
 #[link(name = "Metal", kind = "framework")]
 extern {
@@ -206,16 +206,6 @@ pub struct MTLSize {
   pub depth: usize
 }
 
-pub trait MTLCommandBuffer : NSObject {
-  forward!(commit, sel!(commit), () -> ());
-  forward!(present_drawable, sel!(presentDrawable:), (drawable: T) -> (), <T: CAMetalDrawable>);
-  forward!(render_command_encoder_with_descriptor, sel!(renderCommandEncoderWithDescriptor:), (render_pass_descriptor: T) -> MTLCommandEncoderID, <T: MTLRenderPassDescriptor>, retain);
-}
-
-id!(MTLCommandBufferID, MTLCommandBuffer);
-
-impl NSObject for MTLCommandBufferID {}
-
 pub trait MTLCommandEncoder : NSObject {
   forward!(draw_primitives_vertex_start_vertex_count, sel!(drawPrimitives:vertexStart:vertexCount:), (primitive_type: MTLPrimitiveType, start: usize, count: usize) -> ());
   forward!(draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset, sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type: MTLPrimitiveType, count: usize, index_type: MTLIndexType, index_buffer: T, offset: usize) -> (), <T: MTLBuffer>);
@@ -230,14 +220,6 @@ pub trait MTLCommandEncoder : NSObject {
 id!(MTLCommandEncoderID, MTLCommandEncoder);
 
 impl NSObject for MTLCommandEncoderID {}
-
-pub trait MTLCommandQueue : NSObject {
-  forward!(command_buffer, sel!(commandBuffer), () -> MTLCommandBufferID, retain);
-}
-
-id!(MTLCommandQueueID, MTLCommandQueue);
-
-impl NSObject for MTLCommandQueueID {}
 
 pub trait MTLDepthStencilDescriptor : NSObject {
   initializer!(init, sel!(init), ());
@@ -310,30 +292,6 @@ pub trait MTLDevice : NSObject {
 id!(MTLDeviceID, MTLDevice);
 
 impl NSObject for MTLDeviceID {}
-
-pub trait MTLFunction : NSObject {
-
-}
-
-id!(MTLFunctionID, MTLFunction);
-
-impl NSObject for MTLFunctionID {}
-
-pub trait MTLLibrary : NSObject {
-  forward!(new_function_with_name, sel!(newFunctionWithName:), (name: T) -> MTLFunctionID, <T: NSString>);
-}
-
-id!(MTLLibraryID, MTLLibrary);
-
-impl NSObject for MTLLibraryID {}
-
-pub trait MTLRenderPassDescriptor : NSObject {
-
-}
-
-id!(MTLRenderPassDescriptorID, MTLRenderPassDescriptor, "MTLRenderPassDescriptor");
-
-impl NSObject for MTLRenderPassDescriptorID {}
 
 pub trait MTLRenderPipelineColorAttachmentDescriptor : NSObject {
   forward!(set_pixel_format, sel!(setPixelFormat:), (format: usize) -> ());

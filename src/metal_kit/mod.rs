@@ -508,7 +508,7 @@ impl Clone for MTKViewID {
 impl Drop for MTKViewID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -597,7 +597,7 @@ impl Clone for MTKViewDelegateID {
 impl Drop for MTKViewDelegateID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }

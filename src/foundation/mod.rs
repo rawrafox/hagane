@@ -54,7 +54,7 @@ pub trait NSArray : NSObject {
         Ok(r) => {
           let result: T5 = r;
 
-          return result;
+          return result.retain();
         }
       }
     }
@@ -67,7 +67,7 @@ pub trait NSArray : NSObject {
         Ok(r) => {
           let result: T5 = r;
 
-          return result;
+          return result.retain();
         }
       }
     }
@@ -127,7 +127,7 @@ impl Clone for NSArrayID {
 impl Drop for NSArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -191,7 +191,7 @@ impl Clone for NSCoderID {
 impl Drop for NSCoderID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -263,7 +263,7 @@ impl Clone for NSErrorID {
 impl Drop for NSErrorID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -336,7 +336,7 @@ impl Clone for NSMutableArrayID {
 impl Drop for NSMutableArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -528,7 +528,7 @@ impl Clone for NSStringID {
 impl Drop for NSStringID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -612,7 +612,7 @@ impl Clone for NSURLID {
 impl Drop for NSURLID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
@@ -749,7 +749,7 @@ impl Clone for NSObjectID {
 impl Drop for NSObjectID {
   fn drop(&mut self) {
     if !self.is_nil() {
-      self.release();
+      unsafe { self.release() };
     }
   }
 }
