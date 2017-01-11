@@ -93,16 +93,15 @@ impl RSMRenderer for Example04Renderer {
 
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
-    let rotation_x = seconds * std::f32::consts::FRAC_PI_2;
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = ((5.0f32 * seconds).sin() * 0.25f32 + 1.0f32) * 0.01f32;
+    let scale_factor = 0.02f32;
 
-    let rotation = nalgebra::Rotation3::from_euler_angles(rotation_x, rotation_y, 0.0);
+    let rotation = nalgebra::Rotation3::from_euler_angles(0.0, rotation_y, 0.0);
 
     let model_matrix = nalgebra::Similarity3::from_rotation_matrix(nalgebra::Vector3::new(0.0f32, 0.0f32, 0.0f32), rotation, scale_factor);
 
     let origin = nalgebra::Point3::new(0.0f32, 0.0f32,  0.0f32);
-    let camera = nalgebra::Point3::new(0.0f32, 0.0f32, -5.0f32);
+    let camera = nalgebra::Point3::new(0.0f32, 0.0f32, -7.0f32);
 
     let camera_matrix = nalgebra::Isometry3::new_observer_frame(&camera, &origin, &nalgebra::Vector3::new(0.0f32, 1.0f32, 0.0f32));
     let projection_matrix = nalgebra::PerspectiveMatrix3::new(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
@@ -148,7 +147,7 @@ impl RSMRenderer for Example04Renderer {
 fn main() {
   RSMViewID::load_class();
 
-  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
+  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 600.0, height: 600.0 } };
 
   let renderer = Example04Renderer {
     time: std::time::Instant::now(),
