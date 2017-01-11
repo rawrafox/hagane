@@ -7,6 +7,67 @@ use core_foundation::*;
 use foundation::*;
 use legacy_metal::*;
 bitflags! {
+  pub flags MTLArgumentAccess: NSUInteger {
+    const MTLArgumentAccessReadOnly = 0,
+    const MTLArgumentAccessReadWrite = 1,
+    const MTLArgumentAccessWriteOnly = 2,
+  }
+}
+bitflags! {
+  pub flags MTLArgumentType: NSUInteger {
+    const MTLArgumentTypeBuffer = 0,
+    const MTLArgumentTypeThreadgroupMemory = 1,
+    const MTLArgumentTypeTexture = 2,
+    const MTLArgumentTypeSampler = 4,
+  }
+}
+bitflags! {
+  pub flags MTLAttributeFormat: NSUInteger {
+    const MTLAttributeFormatInvalid = 0,
+    const MTLAttributeFormatUChar2 = 1,
+    const MTLAttributeFormatUChar3 = 2,
+    const MTLAttributeFormatUChar4 = 3,
+    const MTLAttributeFormatChar2 = 4,
+    const MTLAttributeFormatChar3 = 5,
+    const MTLAttributeFormatChar4 = 6,
+    const MTLAttributeFormatUChar2Normalized = 7,
+    const MTLAttributeFormatUChar3Normalized = 8,
+    const MTLAttributeFormatUChar4Normalized = 9,
+    const MTLAttributeFormatChar2Normalized = 10,
+    const MTLAttributeFormatChar3Normalized = 11,
+    const MTLAttributeFormatChar4Normalized = 12,
+    const MTLAttributeFormatUShort2 = 13,
+    const MTLAttributeFormatUShort3 = 14,
+    const MTLAttributeFormatUShort4 = 15,
+    const MTLAttributeFormatShort2 = 16,
+    const MTLAttributeFormatShort3 = 17,
+    const MTLAttributeFormatShort4 = 18,
+    const MTLAttributeFormatUShort2Normalized = 19,
+    const MTLAttributeFormatUShort3Normalized = 20,
+    const MTLAttributeFormatUShort4Normalized = 21,
+    const MTLAttributeFormatShort2Normalized = 22,
+    const MTLAttributeFormatShort3Normalized = 23,
+    const MTLAttributeFormatShort4Normalized = 24,
+    const MTLAttributeFormatHalf2 = 25,
+    const MTLAttributeFormatHalf3 = 26,
+    const MTLAttributeFormatHalf4 = 27,
+    const MTLAttributeFormatFloat = 28,
+    const MTLAttributeFormatFloat2 = 29,
+    const MTLAttributeFormatFloat3 = 30,
+    const MTLAttributeFormatFloat4 = 31,
+    const MTLAttributeFormatInt = 32,
+    const MTLAttributeFormatInt2 = 33,
+    const MTLAttributeFormatInt3 = 34,
+    const MTLAttributeFormatInt4 = 35,
+    const MTLAttributeFormatUInt = 36,
+    const MTLAttributeFormatUInt2 = 37,
+    const MTLAttributeFormatUInt3 = 38,
+    const MTLAttributeFormatUInt4 = 39,
+    const MTLAttributeFormatInt1010102Normalized = 40,
+    const MTLAttributeFormatUInt1010102Normalized = 41,
+  }
+}
+bitflags! {
   pub flags MTLBlendFactor: NSUInteger {
     const MTLBlendFactorZero = 0,
     const MTLBlendFactorOne = 1,
@@ -39,6 +100,20 @@ bitflags! {
   }
 }
 bitflags! {
+  pub flags MTLBlitOption: NSUInteger {
+    const MTLBlitOptionNone = 0,
+    const MTLBlitOptionDepthFromDepthStencil = 1 << 0,
+    const MTLBlitOptionStencilFromDepthStencil = 1 << 1,
+    const MTLBlitOptionRowLinearPVRTC = 1 << 2,
+  }
+}
+bitflags! {
+  pub flags MTLCPUCacheMode: NSUInteger {
+    const MTLCPUCacheModeDefaultCache = 0,
+    const MTLCPUCacheModeWriteCombined = 1,
+  }
+}
+bitflags! {
   pub flags MTLColorWriteMask: NSUInteger {
     const MTLColorWriteMaskNone = 0,
     const MTLColorWriteMaskRed = 0x1 << 3,
@@ -46,6 +121,29 @@ bitflags! {
     const MTLColorWriteMaskBlue = 0x1 << 1,
     const MTLColorWriteMaskAlpha = 0x1 << 0,
     const MTLColorWriteMaskAll = 0xf,
+  }
+}
+bitflags! {
+  pub flags MTLCommandBufferError: NSUInteger {
+    const MTLCommandBufferErrorNone = 0,
+    const MTLCommandBufferErrorInternal = 1,
+    const MTLCommandBufferErrorTimeout = 2,
+    const MTLCommandBufferErrorPageFault = 3,
+    const MTLCommandBufferErrorBlacklisted = 4,
+    const MTLCommandBufferErrorNotPermitted = 7,
+    const MTLCommandBufferErrorOutOfMemory = 8,
+    const MTLCommandBufferErrorInvalidResource = 9,
+    const MTLCommandBufferErrorMemoryless = 10,
+  }
+}
+bitflags! {
+  pub flags MTLCommandBufferStatus: NSUInteger {
+    const MTLCommandBufferStatusNotEnqueued = 0,
+    const MTLCommandBufferStatusEnqueued = 1,
+    const MTLCommandBufferStatusCommitted = 2,
+    const MTLCommandBufferStatusScheduled = 3,
+    const MTLCommandBufferStatusCompleted = 4,
+    const MTLCommandBufferStatusError = 5,
   }
 }
 bitflags! {
@@ -58,12 +156,6 @@ bitflags! {
     const MTLCompareFunctionNotEqual = 5,
     const MTLCompareFunctionGreaterEqual = 6,
     const MTLCompareFunctionAlways = 7,
-  }
-}
-bitflags! {
-  pub flags MTLCPUCacheMode: NSUInteger {
-    const MTLCPUCacheModeDefaultCache = 0,
-    const MTLCPUCacheModeWriteCombined = 1,
   }
 }
 bitflags! {
@@ -97,9 +189,61 @@ bitflags! {
   }
 }
 bitflags! {
+  pub flags MTLFunctionType: NSUInteger {
+    const MTLFunctionTypeVertex = 1,
+    const MTLFunctionTypeFragment = 2,
+    const MTLFunctionTypeKernel = 3,
+  }
+}
+bitflags! {
   pub flags MTLIndexType: NSUInteger {
     const MTLIndexTypeUInt16 = 0,
     const MTLIndexTypeUInt32 = 1,
+  }
+}
+bitflags! {
+  pub flags MTLLanguageVersion: NSUInteger {
+    const MTLLanguageVersion1_0 = (1 << 16),
+    const MTLLanguageVersion1_1 = (1 << 16) + 1,
+    const MTLLanguageVersion1_2 = (1 << 16) + 2,
+  }
+}
+bitflags! {
+  pub flags MTLLibraryError: NSUInteger {
+    const MTLLibraryErrorUnsupported = 1,
+    const MTLLibraryErrorInternal = 2,
+    const MTLLibraryErrorCompileFailure = 3,
+    const MTLLibraryErrorCompileWarning = 4,
+    const MTLLibraryErrorFunctionNotFound = 5,
+    const MTLLibraryErrorFileNotFound = 6,
+  }
+}
+bitflags! {
+  pub flags MTLLoadAction: NSUInteger {
+    const MTLLoadActionDontCare = 0,
+    const MTLLoadActionLoad = 1,
+    const MTLLoadActionClear = 2,
+  }
+}
+bitflags! {
+  pub flags MTLMultisampleDepthResolveFilter: NSUInteger {
+    const MTLMultisampleDepthResolveFilterSample0 = 0,
+    const MTLMultisampleDepthResolveFilterMin = 1,
+    const MTLMultisampleDepthResolveFilterMax = 2,
+  }
+}
+bitflags! {
+  pub flags MTLPatchType: NSUInteger {
+    const MTLPatchTypeNone = 0,
+    const MTLPatchTypeTriangle = 1,
+    const MTLPatchTypeQuad = 2,
+  }
+}
+bitflags! {
+  pub flags MTLPipelineOption: NSUInteger {
+    const MTLPipelineOptionNone = 0,
+    const MTLPipelineOptionArgumentInfo = 1 << 0,
+    const MTLPipelineOptionBufferTypeInfo = 1 << 1,
   }
 }
 bitflags! {
@@ -231,6 +375,14 @@ bitflags! {
   }
 }
 bitflags! {
+  pub flags MTLPrimitiveTopologyClass: NSUInteger {
+    const MTLPrimitiveTopologyClassUnspecified = 0,
+    const MTLPrimitiveTopologyClassPoint = 1,
+    const MTLPrimitiveTopologyClassLine = 2,
+    const MTLPrimitiveTopologyClassTriangle = 3,
+  }
+}
+bitflags! {
   pub flags MTLPrimitiveType: NSUInteger {
     const MTLPrimitiveTypePoint = 0,
     const MTLPrimitiveTypeLine = 1,
@@ -240,16 +392,217 @@ bitflags! {
   }
 }
 bitflags! {
+  pub flags MTLPurgeableState: NSUInteger {
+    const MTLPurgeableStateKeepCurrent = 1,
+    const MTLPurgeableStateNonVolatile = 2,
+    const MTLPurgeableStateVolatile = 3,
+    const MTLPurgeableStateEmpty = 4,
+  }
+}
+bitflags! {
+  pub flags MTLRenderPipelineError: NSUInteger {
+    const MTLRenderPipelineErrorInternal = 1,
+    const MTLRenderPipelineErrorUnsupported = 2,
+    const MTLRenderPipelineErrorInvalidInput = 3,
+  }
+}
+bitflags! {
+  pub flags MTLRenderStages: NSUInteger {
+    const MTLRenderStageVertex = (1 << 0),
+    const MTLRenderStageFragment = (1 << 1),
+  }
+}
+bitflags! {
+  pub flags MTLResourceOptions: NSUInteger {
+    const MTLResourceCPUCacheModeDefaultCache = MTLCPUCacheModeDefaultCache.bits << 0,
+    const MTLResourceCPUCacheModeWriteCombined = MTLCPUCacheModeWriteCombined.bits << 0,
+    const MTLResourceStorageModeShared = MTLStorageModeShared.bits << 4,
+    const MTLResourceStorageModeManaged = MTLStorageModeManaged.bits << 4,
+    const MTLResourceStorageModePrivate = MTLStorageModePrivate.bits << 4,
+    const MTLResourceStorageModeMemoryless = MTLStorageModeMemoryless.bits << 4,
+    const MTLResourceHazardTrackingModeUntracked = 0x1 << 8,
+  }
+}
+bitflags! {
+  pub flags MTLSamplerAddressMode: NSUInteger {
+    const MTLSamplerAddressModeClampToEdge = 0,
+    const MTLSamplerAddressModeMirrorClampToEdge = 1,
+    const MTLSamplerAddressModeRepeat = 2,
+    const MTLSamplerAddressModeMirrorRepeat = 3,
+    const MTLSamplerAddressModeClampToZero = 4,
+    const MTLSamplerAddressModeClampToBorderColor = 5,
+  }
+}
+bitflags! {
+  pub flags MTLSamplerBorderColor: NSUInteger {
+    const MTLSamplerBorderColorTransparentBlack = 0,
+    const MTLSamplerBorderColorOpaqueBlack = 1,
+    const MTLSamplerBorderColorOpaqueWhite = 2,
+  }
+}
+bitflags! {
+  pub flags MTLSamplerMinMagFilter: NSUInteger {
+    const MTLSamplerMinMagFilterNearest = 0,
+    const MTLSamplerMinMagFilterLinear = 1,
+  }
+}
+bitflags! {
+  pub flags MTLSamplerMipFilter: NSUInteger {
+    const MTLSamplerMipFilterNotMipmapped = 0,
+    const MTLSamplerMipFilterNearest = 1,
+    const MTLSamplerMipFilterLinear = 2,
+  }
+}
+bitflags! {
+  pub flags MTLStencilOperation: NSUInteger {
+    const MTLStencilOperationKeep = 0,
+    const MTLStencilOperationZero = 1,
+    const MTLStencilOperationReplace = 2,
+    const MTLStencilOperationIncrementClamp = 3,
+    const MTLStencilOperationDecrementClamp = 4,
+    const MTLStencilOperationInvert = 5,
+    const MTLStencilOperationIncrementWrap = 6,
+    const MTLStencilOperationDecrementWrap = 7,
+  }
+}
+bitflags! {
+  pub flags MTLStepFunction: NSUInteger {
+    const MTLStepFunctionConstant = 0,
+    const MTLStepFunctionPerVertex = 1,
+    const MTLStepFunctionPerInstance = 2,
+    const MTLStepFunctionPerPatch = 3,
+    const MTLStepFunctionPerPatchControlPoint = 4,
+    const MTLStepFunctionThreadPositionInGridX = 5,
+    const MTLStepFunctionThreadPositionInGridY = 6,
+    const MTLStepFunctionThreadPositionInGridXIndexed = 7,
+    const MTLStepFunctionThreadPositionInGridYIndexed = 8,
+  }
+}
+bitflags! {
   pub flags MTLStorageMode: NSUInteger {
     const MTLStorageModeShared = 0,
     const MTLStorageModeManaged = 1,
     const MTLStorageModePrivate = 2,
+    const MTLStorageModeMemoryless = 3,
+  }
+}
+bitflags! {
+  pub flags MTLStoreAction: NSUInteger {
+    const MTLStoreActionDontCare = 0,
+    const MTLStoreActionStore = 1,
+    const MTLStoreActionMultisampleResolve = 2,
+    const MTLStoreActionStoreAndMultisampleResolve = 3,
+    const MTLStoreActionUnknown = 4,
+  }
+}
+bitflags! {
+  pub flags MTLTessellationControlPointIndexType: NSUInteger {
+    const MTLTessellationControlPointIndexTypeNone = 0,
+    const MTLTessellationControlPointIndexTypeUInt16 = 1,
+    const MTLTessellationControlPointIndexTypeUInt32 = 2,
+  }
+}
+bitflags! {
+  pub flags MTLTessellationFactorFormat: NSUInteger {
+    const MTLTessellationFactorFormatHalf = 0,
+  }
+}
+bitflags! {
+  pub flags MTLTessellationFactorStepFunction: NSUInteger {
+    const MTLTessellationFactorStepFunctionConstant = 0,
+    const MTLTessellationFactorStepFunctionPerPatch = 1,
+    const MTLTessellationFactorStepFunctionPerInstance = 2,
+    const MTLTessellationFactorStepFunctionPerPatchAndPerInstance = 3,
+  }
+}
+bitflags! {
+  pub flags MTLTessellationPartitionMode: NSUInteger {
+    const MTLTessellationPartitionModePow2 = 0,
+    const MTLTessellationPartitionModeInteger = 1,
+    const MTLTessellationPartitionModeFractionalOdd = 2,
+    const MTLTessellationPartitionModeFractionalEven = 3,
+  }
+}
+bitflags! {
+  pub flags MTLTextureType: NSUInteger {
+    const MTLTextureType1D = 0,
+    const MTLTextureType1DArray = 1,
+    const MTLTextureType2D = 2,
+    const MTLTextureType2DArray = 3,
+    const MTLTextureType2DMultisample = 4,
+    const MTLTextureTypeCube = 5,
+    const MTLTextureTypeCubeArray = 6,
+    const MTLTextureType3D = 7,
+  }
+}
+bitflags! {
+  pub flags MTLTextureUsage: NSUInteger {
+    const MTLTextureUsageUnknown = 0x0000,
+    const MTLTextureUsageShaderRead = 0x0001,
+    const MTLTextureUsageShaderWrite = 0x0002,
+    const MTLTextureUsageRenderTarget = 0x0004,
+    const MTLTextureUsagePixelFormatView = 0x0010,
   }
 }
 bitflags! {
   pub flags MTLTriangleFillMode: NSUInteger {
     const MTLTriangleFillModeFill = 0,
     const MTLTriangleFillModeLines = 1,
+  }
+}
+bitflags! {
+  pub flags MTLVertexFormat: NSUInteger {
+    const MTLVertexFormatInvalid = 0,
+    const MTLVertexFormatUChar2 = 1,
+    const MTLVertexFormatUChar3 = 2,
+    const MTLVertexFormatUChar4 = 3,
+    const MTLVertexFormatChar2 = 4,
+    const MTLVertexFormatChar3 = 5,
+    const MTLVertexFormatChar4 = 6,
+    const MTLVertexFormatUChar2Normalized = 7,
+    const MTLVertexFormatUChar3Normalized = 8,
+    const MTLVertexFormatUChar4Normalized = 9,
+    const MTLVertexFormatChar2Normalized = 10,
+    const MTLVertexFormatChar3Normalized = 11,
+    const MTLVertexFormatChar4Normalized = 12,
+    const MTLVertexFormatUShort2 = 13,
+    const MTLVertexFormatUShort3 = 14,
+    const MTLVertexFormatUShort4 = 15,
+    const MTLVertexFormatShort2 = 16,
+    const MTLVertexFormatShort3 = 17,
+    const MTLVertexFormatShort4 = 18,
+    const MTLVertexFormatUShort2Normalized = 19,
+    const MTLVertexFormatUShort3Normalized = 20,
+    const MTLVertexFormatUShort4Normalized = 21,
+    const MTLVertexFormatShort2Normalized = 22,
+    const MTLVertexFormatShort3Normalized = 23,
+    const MTLVertexFormatShort4Normalized = 24,
+    const MTLVertexFormatHalf2 = 25,
+    const MTLVertexFormatHalf3 = 26,
+    const MTLVertexFormatHalf4 = 27,
+    const MTLVertexFormatFloat = 28,
+    const MTLVertexFormatFloat2 = 29,
+    const MTLVertexFormatFloat3 = 30,
+    const MTLVertexFormatFloat4 = 31,
+    const MTLVertexFormatInt = 32,
+    const MTLVertexFormatInt2 = 33,
+    const MTLVertexFormatInt3 = 34,
+    const MTLVertexFormatInt4 = 35,
+    const MTLVertexFormatUInt = 36,
+    const MTLVertexFormatUInt2 = 37,
+    const MTLVertexFormatUInt3 = 38,
+    const MTLVertexFormatUInt4 = 39,
+    const MTLVertexFormatInt1010102Normalized = 40,
+    const MTLVertexFormatUInt1010102Normalized = 41,
+  }
+}
+bitflags! {
+  pub flags MTLVertexStepFunction: NSUInteger {
+    const MTLVertexStepFunctionConstant = 0,
+    const MTLVertexStepFunctionPerVertex = 1,
+    const MTLVertexStepFunctionPerInstance = 2,
+    const MTLVertexStepFunctionPerPatch = 3,
+    const MTLVertexStepFunctionPerPatchControlPoint = 4,
   }
 }
 bitflags! {

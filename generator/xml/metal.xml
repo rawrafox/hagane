@@ -3,6 +3,64 @@
   <use>foundation::*</use>
   <use>legacy_metal::*</use>
 
+  <enumeration name="MTLArgumentAccess" type="NSUInteger">
+    <value name="MTLArgumentAccessReadOnly" value="0" />
+    <value name="MTLArgumentAccessReadWrite" value="1" />
+    <value name="MTLArgumentAccessWriteOnly" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLArgumentType" type="NSUInteger">
+    <value name="MTLArgumentTypeBuffer" value="0" />
+    <value name="MTLArgumentTypeThreadgroupMemory" value="1" />
+    <value name="MTLArgumentTypeTexture" value="2" />
+    <value name="MTLArgumentTypeSampler" value="4" />
+  </enumeration>
+
+  <enumeration name="MTLAttributeFormat" type="NSUInteger">
+    <value name="MTLAttributeFormatInvalid" value="0" />
+    <value name="MTLAttributeFormatUChar2" value="1" />
+    <value name="MTLAttributeFormatUChar3" value="2" />
+    <value name="MTLAttributeFormatUChar4" value="3" />
+    <value name="MTLAttributeFormatChar2" value="4" />
+    <value name="MTLAttributeFormatChar3" value="5" />
+    <value name="MTLAttributeFormatChar4" value="6" />
+    <value name="MTLAttributeFormatUChar2Normalized" value="7" />
+    <value name="MTLAttributeFormatUChar3Normalized" value="8" />
+    <value name="MTLAttributeFormatUChar4Normalized" value="9" />
+    <value name="MTLAttributeFormatChar2Normalized" value="10" />
+    <value name="MTLAttributeFormatChar3Normalized" value="11" />
+    <value name="MTLAttributeFormatChar4Normalized" value="12" />
+    <value name="MTLAttributeFormatUShort2" value="13" />
+    <value name="MTLAttributeFormatUShort3" value="14" />
+    <value name="MTLAttributeFormatUShort4" value="15" />
+    <value name="MTLAttributeFormatShort2" value="16" />
+    <value name="MTLAttributeFormatShort3" value="17" />
+    <value name="MTLAttributeFormatShort4" value="18" />
+    <value name="MTLAttributeFormatUShort2Normalized" value="19" />
+    <value name="MTLAttributeFormatUShort3Normalized" value="20" />
+    <value name="MTLAttributeFormatUShort4Normalized" value="21" />
+    <value name="MTLAttributeFormatShort2Normalized" value="22" />
+    <value name="MTLAttributeFormatShort3Normalized" value="23" />
+    <value name="MTLAttributeFormatShort4Normalized" value="24" />
+    <value name="MTLAttributeFormatHalf2" value="25" />
+    <value name="MTLAttributeFormatHalf3" value="26" />
+    <value name="MTLAttributeFormatHalf4" value="27" />
+    <value name="MTLAttributeFormatFloat" value="28" />
+    <value name="MTLAttributeFormatFloat2" value="29" />
+    <value name="MTLAttributeFormatFloat3" value="30" />
+    <value name="MTLAttributeFormatFloat4" value="31" />
+    <value name="MTLAttributeFormatInt" value="32" />
+    <value name="MTLAttributeFormatInt2" value="33" />
+    <value name="MTLAttributeFormatInt3" value="34" />
+    <value name="MTLAttributeFormatInt4" value="35" />
+    <value name="MTLAttributeFormatUInt" value="36" />
+    <value name="MTLAttributeFormatUInt2" value="37" />
+    <value name="MTLAttributeFormatUInt3" value="38" />
+    <value name="MTLAttributeFormatUInt4" value="39" />
+    <value name="MTLAttributeFormatInt1010102Normalized" value="40" />
+    <value name="MTLAttributeFormatUInt1010102Normalized" value="41" />
+  </enumeration>
+
   <enumeration name="MTLBlendFactor" type="NSUInteger">
     <value name="MTLBlendFactorZero" value="0" />
     <value name="MTLBlendFactorOne" value="1" />
@@ -33,6 +91,18 @@
     <value name="MTLBlendOperationMax" value="4" />
   </enumeration>
 
+  <enumeration name="MTLBlitOption" type="NSUInteger">
+    <value name="MTLBlitOptionNone" value="0" />
+    <value name="MTLBlitOptionDepthFromDepthStencil" value="1 << 0" />
+    <value name="MTLBlitOptionStencilFromDepthStencil" value="1 << 1" />
+    <value name="MTLBlitOptionRowLinearPVRTC" value="1 << 2" />
+  </enumeration>
+
+  <enumeration name="MTLCPUCacheMode" type="NSUInteger">
+    <value name="MTLCPUCacheModeDefaultCache" value="0" />
+    <value name="MTLCPUCacheModeWriteCombined" value="1" />
+  </enumeration>
+
   <enumeration name="MTLColorWriteMask" type="NSUInteger">
     <value name="MTLColorWriteMaskNone" value="0" />
     <value name="MTLColorWriteMaskRed" value="0x1 << 3" />
@@ -40,6 +110,27 @@
     <value name="MTLColorWriteMaskBlue" value="0x1 << 1" />
     <value name="MTLColorWriteMaskAlpha" value="0x1 << 0" />
     <value name="MTLColorWriteMaskAll" value="0xf" />
+  </enumeration>
+
+  <enumeration name="MTLCommandBufferError" type="NSUInteger">
+    <value name="MTLCommandBufferErrorNone" value="0" />
+    <value name="MTLCommandBufferErrorInternal" value="1" />
+    <value name="MTLCommandBufferErrorTimeout" value="2" />
+    <value name="MTLCommandBufferErrorPageFault" value="3" />
+    <value name="MTLCommandBufferErrorBlacklisted" value="4" />
+    <value name="MTLCommandBufferErrorNotPermitted" value="7" />
+    <value name="MTLCommandBufferErrorOutOfMemory" value="8" />
+    <value name="MTLCommandBufferErrorInvalidResource" value="9" />
+    <value name="MTLCommandBufferErrorMemoryless" value="10" />
+  </enumeration>
+
+  <enumeration name="MTLCommandBufferStatus" type="NSUInteger">
+    <value name="MTLCommandBufferStatusNotEnqueued" value="0" />
+    <value name="MTLCommandBufferStatusEnqueued" value="1" />
+    <value name="MTLCommandBufferStatusCommitted" value="2" />
+    <value name="MTLCommandBufferStatusScheduled" value="3" />
+    <value name="MTLCommandBufferStatusCompleted" value="4" />
+    <value name="MTLCommandBufferStatusError" value="5" />
   </enumeration>
 
   <enumeration name="MTLCompareFunction" type="NSUInteger">
@@ -51,11 +142,6 @@
     <value name="MTLCompareFunctionNotEqual" value="5" />
     <value name="MTLCompareFunctionGreaterEqual" value="6" />
     <value name="MTLCompareFunctionAlways" value="7" />
-  </enumeration>
-
-  <enumeration name="MTLCPUCacheMode" type="NSUInteger">
-    <value name="MTLCPUCacheModeDefaultCache" value="0" />
-    <value name="MTLCPUCacheModeWriteCombined" value="1" />
   </enumeration>
 
   <enumeration name="MTLCullMode" type="NSUInteger">
@@ -85,9 +171,54 @@
     <value name="MTLFeatureSet_tvOS_GPUFamily1_v2" value="30001" />
   </enumeration>
 
+  <enumeration name="MTLFunctionType" type="NSUInteger">
+    <value name="MTLFunctionTypeVertex" value="1" />
+    <value name="MTLFunctionTypeFragment" value="2" />
+    <value name="MTLFunctionTypeKernel" value="3" />
+  </enumeration>
+
   <enumeration name="MTLIndexType" type="NSUInteger">
     <value name="MTLIndexTypeUInt16" value="0" />
     <value name="MTLIndexTypeUInt32" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLLanguageVersion" type="NSUInteger">
+    <value name="MTLLanguageVersion1_0" value="(1 << 16)" />
+    <value name="MTLLanguageVersion1_1" value="(1 << 16) + 1" />
+    <value name="MTLLanguageVersion1_2" value="(1 << 16) + 2" />
+  </enumeration>
+
+  <enumeration name="MTLLibraryError" type="NSUInteger">
+    <value name="MTLLibraryErrorUnsupported" value="1" />
+    <value name="MTLLibraryErrorInternal" value="2" />
+    <value name="MTLLibraryErrorCompileFailure" value="3" />
+    <value name="MTLLibraryErrorCompileWarning" value="4" />
+    <value name="MTLLibraryErrorFunctionNotFound" value="5" />
+    <value name="MTLLibraryErrorFileNotFound" value="6" />
+  </enumeration>
+
+  <enumeration name="MTLLoadAction" type="NSUInteger">
+    <value name="MTLLoadActionDontCare" value="0" />
+    <value name="MTLLoadActionLoad" value="1" />
+    <value name="MTLLoadActionClear" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLMultisampleDepthResolveFilter" type="NSUInteger">
+    <value name="MTLMultisampleDepthResolveFilterSample0" value="0" />
+    <value name="MTLMultisampleDepthResolveFilterMin" value="1" />
+    <value name="MTLMultisampleDepthResolveFilterMax" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLPatchType" type="NSUInteger">
+    <value name="MTLPatchTypeNone" value="0" />
+    <value name="MTLPatchTypeTriangle" value="1" />
+    <value name="MTLPatchTypeQuad" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLPipelineOption" type="NSUInteger">
+    <value name="MTLPipelineOptionNone" value="0" />
+    <value name="MTLPipelineOptionArgumentInfo" value="1 << 0" />
+    <value name="MTLPipelineOptionBufferTypeInfo" value="1 << 1" />
   </enumeration>
 
   <enumeration name="MTLPixelFormat" type="NSUInteger">
@@ -217,6 +348,13 @@
     <value name="MTLPixelFormatX24_Stencil8" value="262" />
   </enumeration>
 
+  <enumeration name="MTLPrimitiveTopologyClass" type="NSUInteger">
+    <value name="MTLPrimitiveTopologyClassUnspecified" value="0" />
+    <value name="MTLPrimitiveTopologyClassPoint" value="1" />
+    <value name="MTLPrimitiveTopologyClassLine" value="2" />
+    <value name="MTLPrimitiveTopologyClassTriangle" value="3" />
+  </enumeration>
+
   <enumeration name="MTLPrimitiveType" type="NSUInteger">
     <value name="MTLPrimitiveTypePoint" value="0" />
     <value name="MTLPrimitiveTypeLine" value="1" />
@@ -225,15 +363,197 @@
     <value name="MTLPrimitiveTypeTriangleStrip" value="4" />
   </enumeration>
 
+  <enumeration name="MTLPurgeableState" type="NSUInteger">
+    <value name="MTLPurgeableStateKeepCurrent" value="1" />
+    <value name="MTLPurgeableStateNonVolatile" value="2" />
+    <value name="MTLPurgeableStateVolatile" value="3" />
+    <value name="MTLPurgeableStateEmpty" value="4" />
+  </enumeration>
+
+  <enumeration name="MTLRenderPipelineError" type="NSUInteger">
+    <value name="MTLRenderPipelineErrorInternal" value="1" />
+    <value name="MTLRenderPipelineErrorUnsupported" value="2" />
+    <value name="MTLRenderPipelineErrorInvalidInput" value="3" />
+  </enumeration>
+
+  <enumeration name="MTLRenderStages" type="NSUInteger">
+    <value name="MTLRenderStageVertex" value="(1 << 0)" />
+    <value name="MTLRenderStageFragment" value="(1 << 1)" />
+  </enumeration>
+
+  <enumeration name="MTLResourceOptions" type="NSUInteger">
+    <value name="MTLResourceCPUCacheModeDefaultCache" value="MTLCPUCacheModeDefaultCache.bits << 0" />
+    <value name="MTLResourceCPUCacheModeWriteCombined" value="MTLCPUCacheModeWriteCombined.bits << 0" />
+    <value name="MTLResourceStorageModeShared" value="MTLStorageModeShared.bits << 4" />
+    <value name="MTLResourceStorageModeManaged" value="MTLStorageModeManaged.bits << 4" />
+    <value name="MTLResourceStorageModePrivate" value="MTLStorageModePrivate.bits << 4" />
+    <value name="MTLResourceStorageModeMemoryless" value="MTLStorageModeMemoryless.bits << 4" />
+    <value name="MTLResourceHazardTrackingModeUntracked" value="0x1 << 8" />
+  </enumeration>
+
+  <enumeration name="MTLSamplerAddressMode" type="NSUInteger">
+    <value name="MTLSamplerAddressModeClampToEdge" value="0" />
+    <value name="MTLSamplerAddressModeMirrorClampToEdge" value="1" />
+    <value name="MTLSamplerAddressModeRepeat" value="2" />
+    <value name="MTLSamplerAddressModeMirrorRepeat" value="3" />
+    <value name="MTLSamplerAddressModeClampToZero" value="4" />
+    <value name="MTLSamplerAddressModeClampToBorderColor" value="5" />
+  </enumeration>
+
+  <enumeration name="MTLSamplerBorderColor" type="NSUInteger">
+    <value name="MTLSamplerBorderColorTransparentBlack" value="0" />
+    <value name="MTLSamplerBorderColorOpaqueBlack" value="1" />
+    <value name="MTLSamplerBorderColorOpaqueWhite" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLSamplerMinMagFilter" type="NSUInteger">
+    <value name="MTLSamplerMinMagFilterNearest" value="0" />
+    <value name="MTLSamplerMinMagFilterLinear" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLSamplerMipFilter" type="NSUInteger">
+    <value name="MTLSamplerMipFilterNotMipmapped" value="0" />
+    <value name="MTLSamplerMipFilterNearest" value="1" />
+    <value name="MTLSamplerMipFilterLinear" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLStencilOperation" type="NSUInteger">
+    <value name="MTLStencilOperationKeep" value="0" />
+    <value name="MTLStencilOperationZero" value="1" />
+    <value name="MTLStencilOperationReplace" value="2" />
+    <value name="MTLStencilOperationIncrementClamp" value="3" />
+    <value name="MTLStencilOperationDecrementClamp" value="4" />
+    <value name="MTLStencilOperationInvert" value="5" />
+    <value name="MTLStencilOperationIncrementWrap" value="6" />
+    <value name="MTLStencilOperationDecrementWrap" value="7" />
+  </enumeration>
+
+  <enumeration name="MTLStepFunction" type="NSUInteger">
+    <value name="MTLStepFunctionConstant" value="0" />
+    <value name="MTLStepFunctionPerVertex" value="1" />
+    <value name="MTLStepFunctionPerInstance" value="2" />
+    <value name="MTLStepFunctionPerPatch" value="3" />
+    <value name="MTLStepFunctionPerPatchControlPoint" value="4" />
+    <value name="MTLStepFunctionThreadPositionInGridX" value="5" />
+    <value name="MTLStepFunctionThreadPositionInGridY" value="6" />
+    <value name="MTLStepFunctionThreadPositionInGridXIndexed" value="7" />
+    <value name="MTLStepFunctionThreadPositionInGridYIndexed" value="8" />
+  </enumeration>
+
   <enumeration name="MTLStorageMode" type="NSUInteger">
     <value name="MTLStorageModeShared" value="0" />
     <value name="MTLStorageModeManaged" value="1" />
     <value name="MTLStorageModePrivate" value="2" />
+    <value name="MTLStorageModeMemoryless" value="3" />
+  </enumeration>
+
+  <enumeration name="MTLStoreAction" type="NSUInteger">
+    <value name="MTLStoreActionDontCare" value="0" />
+    <value name="MTLStoreActionStore" value="1" />
+    <value name="MTLStoreActionMultisampleResolve" value="2" />
+    <value name="MTLStoreActionStoreAndMultisampleResolve" value="3" />
+    <value name="MTLStoreActionUnknown" value="4" />
+  </enumeration>
+
+  <enumeration name="MTLTessellationControlPointIndexType" type="NSUInteger">
+    <value name="MTLTessellationControlPointIndexTypeNone" value="0" />
+    <value name="MTLTessellationControlPointIndexTypeUInt16" value="1" />
+    <value name="MTLTessellationControlPointIndexTypeUInt32" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLTessellationFactorFormat" type="NSUInteger">
+    <value name="MTLTessellationFactorFormatHalf" value="0" />
+  </enumeration>
+
+  <enumeration name="MTLTessellationFactorStepFunction" type="NSUInteger">
+    <value name="MTLTessellationFactorStepFunctionConstant" value="0" />
+    <value name="MTLTessellationFactorStepFunctionPerPatch" value="1" />
+    <value name="MTLTessellationFactorStepFunctionPerInstance" value="2" />
+    <value name="MTLTessellationFactorStepFunctionPerPatchAndPerInstance" value="3" />
+  </enumeration>
+
+  <enumeration name="MTLTessellationPartitionMode" type="NSUInteger">
+    <value name="MTLTessellationPartitionModePow2" value="0" />
+    <value name="MTLTessellationPartitionModeInteger" value="1" />
+    <value name="MTLTessellationPartitionModeFractionalOdd" value="2" />
+    <value name="MTLTessellationPartitionModeFractionalEven" value="3" />
+  </enumeration>
+
+  <enumeration name="MTLTextureType" type="NSUInteger">
+    <value name="MTLTextureType1D" value="0" />
+    <value name="MTLTextureType1DArray" value="1" />
+    <value name="MTLTextureType2D" value="2" />
+    <value name="MTLTextureType2DArray" value="3" />
+    <value name="MTLTextureType2DMultisample" value="4" />
+    <value name="MTLTextureTypeCube" value="5" />
+    <value name="MTLTextureTypeCubeArray" value="6" />
+    <value name="MTLTextureType3D" value="7" />
+  </enumeration>
+
+  <enumeration name="MTLTextureUsage" type="NSUInteger">
+    <value name="MTLTextureUsageUnknown" value="0x0000" />
+    <value name="MTLTextureUsageShaderRead" value="0x0001" />
+    <value name="MTLTextureUsageShaderWrite" value="0x0002" />
+    <value name="MTLTextureUsageRenderTarget" value="0x0004" />
+    <value name="MTLTextureUsagePixelFormatView" value="0x0010" />
   </enumeration>
 
   <enumeration name="MTLTriangleFillMode" type="NSUInteger">
     <value name="MTLTriangleFillModeFill" value="0" />
     <value name="MTLTriangleFillModeLines" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLVertexFormat" type="NSUInteger">
+    <value name="MTLVertexFormatInvalid" value="0" />
+    <value name="MTLVertexFormatUChar2" value="1" />
+    <value name="MTLVertexFormatUChar3" value="2" />
+    <value name="MTLVertexFormatUChar4" value="3" />
+    <value name="MTLVertexFormatChar2" value="4" />
+    <value name="MTLVertexFormatChar3" value="5" />
+    <value name="MTLVertexFormatChar4" value="6" />
+    <value name="MTLVertexFormatUChar2Normalized" value="7" />
+    <value name="MTLVertexFormatUChar3Normalized" value="8" />
+    <value name="MTLVertexFormatUChar4Normalized" value="9" />
+    <value name="MTLVertexFormatChar2Normalized" value="10" />
+    <value name="MTLVertexFormatChar3Normalized" value="11" />
+    <value name="MTLVertexFormatChar4Normalized" value="12" />
+    <value name="MTLVertexFormatUShort2" value="13" />
+    <value name="MTLVertexFormatUShort3" value="14" />
+    <value name="MTLVertexFormatUShort4" value="15" />
+    <value name="MTLVertexFormatShort2" value="16" />
+    <value name="MTLVertexFormatShort3" value="17" />
+    <value name="MTLVertexFormatShort4" value="18" />
+    <value name="MTLVertexFormatUShort2Normalized" value="19" />
+    <value name="MTLVertexFormatUShort3Normalized" value="20" />
+    <value name="MTLVertexFormatUShort4Normalized" value="21" />
+    <value name="MTLVertexFormatShort2Normalized" value="22" />
+    <value name="MTLVertexFormatShort3Normalized" value="23" />
+    <value name="MTLVertexFormatShort4Normalized" value="24" />
+    <value name="MTLVertexFormatHalf2" value="25" />
+    <value name="MTLVertexFormatHalf3" value="26" />
+    <value name="MTLVertexFormatHalf4" value="27" />
+    <value name="MTLVertexFormatFloat" value="28" />
+    <value name="MTLVertexFormatFloat2" value="29" />
+    <value name="MTLVertexFormatFloat3" value="30" />
+    <value name="MTLVertexFormatFloat4" value="31" />
+    <value name="MTLVertexFormatInt" value="32" />
+    <value name="MTLVertexFormatInt2" value="33" />
+    <value name="MTLVertexFormatInt3" value="34" />
+    <value name="MTLVertexFormatInt4" value="35" />
+    <value name="MTLVertexFormatUInt" value="36" />
+    <value name="MTLVertexFormatUInt2" value="37" />
+    <value name="MTLVertexFormatUInt3" value="38" />
+    <value name="MTLVertexFormatUInt4" value="39" />
+    <value name="MTLVertexFormatInt1010102Normalized" value="40" />
+    <value name="MTLVertexFormatUInt1010102Normalized" value="41" />
+  </enumeration>
+
+  <enumeration name="MTLVertexStepFunction" type="NSUInteger">
+    <value name="MTLVertexStepFunctionConstant" value="0" />
+    <value name="MTLVertexStepFunctionPerVertex" value="1" />
+    <value name="MTLVertexStepFunctionPerInstance" value="2" />
+    <value name="MTLVertexStepFunctionPerPatch" value="3" />
+    <value name="MTLVertexStepFunctionPerPatchControlPoint" value="4" />
   </enumeration>
 
   <enumeration name="MTLVisibilityResultMode" type="NSUInteger">
@@ -247,12 +567,14 @@
     <value name="MTLWindingCounterClockwise" value="1" />
   </enumeration>
 
-  <struct name="MTLClearColor">
+  <!-- Structures -->
+
+  <structure name="MTLClearColor">
     <field name="red" type="f64" />
     <field name="green" type="f64" />
     <field name="blue" type="f64" />
     <field name="alpha" type="f64" />
-  </struct>
+  </structure>
 
   <!-- Classes -->
   <class name="MTLArgument" inherits="NSObject">
