@@ -40,7 +40,7 @@ impl RSMRenderer for Example04Renderer {
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
 
-    let asset = MDLAssetID::alloc().init_with_url(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")));
+    let asset = MDLAssetID::alloc().init_with_url(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/ab3_t1/AB3_TShape1.obj")));
 
     if asset.count() != 1 {
       panic!("Not one single mesh in file");
@@ -96,7 +96,7 @@ impl RSMRenderer for Example04Renderer {
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = 0.02f32;
+    let scale_factor = 0.01f32;
 
     let rotation = nalgebra::Rotation3::from_euler_angles(0.0, rotation_y, 0.0);
 

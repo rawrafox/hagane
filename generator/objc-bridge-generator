@@ -113,6 +113,8 @@ module Bridge
         Extern.new(node)
       when "protocol"
         Protocol.new(node)
+      when "structure"
+        Structure.new(node)
       when "use"
         Use.new(node)
       end
@@ -342,6 +344,19 @@ module Bridge
       else
         o.puts("extern {}")
       end
+    end
+  end
+
+  class Field < Node
+    attr_reader :name, :type
+
+    def prepare(node)
+      @name = node["name"]
+      @type = node["type"]
+    end
+
+    def to_rust(o)
+      o.puts("pub #{self.name.underscore}: #{self.type},")
     end
   end
 
@@ -619,6 +634,31 @@ module Bridge
     def prepare(node)
       @type = node['type']
       @content = node.text.strip
+    end
+  end
+
+  class Structure < Node
+    node "structure"
+
+    attr_reader :name
+
+    def prepare(node)
+      @name = node['name']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "field"
+        Field.new(node)
+      end
+    end
+
+    def to_rust(o)
+      o.puts("#[repr(C)]")
+      o.puts("#[derive(Clone, Copy)]")
+      o.block("pub struct #{self.name}") do |o|
+        self.children.each { |c| c.to_rust(o) }
+      end
     end
   end
 

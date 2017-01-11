@@ -13,23 +13,6 @@ extern {
   fn MTLCreateSystemDefaultDevice() -> *mut c_void;
 }
 
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct MTLClearColor {
-  pub red: f64,
-  pub green: f64,
-  pub blue: f64,
-  pub alpha: f64
-}
-
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct MTLSize {
-  pub width: usize,
-  pub height: usize,
-  pub depth: usize
-}
-
 pub trait MTLDevice : NSObject {
   forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
   forward!(is_headless, sel!(isHeadless), () -> bool);

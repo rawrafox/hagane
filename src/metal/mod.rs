@@ -618,6 +618,100 @@ bitflags! {
     const MTLWindingCounterClockwise = 1,
   }
 }
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLClearColor {
+  pub red: f64,
+  pub green: f64,
+  pub blue: f64,
+  pub alpha: f64,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLDispatchThreadgroupsIndirectArguments {
+  pub threadgroups_per_grid: [u32; 3],
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLDrawIndexedPrimitivesIndirectArguments {
+  pub index_count: u32,
+  pub instance_count: u32,
+  pub index_start: u32,
+  pub base_vertex: i32,
+  pub base_instance: u32,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLDrawPatchIndirectArguments {
+  pub patch_count: u32,
+  pub instance_count: u32,
+  pub patch_start: u32,
+  pub base_instance: u32,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLDrawPrimitivesIndirectArguments {
+  pub vertex_count: u32,
+  pub instance_count: u32,
+  pub vertex_start: u32,
+  pub base_instance: u32,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLOrigin {
+  pub x: NSUInteger,
+  pub y: NSUInteger,
+  pub z: NSUInteger,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLQuadTessellationFactorsHalf {
+  pub edge_tessellation_factor: [u16; 4],
+  pub inside_tessellation_factor: [u16; 2],
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLRegion {
+  pub origin: MTLOrigin,
+  pub size: MTLSize,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLScissorRect {
+  pub x: NSUInteger,
+  pub y: NSUInteger,
+  pub width: NSUInteger,
+  pub height: NSUInteger,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLSize {
+  pub width: NSUInteger,
+  pub height: NSUInteger,
+  pub depth: NSUInteger,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLSizeAndAlign {
+  pub size: NSUInteger,
+  pub align: NSUInteger,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLTriangleTessellationFactorsHalf {
+  pub edge_tessellation_factor: [u16; 3],
+  pub inside_tessellation_factor: u16,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct MTLViewport {
+  pub origin_x: f64,
+  pub origin_y: f64,
+  pub width: f64,
+  pub height: f64,
+  pub znear: f64,
+  pub zfar: f64,
+}
 
 pub trait MTLArgument : NSObject {
 }
@@ -5422,6 +5516,19 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
+  fn set_scissor_rect(&self, rect: MTLScissorRect) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setScissorRect:), (rect,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn set_stencil_front_reference_value_back_reference_value(&self, front_reference_value: u32, back_reference_value: u32) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setStencilFrontReferenceValue:backReferenceValue:), (front_reference_value, back_reference_value)) {
@@ -5451,6 +5558,19 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
   fn set_triangle_fill_mode(&self, fill_mode: MTLTriangleFillMode) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setTriangleFillMode:), (fill_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_viewport(&self, viewport: MTLViewport) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setViewport:), (viewport,)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
           let result: () = r;

@@ -576,6 +576,80 @@
     <field name="alpha" type="f64" />
   </structure>
 
+  <structure name="MTLDispatchThreadgroupsIndirectArguments">
+    <field name="threadgroupsPerGrid" type="[u32; 3]" />
+  </structure>
+
+  <structure name="MTLDrawIndexedPrimitivesIndirectArguments">
+    <field name="indexCount" type="u32" />
+    <field name="instanceCount" type="u32" />
+    <field name="indexStart" type="u32" />
+    <field name="baseVertex" type="i32" />
+    <field name="baseInstance" type="u32" />
+  </structure>
+
+  <structure name="MTLDrawPatchIndirectArguments">
+    <field name="patchCount" type="u32" />
+    <field name="instanceCount" type="u32" />
+    <field name="patchStart" type="u32" />
+    <field name="baseInstance" type="u32" />
+  </structure>
+
+  <structure name="MTLDrawPrimitivesIndirectArguments">
+    <field name="vertexCount" type="u32" />
+    <field name="instanceCount" type="u32" />
+    <field name="vertexStart" type="u32" />
+    <field name="baseInstance" type="u32" />
+  </structure>
+
+  <structure name="MTLOrigin">
+    <field name="x" type="NSUInteger" />
+    <field name="y" type="NSUInteger" />
+    <field name="z" type="NSUInteger" />
+  </structure>
+
+  <structure name="MTLQuadTessellationFactorsHalf">
+    <field name="edgeTessellationFactor" type="[u16; 4]" /> <!-- NOTE: Actually f16 -->
+    <field name="insideTessellationFactor" type="[u16; 2]" />
+  </structure>
+
+  <structure name="MTLRegion">
+    <field name="origin" type="MTLOrigin" />
+    <field name="size" type="MTLSize" />
+  </structure>
+
+  <structure name="MTLScissorRect">
+    <field name="x" type="NSUInteger" />
+    <field name="y" type="NSUInteger" />
+    <field name="width" type="NSUInteger" />
+    <field name="height" type="NSUInteger" />
+  </structure>
+
+  <structure name="MTLSize">
+    <field name="width" type="NSUInteger" />
+    <field name="height" type="NSUInteger" />
+    <field name="depth" type="NSUInteger" />
+  </structure>
+
+  <structure name="MTLSizeAndAlign">
+    <field name="size" type="NSUInteger" />
+    <field name="align" type="NSUInteger" />
+  </structure>
+
+  <structure name="MTLTriangleTessellationFactorsHalf">
+    <field name="edgeTessellationFactor" type="[u16; 3]" /> <!-- NOTE: Actually f16 -->
+    <field name="insideTessellationFactor" type="u16" />
+  </structure>
+
+  <structure name="MTLViewport">
+    <field name="originX" type="f64" />
+    <field name="originY" type="f64" />
+    <field name="width" type="f64" />
+    <field name="height" type="f64" />
+    <field name="znear" type="f64" />
+    <field name="zfar" type="f64" />
+  </structure>
+
   <!-- Classes -->
   <class name="MTLArgument" inherits="NSObject">
     <!-- TODO: All missing -->
@@ -1031,11 +1105,9 @@
       <argument name="pipelineState" protocol="MTLRenderPipelineState" />
     </method>
 
-    <!-- TODO: Needs MTLScissorRect
     <method selector="setScissorRect:">
-      <argument name="rect" protocol="MTLScissorRect" />
+      <argument name="rect" type="MTLScissorRect" />
     </method>
-    -->
 
     <method selector="setStencilFrontReferenceValue:backReferenceValue:">
       <argument name="frontReferenceValue" type="u32" />
@@ -1050,11 +1122,9 @@
       <argument name="fillMode" type="MTLTriangleFillMode" />
     </method>
 
-    <!-- TODO: Needs MTLViewport
     <method selector="setViewport:">
-      <argument name="viewport" protocol="MTLViewport" />
+      <argument name="viewport" type="MTLViewport" />
     </method>
-    -->
 
     <method selector="setVisibilityResultMode:offset:">
       <argument name="mode" type="MTLVisibilityResultMode" />
