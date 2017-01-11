@@ -206,21 +206,6 @@ pub struct MTLSize {
   pub depth: usize
 }
 
-pub trait MTLCommandEncoder : NSObject {
-  forward!(draw_primitives_vertex_start_vertex_count, sel!(drawPrimitives:vertexStart:vertexCount:), (primitive_type: MTLPrimitiveType, start: usize, count: usize) -> ());
-  forward!(draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset, sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type: MTLPrimitiveType, count: usize, index_type: MTLIndexType, index_buffer: T, offset: usize) -> (), <T: MTLBuffer>);
-  forward!(end_encoding, sel!(endEncoding), () -> ());
-  forward!(set_cull_mode, sel!(setCullMode:), (mode: MTLCullMode) -> ());
-  forward!(set_depth_stencil_state, sel!(setDepthStencilState:), (state: T) -> (), <T: MTLDepthStencilState>);
-  forward!(set_front_facing_winding, sel!(setFrontFacingWinding:), (winding: MTLWinding) -> ());
-  forward!(set_render_pipeline_state, sel!(setRenderPipelineState:), (pipeline_state: T) -> (), <T: MTLRenderPipelineState>);
-  forward!(set_vertex_buffer_offset_at_index, sel!(setVertexBuffer:offset:atIndex:), (buffer: T, offset: usize, index: usize) -> (), <T: MTLBuffer>);
-}
-
-id!(MTLCommandEncoderID, MTLCommandEncoder);
-
-impl NSObject for MTLCommandEncoderID {}
-
 pub trait MTLDevice : NSObject {
   forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
   forward!(is_headless, sel!(isHeadless), () -> bool);

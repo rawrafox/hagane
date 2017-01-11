@@ -64,6 +64,11 @@
     <value name="MTLCullModeBack" value="2" />
   </enumeration>
 
+  <enumeration name="MTLDepthClipMode" type="NSUInteger">
+    <value name="MTLDepthClipModeClip" value="0" />
+    <value name="MTLDepthClipModeClamp" value="1" />
+  </enumeration>
+
   <enumeration name="MTLIndexType" type="NSUInteger">
     <value name="MTLIndexTypeUInt16" value="0" />
     <value name="MTLIndexTypeUInt32" value="1" />
@@ -81,6 +86,17 @@
     <value name="MTLStorageModeShared" value="0" />
     <value name="MTLStorageModeManaged" value="1" />
     <value name="MTLStorageModePrivate" value="2" />
+  </enumeration>
+
+  <enumeration name="MTLTriangleFillMode" type="NSUInteger">
+    <value name="MTLTriangleFillModeFill" value="0" />
+    <value name="MTLTriangleFillModeLines" value="1" />
+  </enumeration>
+
+  <enumeration name="MTLVisibilityResultMode" type="NSUInteger">
+    <value name="MTLVisibilityResultModeDisabled" value="0" />
+    <value name="MTLVisibilityResultModeBoolean" value="1" />
+    <value name="MTLVisibilityResultModeCounting" value="2" />
   </enumeration>
 
   <enumeration name="MTLWinding" type="NSUInteger">
@@ -157,10 +173,10 @@
     <!-- Specifying Stencil Descriptors for Primitives -->
     <property name="backFaceStencil" protocol="MTLStencilDescriptor" />
     <property name="frontFaceStencil" protocol="MTLStencilDescriptor" />
-    
+
     <!-- Identifying Properties -->
     <property name="label" protocol="NSString" />
-    
+
   </class>
 
   <class name="MTLFunctionConstant" inherits="NSObject">
@@ -212,7 +228,7 @@
     <!-- Specifying Render Pipeline State -->
     <property name="pixelFormat" type="MTLPixelFormat" />
     <property name="writeMask" type="MTLColorWriteMask" />
-    
+
     <!-- Controlling the Blend Operation -->
     <property name="blendingEnabled" getter="isBlendingEnabled" type="bool" />
     <property name="alphaBlendOperation" type="MTLBlendOperation" />
@@ -245,7 +261,7 @@
     <property name="fragmentFunction" protocol="MTLFunction" />
     <property name="vertexFunction" protocol="MTLFunction" />
     <property name="vertexDescriptor" protocol="MTLVertexDescriptor" />
-    
+
     <!-- Specifying Rendering Pipeline State -->
     <method selector="reset" />
     <property name="colorAttachments" protocol="MTLRenderPipelineColorAttachmentDescriptorArray" />
@@ -409,9 +425,27 @@
     <property name="device" protocol="MTLDevice" read-only />
     <property name="commandQueue" protocol="MTLCommandQueue" read-only />
     <property name="label" protocol="NSString" />
-
   </protocol>
 
+  <protocol name="MTLCommandEncoder" inherits="NSObject">
+    <!-- Ending Encoded Commands -->
+    <method selector="endEncoding" />
+
+    <!-- Debugging from Xcode with Strings -->
+    <method selector="insertDebugSignpost">
+      <argument name="string" protocol="NSString" />
+    </method>
+
+    <method selector="pushDebugGroup">
+      <argument name="string" protocol="NSString" />
+    </method>
+
+    <method selector="popDebugGroup" />
+
+    <!-- Identifying Properties -->
+    <property name="device" protocol="MTLDevice" read-only />
+    <property name="label" protocol="NSString" />
+  </protocol>
   <!-- TODO: MTLCommandEncoder -->
 
   <protocol name="MTLCommandQueue" inherits="NSObject">
@@ -491,6 +525,113 @@
   </protocol>
 
   <protocol name="MTLRenderCommandEncoder" inherits="MTLCommandEncoder, NSObject">
+    <!-- Setting Graphics Rendering State -->
+    <method selector="setBlendColorRed:green:blue:alpha:">
+      <argument name="red" type="f32" />
+      <argument name="green" type="f32" />
+      <argument name="blue" type="f32" />
+      <argument name="alpha" type="f32" />
+    </method>
+
+    <method selector="setCullMode:">
+      <argument name="cullMode" type="MTLCullMode" />
+    </method>
+
+    <method selector="setDepthBias:slopeScale:clamp:">
+      <argument name="depthBias" type="f32" />
+      <argument name="slopeScale" type="f32" />
+      <argument name="clamp" type="f32" />
+    </method>
+
+    <method selector="setDepthClipMode:">
+      <argument name="depthClipMode" type="MTLDepthClipMode" />
+    </method>
+
+    <method selector="setDepthStencilState:">
+      <argument name="depthStencilState" protocol="MTLDepthStencilState" />
+    </method>
+
+    <method selector="setFrontFacingWinding:">
+      <argument name="frontFacingWinding" type="MTLWinding" />
+    </method>
+
+    <method selector="setRenderPipelineState:">
+      <argument name="pipelineState" protocol="MTLRenderPipelineState" />
+    </method>
+
+    <!-- TODO: Needs MTLScissorRect
+    <method selector="setScissorRect:">
+      <argument name="rect" protocol="MTLScissorRect" />
+    </method>
+    -->
+
+    <method selector="setStencilFrontReferenceValue:backReferenceValue:">
+      <argument name="frontReferenceValue" type="u32" />
+      <argument name="backReferenceValue" type="u32" />
+    </method>
+
+    <method selector="setStencilReferenceValue:">
+      <argument name="referenceValue" type="u32" />
+    </method>
+
+    <method selector="setTriangleFillMode:">
+      <argument name="fillMode" type="MTLTriangleFillMode" />
+    </method>
+
+    <!-- TODO: Needs MTLViewport
+    <method selector="setViewport:">
+      <argument name="viewport" protocol="MTLViewport" />
+    </method>
+    -->
+
+    <method selector="setVisibilityResultMode:offset:">
+      <argument name="mode" type="MTLVisibilityResultMode" />
+      <argument name="offset" type="NSUInteger" />
+    </method>
+
+    <!-- Specifying Resources for a Vertex Shader Function -->
+    <method selector="setVertexBuffer:offset:atIndex:">
+      <argument name="buffer" protocol="MTLBuffer" />
+      <argument name="offset" type="NSUInteger" />
+      <argument name="index" type="NSUInteger" />
+    </method>
+    <!-- TODO: All missing -->
+
+    <!-- Specifying Resources for a Fragment Shader Function -->
+    <!-- TODO: All missing -->
+
+    <!-- Specifying Tessellation Factors -->
+    <!-- TODO: All missing -->
+
+    <!-- Drawing Geometric Primitives -->
+    <!-- TODO: All missing -->
+    <method selector="drawPrimitives:vertexStart:vertexCount:">
+      <argument name="primitiveType" type="MTLPrimitiveType" />
+      <argument name="vertexStart" type="NSUInteger" />
+      <argument name="vertexCount" type="NSUInteger" />
+    </method>
+
+    <!-- TODO: More missing -->
+
+    <method selector="drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:">
+      <argument name="primitiveType" type="MTLPrimitiveType" />
+      <argument name="indexCount" type="NSUInteger" />
+      <argument name="indexType" type="MTLIndexType" />
+      <argument name="indexBuffer" protocol="MTLBuffer" />
+      <argument name="indexBufferOffset" type="NSUInteger" />
+    </method>
+    <!-- TODO: drawIndexedPrimitives:indexType:indexBuffer:indexBufferOffset:indirectBuffer:indirectBufferOffset: -->
+
+    <!-- Drawing Tessellated Patches -->
+    <!-- TODO: All missing -->
+
+    <!-- Enabling Texture Barriers -->
+    <!-- TODO: All missing -->
+
+    <!-- Specifying a Store Action -->
+    <!-- TODO: All missing -->
+
+    <!-- Performing Fence Operations -->
     <!-- TODO: All missing -->
   </protocol>
 

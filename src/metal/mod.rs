@@ -74,6 +74,12 @@ bitflags! {
   }
 }
 bitflags! {
+  pub flags MTLDepthClipMode: NSUInteger {
+    const MTLDepthClipModeClip = 0,
+    const MTLDepthClipModeClamp = 1,
+  }
+}
+bitflags! {
   pub flags MTLIndexType: NSUInteger {
     const MTLIndexTypeUInt16 = 0,
     const MTLIndexTypeUInt32 = 1,
@@ -93,6 +99,19 @@ bitflags! {
     const MTLStorageModeShared = 0,
     const MTLStorageModeManaged = 1,
     const MTLStorageModePrivate = 2,
+  }
+}
+bitflags! {
+  pub flags MTLTriangleFillMode: NSUInteger {
+    const MTLTriangleFillModeFill = 0,
+    const MTLTriangleFillModeLines = 1,
+  }
+}
+bitflags! {
+  pub flags MTLVisibilityResultMode: NSUInteger {
+    const MTLVisibilityResultModeDisabled = 0,
+    const MTLVisibilityResultModeBoolean = 1,
+    const MTLVisibilityResultModeCounting = 2,
   }
 }
 bitflags! {
@@ -3803,6 +3822,162 @@ impl std::fmt::Debug for MTLCommandBufferID {
   }
 }
 
+pub trait MTLCommandEncoder : NSObject {
+  fn end_encoding(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(endEncoding), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn insert_debug_signpost<T5: 'static + NSString>(&self, string: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(insertDebugSignpost), (string.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn push_debug_group<T5: 'static + NSString>(&self, string: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(pushDebugGroup), (string.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn pop_debug_group(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(popDebugGroup), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn device(&self) -> MTLDeviceID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(device), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLDeviceID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn label(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(label), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLabel:), (label.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTLCommandEncoderID(*mut std::os::raw::c_void);
+
+impl MTLCommandEncoderID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLCommandEncoderID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLCommandEncoderID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLCommandEncoderID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+}
+
+impl NSObject for MTLCommandEncoderID {}
+impl MTLCommandEncoder for MTLCommandEncoderID {}
+
+impl Clone for MTLCommandEncoderID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLCommandEncoderID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLCommandEncoderID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLCommandEncoderID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLCommandEncoderID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLCommandEncoderID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait MTLCommandQueue : NSObject {
   fn command_buffer(&self) -> MTLCommandBufferID where Self: 'static + Sized {
     unsafe {
@@ -4658,6 +4833,187 @@ impl std::fmt::Debug for MTLParallelRenderCommandEncoderID {
 }
 
 pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
+  fn set_blend_color_red_green_blue_alpha(&self, red: f32, green: f32, blue: f32, alpha: f32) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setBlendColorRed:green:blue:alpha:), (red, green, blue, alpha)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_cull_mode(&self, cull_mode: MTLCullMode) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setCullMode:), (cull_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_depth_bias_slope_scale_clamp(&self, depth_bias: f32, slope_scale: f32, clamp: f32) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setDepthBias:slopeScale:clamp:), (depth_bias, slope_scale, clamp)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_depth_clip_mode(&self, depth_clip_mode: MTLDepthClipMode) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setDepthClipMode:), (depth_clip_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_depth_stencil_state<T5: 'static + MTLDepthStencilState>(&self, depth_stencil_state: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setDepthStencilState:), (depth_stencil_state.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_front_facing_winding(&self, front_facing_winding: MTLWinding) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setFrontFacingWinding:), (front_facing_winding,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_render_pipeline_state<T5: 'static + MTLRenderPipelineState>(&self, pipeline_state: T5) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setRenderPipelineState:), (pipeline_state.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_stencil_front_reference_value_back_reference_value(&self, front_reference_value: u32, back_reference_value: u32) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setStencilFrontReferenceValue:backReferenceValue:), (front_reference_value, back_reference_value)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_stencil_reference_value(&self, reference_value: u32) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setStencilReferenceValue:), (reference_value,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_triangle_fill_mode(&self, fill_mode: MTLTriangleFillMode) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setTriangleFillMode:), (fill_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_visibility_result_mode_offset(&self, mode: MTLVisibilityResultMode, offset: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setVisibilityResultMode:offset:), (mode, offset)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_vertex_buffer_offset_at_index<T5: 'static + MTLBuffer>(&self, buffer: T5, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setVertexBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn draw_primitives_vertex_start_vertex_count(&self, primitive_type: MTLPrimitiveType, vertex_start: NSUInteger, vertex_count: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(drawPrimitives:vertexStart:vertexCount:), (primitive_type, vertex_start, vertex_count)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset<T5: 'static + MTLBuffer>(&self, primitive_type: MTLPrimitiveType, index_count: NSUInteger, index_type: MTLIndexType, index_buffer: T5, index_buffer_offset: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type, index_count, index_type, index_buffer.as_ptr(), index_buffer_offset)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
 pub struct MTLRenderCommandEncoderID(*mut std::os::raw::c_void);
