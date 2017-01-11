@@ -7,6 +7,48 @@ use core_foundation::*;
 use foundation::*;
 use legacy_metal::*;
 bitflags! {
+  pub flags MTLBlendFactor: NSUInteger {
+    const MTLBlendFactorZero = 0,
+    const MTLBlendFactorOne = 1,
+    const MTLBlendFactorSourceColor = 2,
+    const MTLBlendFactorOneMinusSourceColor = 3,
+    const MTLBlendFactorSourceAlpha = 4,
+    const MTLBlendFactorOneMinusSourceAlpha = 5,
+    const MTLBlendFactorDestinationColor = 6,
+    const MTLBlendFactorOneMinusDestinationColor = 7,
+    const MTLBlendFactorDestinationAlpha = 8,
+    const MTLBlendFactorOneMinusDestinationAlpha = 9,
+    const MTLBlendFactorSourceAlphaSaturated = 10,
+    const MTLBlendFactorBlendColor = 11,
+    const MTLBlendFactorOneMinusBlendColor = 12,
+    const MTLBlendFactorBlendAlpha = 13,
+    const MTLBlendFactorOneMinusBlendAlpha = 14,
+    const MTLBlendFactorSource1Color = 15,
+    const MTLBlendFactorOneMinusSource1Color = 16,
+    const MTLBlendFactorSource1Alpha = 17,
+    const MTLBlendFactorOneMinusSource1Alpha = 18,
+  }
+}
+bitflags! {
+  pub flags MTLBlendOperation: NSUInteger {
+    const MTLBlendOperationAdd = 0,
+    const MTLBlendOperationSubtract = 1,
+    const MTLBlendOperationReverseSubtract = 2,
+    const MTLBlendOperationMin = 3,
+    const MTLBlendOperationMax = 4,
+  }
+}
+bitflags! {
+  pub flags MTLColorWriteMask: NSUInteger {
+    const MTLColorWriteMaskNone = 0,
+    const MTLColorWriteMaskRed = 0x1 << 3,
+    const MTLColorWriteMaskGreen = 0x1 << 2,
+    const MTLColorWriteMaskBlue = 0x1 << 1,
+    const MTLColorWriteMaskAlpha = 0x1 << 0,
+    const MTLColorWriteMaskAll = 0xf,
+  }
+}
+bitflags! {
   pub flags MTLCompareFunction: NSUInteger {
     const MTLCompareFunctionNever = 0,
     const MTLCompareFunctionLess = 1,
@@ -57,6 +99,1513 @@ bitflags! {
   pub flags MTLWinding: NSUInteger {
     const MTLWindingClockwise = 0,
     const MTLWindingCounterClockwise = 1,
+  }
+}
+
+pub trait MTLArgument : NSObject {
+}
+
+pub struct MTLArgumentID(*mut std::os::raw::c_void);
+
+impl MTLArgumentID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLArgumentID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLArgumentID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLArgumentID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLArgument").unwrap();
+  }
+}
+
+impl NSObject for MTLArgumentID {}
+impl MTLArgument for MTLArgumentID {}
+
+impl Clone for MTLArgumentID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLArgumentID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLArgumentID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLArgumentID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLArgumentID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLArgumentID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLArrayType : NSObject {
+}
+
+pub struct MTLArrayTypeID(*mut std::os::raw::c_void);
+
+impl MTLArrayTypeID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLArrayTypeID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLArrayTypeID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLArrayTypeID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLArrayType").unwrap();
+  }
+}
+
+impl NSObject for MTLArrayTypeID {}
+impl MTLArrayType for MTLArrayTypeID {}
+
+impl Clone for MTLArrayTypeID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLArrayTypeID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLArrayTypeID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLArrayTypeID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLArrayTypeID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLArrayTypeID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLAttribute : NSObject {
+}
+
+pub struct MTLAttributeID(*mut std::os::raw::c_void);
+
+impl MTLAttributeID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLAttributeID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLAttributeID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLAttribute").unwrap();
+  }
+}
+
+impl NSObject for MTLAttributeID {}
+impl MTLAttribute for MTLAttributeID {}
+
+impl Clone for MTLAttributeID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLAttributeID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLAttributeID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLAttributeID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLAttributeID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLAttributeDescriptor : NSObject {
+}
+
+pub struct MTLAttributeDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLAttributeDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLAttributeDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLAttributeDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLAttributeDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLAttributeDescriptorID {}
+impl MTLAttributeDescriptor for MTLAttributeDescriptorID {}
+
+impl Clone for MTLAttributeDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLAttributeDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLAttributeDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLAttributeDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLAttributeDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLAttributeDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLAttributeDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLAttributeDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLAttributeDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLAttributeDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLAttributeDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLAttributeDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLAttributeDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLAttributeDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLAttributeDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLAttributeDescriptorArrayID {}
+impl MTLAttributeDescriptorArray for MTLAttributeDescriptorArrayID {}
+
+impl Clone for MTLAttributeDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLAttributeDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLAttributeDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLAttributeDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLAttributeDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLAttributeDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLBufferLayoutDescriptor : NSObject {
+}
+
+pub struct MTLBufferLayoutDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLBufferLayoutDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLBufferLayoutDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLBufferLayoutDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLBufferLayoutDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLBufferLayoutDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLBufferLayoutDescriptorID {}
+impl MTLBufferLayoutDescriptor for MTLBufferLayoutDescriptorID {}
+
+impl Clone for MTLBufferLayoutDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLBufferLayoutDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLBufferLayoutDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLBufferLayoutDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLBufferLayoutDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLBufferLayoutDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLBufferLayoutDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLBufferLayoutDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLBufferLayoutDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLBufferLayoutDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLBufferLayoutDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLBufferLayoutDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLBufferLayoutDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLBufferLayoutDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLBufferLayoutDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLBufferLayoutDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLBufferLayoutDescriptorArrayID {}
+impl MTLBufferLayoutDescriptorArray for MTLBufferLayoutDescriptorArrayID {}
+
+impl Clone for MTLBufferLayoutDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLBufferLayoutDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLBufferLayoutDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLBufferLayoutDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLBufferLayoutDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLBufferLayoutDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLCompileOptions : NSObject {
+}
+
+pub struct MTLCompileOptionsID(*mut std::os::raw::c_void);
+
+impl MTLCompileOptionsID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLCompileOptionsID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLCompileOptionsID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLCompileOptionsID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLCompileOptions").unwrap();
+  }
+}
+
+impl NSObject for MTLCompileOptionsID {}
+impl MTLCompileOptions for MTLCompileOptionsID {}
+
+impl Clone for MTLCompileOptionsID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLCompileOptionsID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLCompileOptionsID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLCompileOptionsID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLCompileOptionsID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLCompileOptionsID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLComputePipelineDescriptor : NSObject {
+}
+
+pub struct MTLComputePipelineDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLComputePipelineDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLComputePipelineDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLComputePipelineDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLComputePipelineDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLComputePipelineDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLComputePipelineDescriptorID {}
+impl MTLComputePipelineDescriptor for MTLComputePipelineDescriptorID {}
+
+impl Clone for MTLComputePipelineDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLComputePipelineDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLComputePipelineDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLComputePipelineDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLComputePipelineDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLComputePipelineDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLComputePipelineReflection : NSObject {
+}
+
+pub struct MTLComputePipelineReflectionID(*mut std::os::raw::c_void);
+
+impl MTLComputePipelineReflectionID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLComputePipelineReflectionID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLComputePipelineReflectionID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLComputePipelineReflectionID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLComputePipelineReflection").unwrap();
+  }
+}
+
+impl NSObject for MTLComputePipelineReflectionID {}
+impl MTLComputePipelineReflection for MTLComputePipelineReflectionID {}
+
+impl Clone for MTLComputePipelineReflectionID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLComputePipelineReflectionID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLComputePipelineReflectionID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLComputePipelineReflectionID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLComputePipelineReflectionID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLComputePipelineReflectionID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLDepthStencilDescriptor : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn depth_compare_function(&self) -> MTLCompareFunction where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(depthCompareFunction), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_depth_compare_function(&self, depth_compare_function: MTLCompareFunction) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDepthCompareFunction:), (depth_compare_function,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn is_depth_write_enabled(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(isDepthWriteEnabled), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_depth_write_enabled(&self, depth_write_enabled: bool) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDepthWriteEnabled:), (depth_write_enabled,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn back_face_stencil(&self) -> MTLStencilDescriptorID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(backFaceStencil), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLStencilDescriptorID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_back_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, back_face_stencil: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setBackFaceStencil:), (back_face_stencil.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn front_face_stencil(&self) -> MTLStencilDescriptorID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(frontFaceStencil), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLStencilDescriptorID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_front_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, front_face_stencil: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setFrontFaceStencil:), (front_face_stencil.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn label(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(label), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLabel:), (label.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTLDepthStencilDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLDepthStencilDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLDepthStencilDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLDepthStencilDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLDepthStencilDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLDepthStencilDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLDepthStencilDescriptorID {}
+impl MTLDepthStencilDescriptor for MTLDepthStencilDescriptorID {}
+
+impl Clone for MTLDepthStencilDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLDepthStencilDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLDepthStencilDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLDepthStencilDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLDepthStencilDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLDepthStencilDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLFunctionConstant : NSObject {
+}
+
+pub struct MTLFunctionConstantID(*mut std::os::raw::c_void);
+
+impl MTLFunctionConstantID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLFunctionConstantID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLFunctionConstantID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLFunctionConstantID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLFunctionConstant").unwrap();
+  }
+}
+
+impl NSObject for MTLFunctionConstantID {}
+impl MTLFunctionConstant for MTLFunctionConstantID {}
+
+impl Clone for MTLFunctionConstantID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLFunctionConstantID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLFunctionConstantID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLFunctionConstantID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLFunctionConstantID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLFunctionConstantID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLFunctionConstantValues : NSObject {
+}
+
+pub struct MTLFunctionConstantValuesID(*mut std::os::raw::c_void);
+
+impl MTLFunctionConstantValuesID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLFunctionConstantValuesID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLFunctionConstantValuesID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLFunctionConstantValuesID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLFunctionConstantValues").unwrap();
+  }
+}
+
+impl NSObject for MTLFunctionConstantValuesID {}
+impl MTLFunctionConstantValues for MTLFunctionConstantValuesID {}
+
+impl Clone for MTLFunctionConstantValuesID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLFunctionConstantValuesID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLFunctionConstantValuesID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLFunctionConstantValuesID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLFunctionConstantValuesID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLFunctionConstantValuesID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLHeapDescriptor : NSObject {
+}
+
+pub struct MTLHeapDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLHeapDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLHeapDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLHeapDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLHeapDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLHeapDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLHeapDescriptorID {}
+impl MTLHeapDescriptor for MTLHeapDescriptorID {}
+
+impl Clone for MTLHeapDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLHeapDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLHeapDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLHeapDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLHeapDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLHeapDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPassAttachmentDescriptor : NSObject {
+}
+
+pub struct MTLRenderPassAttachmentDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPassAttachmentDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassAttachmentDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPassAttachmentDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPassAttachmentDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPassAttachmentDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPassAttachmentDescriptorID {}
+impl MTLRenderPassAttachmentDescriptor for MTLRenderPassAttachmentDescriptorID {}
+
+impl Clone for MTLRenderPassAttachmentDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPassAttachmentDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPassAttachmentDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassAttachmentDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPassAttachmentDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPassAttachmentDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPassColorAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
+}
+
+pub struct MTLRenderPassColorAttachmentDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPassColorAttachmentDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPassColorAttachmentDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPassColorAttachmentDescriptor").unwrap();
+  }
+}
+
+impl MTLRenderPassAttachmentDescriptor for MTLRenderPassColorAttachmentDescriptorID {}
+impl NSObject for MTLRenderPassColorAttachmentDescriptorID {}
+impl MTLRenderPassColorAttachmentDescriptor for MTLRenderPassColorAttachmentDescriptorID {}
+
+impl Clone for MTLRenderPassColorAttachmentDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPassColorAttachmentDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPassColorAttachmentDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPassColorAttachmentDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPassColorAttachmentDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLRenderPassColorAttachmentDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLRenderPassColorAttachmentDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLRenderPassColorAttachmentDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLRenderPassColorAttachmentDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLRenderPassColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLRenderPassColorAttachmentDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPassColorAttachmentDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPassColorAttachmentDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPassColorAttachmentDescriptorArrayID {}
+impl MTLRenderPassColorAttachmentDescriptorArray for MTLRenderPassColorAttachmentDescriptorArrayID {}
+
+impl Clone for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassColorAttachmentDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPassDepthAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
+}
+
+pub struct MTLRenderPassDepthAttachmentDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPassDepthAttachmentDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassDepthAttachmentDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPassDepthAttachmentDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPassDepthAttachmentDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPassDepthAttachmentDescriptor").unwrap();
+  }
+}
+
+impl MTLRenderPassAttachmentDescriptor for MTLRenderPassDepthAttachmentDescriptorID {}
+impl NSObject for MTLRenderPassDepthAttachmentDescriptorID {}
+impl MTLRenderPassDepthAttachmentDescriptor for MTLRenderPassDepthAttachmentDescriptorID {}
+
+impl Clone for MTLRenderPassDepthAttachmentDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPassDepthAttachmentDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPassDepthAttachmentDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassDepthAttachmentDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPassDepthAttachmentDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPassDepthAttachmentDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
   }
 }
 
@@ -127,6 +1676,1702 @@ unsafe impl objc::Encode for MTLRenderPassDescriptorID {
 }
 
 impl std::fmt::Debug for MTLRenderPassDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPassStencilAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
+}
+
+pub struct MTLRenderPassStencilAttachmentDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPassStencilAttachmentDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassStencilAttachmentDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPassStencilAttachmentDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPassStencilAttachmentDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPassStencilAttachmentDescriptor").unwrap();
+  }
+}
+
+impl MTLRenderPassAttachmentDescriptor for MTLRenderPassStencilAttachmentDescriptorID {}
+impl NSObject for MTLRenderPassStencilAttachmentDescriptorID {}
+impl MTLRenderPassStencilAttachmentDescriptor for MTLRenderPassStencilAttachmentDescriptorID {}
+
+impl Clone for MTLRenderPassStencilAttachmentDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPassStencilAttachmentDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPassStencilAttachmentDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPassStencilAttachmentDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPassStencilAttachmentDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPassStencilAttachmentDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPipelineColorAttachmentDescriptor : NSObject {
+  fn pixel_format(&self) -> MTLPixelFormat where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(pixelFormat), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_pixel_format(&self, pixel_format: MTLPixelFormat) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setPixelFormat:), (pixel_format,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn write_mask(&self) -> MTLColorWriteMask where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(writeMask), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_write_mask(&self, write_mask: MTLColorWriteMask) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setWriteMask:), (write_mask,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn is_blending_enabled(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(isBlendingEnabled), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_blending_enabled(&self, blending_enabled: bool) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setBlendingEnabled:), (blending_enabled,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn alpha_blend_operation(&self) -> MTLBlendOperation where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(alphaBlendOperation), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_alpha_blend_operation(&self, alpha_blend_operation: MTLBlendOperation) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setAlphaBlendOperation:), (alpha_blend_operation,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn rgb_blend_operation(&self) -> MTLBlendOperation where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(rgbBlendOperation), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_rgb_blend_operation(&self, rgb_blend_operation: MTLBlendOperation) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setRgbBlendOperation:), (rgb_blend_operation,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn destination_alpha_blend_factor(&self) -> MTLBlendFactor where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(destinationAlphaBlendFactor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_destination_alpha_blend_factor(&self, destination_alpha_blend_factor: MTLBlendFactor) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDestinationAlphaBlendFactor:), (destination_alpha_blend_factor,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn destination_rgb_blend_factor(&self) -> MTLBlendFactor where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(destinationRGBBlendFactor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_destination_rgb_blend_factor(&self, destination_rgb_blend_factor: MTLBlendFactor) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDestinationRGBBlendFactor:), (destination_rgb_blend_factor,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn source_alpha_blend_factor(&self) -> MTLBlendFactor where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(sourceAlphaBlendFactor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_source_alpha_blend_factor(&self, source_alpha_blend_factor: MTLBlendFactor) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setSourceAlphaBlendFactor:), (source_alpha_blend_factor,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn source_rgb_blend_factor(&self) -> MTLBlendFactor where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(sourceRGBBlendFactor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_source_rgb_blend_factor(&self, source_rgb_blend_factor: MTLBlendFactor) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setSourceRGBBlendFactor:), (source_rgb_blend_factor,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTLRenderPipelineColorAttachmentDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPipelineColorAttachmentDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPipelineColorAttachmentDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPipelineColorAttachmentDescriptorID {}
+impl MTLRenderPipelineColorAttachmentDescriptor for MTLRenderPipelineColorAttachmentDescriptorID {}
+
+impl Clone for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPipelineColorAttachmentDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLRenderPipelineColorAttachmentDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLRenderPipelineColorAttachmentDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLRenderPipelineColorAttachmentDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLRenderPipelineColorAttachmentDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLRenderPipelineColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPipelineColorAttachmentDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPipelineColorAttachmentDescriptorArrayID {}
+impl MTLRenderPipelineColorAttachmentDescriptorArray for MTLRenderPipelineColorAttachmentDescriptorArrayID {}
+
+impl Clone for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineColorAttachmentDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPipelineDescriptor : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn fragment_function(&self) -> MTLFunctionID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(fragmentFunction), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLFunctionID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_fragment_function<T: 'static + ObjectiveC + MTLFunction>(&self, fragment_function: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setFragmentFunction:), (fragment_function.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn vertex_function(&self) -> MTLFunctionID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(vertexFunction), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLFunctionID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_vertex_function<T: 'static + ObjectiveC + MTLFunction>(&self, vertex_function: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setVertexFunction:), (vertex_function.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn vertex_descriptor(&self) -> MTLVertexDescriptorID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(vertexDescriptor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLVertexDescriptorID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_vertex_descriptor<T: 'static + ObjectiveC + MTLVertexDescriptor>(&self, vertex_descriptor: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setVertexDescriptor:), (vertex_descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn reset(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(reset), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn color_attachments(&self) -> MTLRenderPipelineColorAttachmentDescriptorArrayID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(colorAttachments), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLRenderPipelineColorAttachmentDescriptorArrayID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_color_attachments<T: 'static + ObjectiveC + MTLRenderPipelineColorAttachmentDescriptorArray>(&self, color_attachments: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setColorAttachments:), (color_attachments.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn depth_attachment_pixel_format(&self) -> MTLPixelFormat where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(depthAttachmentPixelFormat), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_depth_attachment_pixel_format(&self, depth_attachment_pixel_format: MTLPixelFormat) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDepthAttachmentPixelFormat:), (depth_attachment_pixel_format,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn stencil_attachment_pixel_format(&self) -> MTLPixelFormat where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(stencilAttachmentPixelFormat), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_stencil_attachment_pixel_format(&self, stencil_attachment_pixel_format: MTLPixelFormat) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setStencilAttachmentPixelFormat:), (stencil_attachment_pixel_format,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn label(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(label), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLabel:), (label.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTLRenderPipelineDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLRenderPipelineDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPipelineDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPipelineDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPipelineDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPipelineDescriptorID {}
+impl MTLRenderPipelineDescriptor for MTLRenderPipelineDescriptorID {}
+
+impl Clone for MTLRenderPipelineDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPipelineDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPipelineDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPipelineDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPipelineDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLRenderPipelineReflection : NSObject {
+}
+
+pub struct MTLRenderPipelineReflectionID(*mut std::os::raw::c_void);
+
+impl MTLRenderPipelineReflectionID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineReflectionID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLRenderPipelineReflectionID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLRenderPipelineReflectionID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLRenderPipelineReflection").unwrap();
+  }
+}
+
+impl NSObject for MTLRenderPipelineReflectionID {}
+impl MTLRenderPipelineReflection for MTLRenderPipelineReflectionID {}
+
+impl Clone for MTLRenderPipelineReflectionID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLRenderPipelineReflectionID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLRenderPipelineReflectionID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLRenderPipelineReflectionID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLRenderPipelineReflectionID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLRenderPipelineReflectionID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLSamplerDescriptor : NSObject {
+}
+
+pub struct MTLSamplerDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLSamplerDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLSamplerDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLSamplerDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLSamplerDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLSamplerDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLSamplerDescriptorID {}
+impl MTLSamplerDescriptor for MTLSamplerDescriptorID {}
+
+impl Clone for MTLSamplerDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLSamplerDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLSamplerDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLSamplerDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLSamplerDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLSamplerDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLStageInputOutputDescriptor : NSObject {
+}
+
+pub struct MTLStageInputOutputDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLStageInputOutputDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStageInputOutputDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLStageInputOutputDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLStageInputOutputDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLStageInputOutputDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLStageInputOutputDescriptorID {}
+impl MTLStageInputOutputDescriptor for MTLStageInputOutputDescriptorID {}
+
+impl Clone for MTLStageInputOutputDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLStageInputOutputDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLStageInputOutputDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStageInputOutputDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLStageInputOutputDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLStageInputOutputDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLStencilDescriptor : NSObject {
+}
+
+pub struct MTLStencilDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLStencilDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStencilDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLStencilDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLStencilDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLStencilDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLStencilDescriptorID {}
+impl MTLStencilDescriptor for MTLStencilDescriptorID {}
+
+impl Clone for MTLStencilDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLStencilDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLStencilDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStencilDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLStencilDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLStencilDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLStructMember : NSObject {
+}
+
+pub struct MTLStructMemberID(*mut std::os::raw::c_void);
+
+impl MTLStructMemberID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStructMemberID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLStructMemberID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLStructMemberID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLStructMember").unwrap();
+  }
+}
+
+impl NSObject for MTLStructMemberID {}
+impl MTLStructMember for MTLStructMemberID {}
+
+impl Clone for MTLStructMemberID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLStructMemberID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLStructMemberID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStructMemberID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLStructMemberID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLStructMemberID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLStructType : NSObject {
+}
+
+pub struct MTLStructTypeID(*mut std::os::raw::c_void);
+
+impl MTLStructTypeID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStructTypeID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLStructTypeID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLStructTypeID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLStructType").unwrap();
+  }
+}
+
+impl NSObject for MTLStructTypeID {}
+impl MTLStructType for MTLStructTypeID {}
+
+impl Clone for MTLStructTypeID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLStructTypeID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLStructTypeID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLStructTypeID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLStructTypeID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLStructTypeID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLTextureDescriptor : NSObject {
+}
+
+pub struct MTLTextureDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLTextureDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLTextureDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLTextureDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLTextureDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLTextureDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLTextureDescriptorID {}
+impl MTLTextureDescriptor for MTLTextureDescriptorID {}
+
+impl Clone for MTLTextureDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLTextureDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLTextureDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLTextureDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLTextureDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLTextureDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexAttribute : NSObject {
+}
+
+pub struct MTLVertexAttributeID(*mut std::os::raw::c_void);
+
+impl MTLVertexAttributeID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexAttributeID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexAttributeID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexAttribute").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexAttributeID {}
+impl MTLVertexAttribute for MTLVertexAttributeID {}
+
+impl Clone for MTLVertexAttributeID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexAttributeID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexAttributeID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexAttributeID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexAttributeID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexAttributeDescriptor : NSObject {
+}
+
+pub struct MTLVertexAttributeDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLVertexAttributeDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexAttributeDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexAttributeDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexAttributeDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexAttributeDescriptorID {}
+impl MTLVertexAttributeDescriptor for MTLVertexAttributeDescriptorID {}
+
+impl Clone for MTLVertexAttributeDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexAttributeDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexAttributeDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexAttributeDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexAttributeDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexAttributeDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLVertexAttributeDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLVertexAttributeDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLVertexAttributeDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLVertexAttributeDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLVertexAttributeDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLVertexAttributeDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexAttributeDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexAttributeDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexAttributeDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexAttributeDescriptorArrayID {}
+impl MTLVertexAttributeDescriptorArray for MTLVertexAttributeDescriptorArrayID {}
+
+impl Clone for MTLVertexAttributeDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexAttributeDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexAttributeDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexAttributeDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexAttributeDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexAttributeDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexBufferLayoutDescriptor : NSObject {
+}
+
+pub struct MTLVertexBufferLayoutDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLVertexBufferLayoutDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexBufferLayoutDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexBufferLayoutDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexBufferLayoutDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexBufferLayoutDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexBufferLayoutDescriptorID {}
+impl MTLVertexBufferLayoutDescriptor for MTLVertexBufferLayoutDescriptorID {}
+
+impl Clone for MTLVertexBufferLayoutDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexBufferLayoutDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexBufferLayoutDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexBufferLayoutDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexBufferLayoutDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexBufferLayoutDescriptorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexBufferLayoutDescriptorArray : NSObject {
+  fn object_at_index(&self, index: NSUInteger) -> MTLVertexBufferLayoutDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLVertexBufferLayoutDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+
+  fn object_at_indexed_subscript(&self, index: NSUInteger) -> MTLVertexBufferLayoutDescriptorID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLVertexBufferLayoutDescriptorID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
+}
+
+pub struct MTLVertexBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
+
+impl MTLVertexBufferLayoutDescriptorArrayID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexBufferLayoutDescriptorArrayID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexBufferLayoutDescriptorArrayID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexBufferLayoutDescriptorArrayID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexBufferLayoutDescriptorArray").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexBufferLayoutDescriptorArrayID {}
+impl MTLVertexBufferLayoutDescriptorArray for MTLVertexBufferLayoutDescriptorArrayID {}
+
+impl Clone for MTLVertexBufferLayoutDescriptorArrayID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexBufferLayoutDescriptorArrayID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexBufferLayoutDescriptorArrayID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexBufferLayoutDescriptorArrayID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexBufferLayoutDescriptorArrayID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexBufferLayoutDescriptorArrayID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLVertexDescriptor : NSObject {
+}
+
+pub struct MTLVertexDescriptorID(*mut std::os::raw::c_void);
+
+impl MTLVertexDescriptorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexDescriptorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLVertexDescriptorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLVertexDescriptorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTLVertexDescriptor").unwrap();
+  }
+}
+
+impl NSObject for MTLVertexDescriptorID {}
+impl MTLVertexDescriptor for MTLVertexDescriptorID {}
+
+impl Clone for MTLVertexDescriptorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLVertexDescriptorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLVertexDescriptorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLVertexDescriptorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLVertexDescriptorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLVertexDescriptorID {
   fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
     return write!(f, "{}", self.debug_description().as_str());
   }

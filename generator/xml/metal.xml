@@ -3,6 +3,45 @@
   <use>foundation::*</use>
   <use>legacy_metal::*</use>
 
+  <enumeration name="MTLBlendFactor" type="NSUInteger">
+    <value name="MTLBlendFactorZero" value="0" />
+    <value name="MTLBlendFactorOne" value="1" />
+    <value name="MTLBlendFactorSourceColor" value="2" />
+    <value name="MTLBlendFactorOneMinusSourceColor" value="3" />
+    <value name="MTLBlendFactorSourceAlpha" value="4" />
+    <value name="MTLBlendFactorOneMinusSourceAlpha" value="5" />
+    <value name="MTLBlendFactorDestinationColor" value="6" />
+    <value name="MTLBlendFactorOneMinusDestinationColor" value="7" />
+    <value name="MTLBlendFactorDestinationAlpha" value="8" />
+    <value name="MTLBlendFactorOneMinusDestinationAlpha" value="9" />
+    <value name="MTLBlendFactorSourceAlphaSaturated" value="10" />
+    <value name="MTLBlendFactorBlendColor" value="11" />
+    <value name="MTLBlendFactorOneMinusBlendColor" value="12" />
+    <value name="MTLBlendFactorBlendAlpha" value="13" />
+    <value name="MTLBlendFactorOneMinusBlendAlpha" value="14" />
+    <value name="MTLBlendFactorSource1Color" value="15" />
+    <value name="MTLBlendFactorOneMinusSource1Color" value="16" />
+    <value name="MTLBlendFactorSource1Alpha" value="17" />
+    <value name="MTLBlendFactorOneMinusSource1Alpha" value="18" />
+  </enumeration>
+
+  <enumeration name="MTLBlendOperation" type="NSUInteger">
+    <value name="MTLBlendOperationAdd" value="0" />
+    <value name="MTLBlendOperationSubtract" value="1" />
+    <value name="MTLBlendOperationReverseSubtract" value="2" />
+    <value name="MTLBlendOperationMin" value="3" />
+    <value name="MTLBlendOperationMax" value="4" />
+  </enumeration>
+
+  <enumeration name="MTLColorWriteMask" type="NSUInteger">
+    <value name="MTLColorWriteMaskNone" value="0" />
+    <value name="MTLColorWriteMaskRed" value="0x1 << 3" />
+    <value name="MTLColorWriteMaskGreen" value="0x1 << 2" />
+    <value name="MTLColorWriteMaskBlue" value="0x1 << 1" />
+    <value name="MTLColorWriteMaskAlpha" value="0x1 << 0" />
+    <value name="MTLColorWriteMaskAll" value="0xf" />
+  </enumeration>
+
   <enumeration name="MTLCompareFunction" type="NSUInteger">
     <value name="MTLCompareFunctionNever" value="0" />
     <value name="MTLCompareFunctionLess" value="1" />
@@ -50,13 +89,248 @@
   </enumeration>
 
   <!-- Classes -->
-  <!-- TODO: Missing -->
+  <class name="MTLArgument" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLArrayType" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLAttribute" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLAttributeDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLAttributeDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLAttributeDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLAttributeDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLBufferLayoutDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLBufferLayoutDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLBufferLayoutDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLBufferLayoutDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLCompileOptions" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLComputePipelineDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLComputePipelineReflection" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLDepthStencilDescriptor" inherits="NSObject">
+    <initializer selector="init" />
+
+    <!-- Specifying Depth Operations -->
+    <property name="depthCompareFunction" type="MTLCompareFunction" />
+    <property name="depthWriteEnabled" getter="isDepthWriteEnabled" type="bool" />
+
+    <!-- Specifying Stencil Descriptors for Primitives -->
+    <property name="backFaceStencil" protocol="MTLStencilDescriptor" />
+    <property name="frontFaceStencil" protocol="MTLStencilDescriptor" />
+    
+    <!-- Identifying Properties -->
+    <property name="label" protocol="NSString" />
+    
+  </class>
+
+  <class name="MTLFunctionConstant" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLFunctionConstantValues" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLHeapDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLRenderPassAttachmentDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLRenderPassColorAttachmentDescriptor" inherits="MTLRenderPassAttachmentDescriptor, NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLRenderPassColorAttachmentDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLRenderPassColorAttachmentDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLRenderPassColorAttachmentDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLRenderPassDepthAttachmentDescriptor" inherits="MTLRenderPassAttachmentDescriptor, NSObject">
+    <!-- TODO: All missing -->
+  </class>
 
   <class name="MTLRenderPassDescriptor" inherits="NSObject">
     <!-- TODO: All missing -->
   </class>
 
-  <!-- TODO: More missing -->
+  <class name="MTLRenderPassStencilAttachmentDescriptor" inherits="MTLRenderPassAttachmentDescriptor, NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLRenderPipelineColorAttachmentDescriptor" inherits="NSObject">
+    <!-- Specifying Render Pipeline State -->
+    <property name="pixelFormat" type="MTLPixelFormat" />
+    <property name="writeMask" type="MTLColorWriteMask" />
+    
+    <!-- Controlling the Blend Operation -->
+    <property name="blendingEnabled" getter="isBlendingEnabled" type="bool" />
+    <property name="alphaBlendOperation" type="MTLBlendOperation" />
+    <property name="rgbBlendOperation" type="MTLBlendOperation" />
+
+    <!-- Specifying Blend Factors -->
+    <property name="destinationAlphaBlendFactor" type="MTLBlendFactor" />
+    <property name="destinationRGBBlendFactor" type="MTLBlendFactor" />
+    <property name="sourceAlphaBlendFactor" type="MTLBlendFactor" />
+    <property name="sourceRGBBlendFactor" type="MTLBlendFactor" />
+  </class>
+
+  <class name="MTLRenderPipelineColorAttachmentDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLRenderPipelineColorAttachmentDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLRenderPipelineColorAttachmentDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLRenderPipelineDescriptor" inherits="NSObject">
+    <initializer selector="init" />
+
+    <!-- Specifying Shader Functions and Associated Data -->
+    <property name="fragmentFunction" protocol="MTLFunction" />
+    <property name="vertexFunction" protocol="MTLFunction" />
+    <property name="vertexDescriptor" protocol="MTLVertexDescriptor" />
+    
+    <!-- Specifying Rendering Pipeline State -->
+    <method selector="reset" />
+    <property name="colorAttachments" protocol="MTLRenderPipelineColorAttachmentDescriptorArray" />
+    <property name="depthAttachmentPixelFormat" type="MTLPixelFormat" />
+    <property name="stencilAttachmentPixelFormat" type="MTLPixelFormat" />
+
+    <!-- Specifying Rasterization and Visibility State -->
+    <!-- TODO: All missing -->
+
+    <!-- Specifying Tessellation State -->
+    <!-- TODO: All missing -->
+
+    <!-- Identifying Properties -->
+    <property name="label" protocol="NSString" />
+  </class>
+
+  <class name="MTLRenderPipelineReflection" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLSamplerDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLStageInputOutputDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLStencilDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLStructMember" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLStructType" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLTextureDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLVertexAttribute" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLVertexAttributeDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLVertexAttributeDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLVertexAttributeDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLVertexAttributeDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLVertexBufferLayoutDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
+  <class name="MTLVertexBufferLayoutDescriptorArray" inherits="NSObject">
+    <!-- Instance Methods -->
+    <method selector="objectAtIndex:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLVertexBufferLayoutDescriptor" />
+    </method>
+
+    <method selector="objectAtIndexedSubscript:">
+      <argument name="index" type="NSUInteger" />
+      <return protocol="MTLVertexBufferLayoutDescriptor" />
+    </method>
+  </class>
+
+  <class name="MTLVertexDescriptor" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
 
   <!-- Protocols -->
   <protocol name="MTLBlitCommandEncoder" inherits="MTLCommandEncoder, NSObject">

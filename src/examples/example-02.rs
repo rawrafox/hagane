@@ -46,7 +46,7 @@ impl RSMRenderer for Example02Renderer {
 
     let color_attachments = pipeline_descriptor.color_attachments();
     let color_attachment = color_attachments.object_at_indexed_subscript(0);
-    color_attachment.set_pixel_format(80);
+    color_attachment.set_pixel_format(MTLPixelFormat::MTLPixelFormatBGRA8Unorm);
 
     self.pipeline_state = match device.new_render_pipeline_state_with_descriptor(pipeline_descriptor) {
       Ok(p) => p,

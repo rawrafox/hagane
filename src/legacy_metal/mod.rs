@@ -221,17 +221,6 @@ id!(MTLCommandEncoderID, MTLCommandEncoder);
 
 impl NSObject for MTLCommandEncoderID {}
 
-pub trait MTLDepthStencilDescriptor : NSObject {
-  initializer!(init, sel!(init), ());
-
-  forward!(set_depth_compare_function, sel!(setDepthCompareFunction:), (compare_function: MTLCompareFunction) -> ());
-  forward!(set_depth_write_enabled, sel!(setDepthWriteEnabled:), (enabled: bool) -> ());
-}
-
-id!(MTLDepthStencilDescriptorID, MTLDepthStencilDescriptor, "MTLDepthStencilDescriptor");
-
-impl NSObject for MTLDepthStencilDescriptorID {}
-
 pub trait MTLDevice : NSObject {
   forward!(is_depth24_stencil8_pixel_format_supported, sel!(isDepth24Stencil8PixelFormatSupported), () -> bool);
   forward!(is_headless, sel!(isHeadless), () -> bool);
@@ -292,34 +281,6 @@ pub trait MTLDevice : NSObject {
 id!(MTLDeviceID, MTLDevice);
 
 impl NSObject for MTLDeviceID {}
-
-pub trait MTLRenderPipelineColorAttachmentDescriptor : NSObject {
-  forward!(set_pixel_format, sel!(setPixelFormat:), (format: usize) -> ());
-}
-
-id!(MTLRenderPipelineColorAttachmentDescriptorID, MTLRenderPipelineColorAttachmentDescriptor, "MTLRenderPipelineColorAttachmentDescriptor");
-
-impl NSObject for MTLRenderPipelineColorAttachmentDescriptorID {}
-
-pub trait MTLRenderPipelineColorAttachmentDescriptorArray : NSObject {
-  forward!(object_at_indexed_subscript, sel!(objectAtIndexedSubscript:), (i: usize) -> MTLRenderPipelineColorAttachmentDescriptorID, retain);
-}
-
-id!(MTLRenderPipelineColorAttachmentDescriptorArrayID, MTLRenderPipelineColorAttachmentDescriptorArray, "MTLRenderPipelineColorAttachmentDescriptorArray");
-
-impl NSObject for MTLRenderPipelineColorAttachmentDescriptorArrayID {}
-
-pub trait MTLRenderPipelineDescriptor : NSObject {
-  initializer!(init, sel!(init), ());
-
-  forward!(color_attachments, sel!(colorAttachments), () -> MTLRenderPipelineColorAttachmentDescriptorArrayID, retain);
-  forward!(set_fragment_function, sel!(setFragmentFunction:), (function: T) -> (), <T: MTLFunction>);
-  forward!(set_vertex_function, sel!(setVertexFunction:), (function: T) -> (), <T: MTLFunction>);
-}
-
-id!(MTLRenderPipelineDescriptorID, MTLRenderPipelineDescriptor, "MTLRenderPipelineDescriptor");
-
-impl NSObject for MTLRenderPipelineDescriptorID {}
 
 pub fn all_devices() -> NSArrayID {
   unsafe {
