@@ -1,5 +1,4 @@
 #![allow(non_upper_case_globals)]
-
 use std;
 use objc;
 use super::ObjectiveC;
@@ -8,6 +7,7 @@ use super::ObjectiveC;
 extern {}
 pub type NSInteger = isize;
 pub type NSUInteger = usize;
+
 bitflags! {
   pub flags NSStringEncoding: NSUInteger {
     const NSASCIIStringEncoding = 1,

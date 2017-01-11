@@ -52,12 +52,12 @@ impl RSMRenderer for Example04Renderer {
 
     self.index_buffers = submeshes.into_iter().map(|submesh| {
       let index_buffer = submesh.index_buffer();
-      let index_buffer = device.new_buffer_with_bytes_length_options(index_buffer.map().bytes(), index_buffer.length(), 0);
+      let index_buffer = device.new_buffer_with_bytes_length_options(index_buffer.map().bytes(), index_buffer.length(), MTLResourceCPUCacheModeDefaultCache);
 
       (index_buffer, submesh.index_count())
     }).collect();
 
-    self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), 0);
+    self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
 
     let vertex_buffers = mesh.vertex_buffers();
 
@@ -66,7 +66,7 @@ impl RSMRenderer for Example04Renderer {
     }
 
     let vertex_buffer = mesh.vertex_buffers().object_at_index::<MDLMeshBufferID>(0);
-    self.vertex_buffer = device.new_buffer_with_bytes_length_options(vertex_buffer.map().bytes(), vertex_buffer.length(), 0);
+    self.vertex_buffer = device.new_buffer_with_bytes_length_options(vertex_buffer.map().bytes(), vertex_buffer.length(), MTLResourceCPUCacheModeDefaultCache);
 
     let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-04.metallib")) {
       Ok(l) => l,

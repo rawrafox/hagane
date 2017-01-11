@@ -1,5 +1,4 @@
 #![allow(non_upper_case_globals)]
-
 use std;
 use objc;
 use super::ObjectiveC;
@@ -7,6 +6,7 @@ use foundation::*;
 
 #[link(name = "ModelIO", kind = "framework")]
 extern {}
+
 bitflags! {
   pub flags MDLGeometryType: NSInteger {
     const MDLGeometryTypePoints = 0,
@@ -17,6 +17,7 @@ bitflags! {
     const MDLGeometryTypeVariableTopology = 5,
   }
 }
+
 bitflags! {
   pub flags MDLIndexBitDepth: NSUInteger {
     const MDLIndexBitDepthInvalid = 0,
@@ -25,6 +26,7 @@ bitflags! {
     const MDLIndexBitDepthUInt32 = 32,
   }
 }
+
 bitflags! {
   pub flags MDLVertexFormat: NSUInteger {
     const MDLVertexFormatInvalid = 0,

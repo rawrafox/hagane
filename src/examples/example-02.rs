@@ -30,7 +30,7 @@ impl RSMRenderer for Example02Renderer {
 
     let vertex_size = std::mem::size_of::<Vertex>();
     let buffer_size = VERTICES.len() * vertex_size;
-    self.buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, 0);
+    self.buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-02.metallib")) {
       Ok(l) => l,

@@ -113,6 +113,8 @@ module Bridge
         Extern.new(node)
       when "protocol"
         Protocol.new(node)
+      when "script"
+        Script.new(node)
       when "structure"
         Structure.new(node)
       when "use"
@@ -122,7 +124,6 @@ module Bridge
 
     def to_rust(o)
       o.puts("#![allow(non_upper_case_globals)]", pad: true, group: "prelude")
-      o.puts
 
       unless @no_prelude
         o.puts("use std;")
@@ -185,10 +186,10 @@ module Bridge
       inheritance = self.inherits.length == 0 ? "ObjectiveC" : self.inherits.join(" + ")
 
       o.block("pub trait #{self.name} : #{inheritance}", pad: true) do |o|
-        self.children.each { |c| c.to_rust(o) }
+        self.children.reject { |x| x.is_a?(Script) }.each { |c| c.to_rust(o) }
         self.children.select { |x| x.is_a?(Script) && x.type == "trait" }.each do |script|
           o.puts
-          script.content.lines.each { |line| o.puts(line) }
+          script.to_rust(o)
         end
       end
       o.puts
@@ -198,7 +199,7 @@ module Bridge
         self.impl_for_self(o)
         self.children.select { |x| x.is_a?(Script) && x.type == "id" }.each do |script|
           o.puts
-          script.content.lines.each { |line| o.puts(line) }
+          script.to_rust(o)
         end
       end
       o.puts
@@ -318,7 +319,7 @@ module Bridge
     end
 
     def to_rust(o)
-      o.block("bitflags!") do |o|
+      o.block("bitflags!", pad: true) do |o|
         o.block("pub flags #{self.name}: #{self.type}") do |o|
           self.children.each { |c| c.to_rust(o) }
         end
@@ -333,6 +334,13 @@ module Bridge
 
     def prepare(node)
       @framework = node['framework']
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "function"
+        Function.new(node)
+      end
     end
 
     def to_rust(o)
@@ -357,6 +365,40 @@ module Bridge
 
     def to_rust(o)
       o.puts("pub #{self.name.underscore}: #{self.type},")
+    end
+  end
+
+  class Function < Node
+    attr_reader :name
+
+    def prepare(node)
+      @name = node["name"]
+    end
+
+    def prepare_child(node)
+      case node.name
+      when "return"
+        Return.new(node)
+      end
+    end
+
+    def to_rust(o)
+      return_values = self.children.select { |x| x.is_a? Return }.map do |return_value|
+        case return_value.kind
+        when "type"
+          type_name = return_value.type.to_s
+
+          " -> #{type_name}"
+        else
+          raise Exception, "unsupported kind #{return_value.kind}"
+        end
+      end
+
+      raise ArgumentError, "too many return values" if return_values.length > 1
+
+      return_value = return_values[0] || ""
+
+      o.puts("fn #{self.name}()#{return_value};")
     end
   end
 
@@ -634,6 +676,10 @@ module Bridge
     def prepare(node)
       @type = node['type']
       @content = node.text.strip
+    end
+
+    def to_rust(o)
+      @content.lines.each { |line| o.puts(line) }
     end
   end
 

@@ -1,5 +1,4 @@
 #![allow(non_upper_case_globals)]
-
 use std;
 use objc;
 use super::ObjectiveC;
@@ -8,7 +7,6 @@ use core_animation::*;
 use core_graphics::*;
 use foundation::*;
 use metal::*;
-use legacy_metal::*;
 
 #[link(name = "MetalKit", kind = "framework")]
 extern {}

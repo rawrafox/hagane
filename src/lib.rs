@@ -23,9 +23,6 @@ pub use foundation::*;
 pub mod metal;
 pub use metal::*;
 
-pub mod legacy_metal;
-pub use legacy_metal::*;
-
 pub mod metal_kit;
 pub use metal_kit::*;
 
@@ -38,7 +35,6 @@ pub trait ObjectiveC {
   fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self;
 
   #[inline] fn as_ptr(&self) -> *mut std::os::raw::c_void;
-
 
   fn as_object(&self) -> &mut objc::runtime::Object {
     let ptr = self.as_ptr() as *mut objc::runtime::Object;

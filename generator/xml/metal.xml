@@ -1,7 +1,42 @@
 <framework module="metal">
   <use>core_foundation::*</use>
   <use>foundation::*</use>
-  <use>legacy_metal::*</use>
+
+  <extern framework="Metal">
+    <!-- Obtaining all Devices -->
+    <function name="MTLCopyAllDevices">
+      <return type="*mut std::os::raw::c_void" />
+    </function>
+
+    <!-- Obtaining the Preferred Device -->
+    <function name="MTLCreateSystemDefaultDevice">
+      <return type="*mut std::os::raw::c_void" />
+    </function>
+    
+    <!-- Creating an Image Location or Region -->
+    <!-- TODO: MTLOriginMake -->
+    <!-- TODO: MTLRegionMake1D -->
+    <!-- TODO: MTLRegionMake2D -->
+    <!-- TODO: MTLRegionMake3D -->
+    <!-- TODO: MTLSizeMake -->
+    
+    <!-- Creating a Color to Clear an Attachment -->
+    <!-- TODO: MTLClearColorMake -->
+  </extern>
+
+  <script type="root">
+pub fn all_devices() -> NSArrayID {
+  unsafe {
+    return NSArrayID::from_ptr(MTLCopyAllDevices());
+  }
+}
+
+pub fn system_default_device() -> MTLDeviceID {
+  unsafe {
+    return MTLDeviceID::from_ptr(MTLCreateSystemDefaultDevice());
+  }
+}
+  </script>
 
   <enumeration name="MTLArgumentAccess" type="NSUInteger">
     <value name="MTLArgumentAccessReadOnly" value="0" />
@@ -1024,7 +1059,122 @@
     <!-- TODO: All missing -->
   </protocol>
 
-  <!-- TODO: MTLDevice -->
+  <protocol name="MTLDevice" inherits="NSObject">
+    <!-- Identifying Properties -->
+    <!-- TODO: All missing -->
+    
+    <property name="depth24Stencil8PixelFormatSupported" getter="isDepth24Stencil8PixelFormatSupported" type="bool" read-only />
+    <property name="headless" getter="isHeadless" type="bool" read-only />
+    <property name="lowPower" getter="isLowPower" type="bool" read-only />
+    <property name="maxThreadsPerThreadgroup" type="MTLSize" read-only />
+    <property name="recommendedMaxWorkingSetSize" type="u64" read-only />
+    <property name="name" protocol="NSString" read-only />
+
+    <method selector="supportsFeatureSet:">
+      <argument name="featureSet" type="MTLFeatureSet" />
+      <return type="bool" />
+    </method>
+
+    <method selector="supportsTextureSampleCount:">
+      <argument name="sampleCount" type="NSUInteger" />
+      <return type="bool" />
+    </method>
+
+    <!-- Creating Metal Shader Libraries -->
+    <method selector="newDefaultLibrary" />
+    <!-- TODO: All missing -->
+    
+    <!-- Creating Command Queues -->
+    <method selector="newCommandQueue">
+      <return protocol="MTLCommandQueue" />
+    </method>
+    
+    <method selector="newCommandQueueWithMaxCommandBufferCount">
+      <argument name="maxCommandBufferCount" type="NSUInteger" />
+      <return protocol="MTLCommandQueue" />
+    </method>
+    
+    <!-- Creating Resources -->
+    <method selector="newBufferWithLength:options:">
+      <argument name="length" type="NSUInteger" />
+      <argument name="options" type="MTLResourceOptions" />
+      <return protocol="MTLBuffer" />
+    </method>
+    
+    <method selector="newBufferWithBytes:length:options:">
+      <argument name="pointer" type="*const std::os::raw::c_void" />
+      <argument name="length" type="NSUInteger" />
+      <argument name="options" type="MTLResourceOptions" />
+      <return protocol="MTLBuffer" />
+    </method>
+    <!-- TODO: All missing -->
+    <method selector="newFence">
+      <return protocol="MTLFence" />
+    </method>
+    
+    <method selector="newSamplerStateWithDescriptor:">
+      <argument name="descriptor" protocol="MTLSamplerDescriptor" />
+      <return protocol="MTLSamplerState" />
+    </method>
+    
+    <!-- Creating Command Objects Needed to Render Graphics -->
+    <!-- TODO: All missing -->
+    <method selector="newDepthStencilStateWithDescriptor:">
+      <argument name="descriptor" protocol="MTLDepthStencilDescriptor" />
+      <return protocol="MTLDepthStencilState" />
+    </method>
+
+    <!-- Creating Command Objects Needed to Perform Computational Tasks -->
+    <!-- TODO: All missing -->
+    
+    <!-- Instance Methods -->
+    <!-- TODO: All missing -->
+    
+    <!-- TODO: This shouldn't be required -->
+    <script type="trait">
+fn new_library_with_file<T: NSString>(&self, filepath: T) -> Result<MTLLibraryID, NSErrorID> {
+  let mut error = NSErrorID::nil();
+
+  unsafe {
+    let lib = msg_send![self.as_object(), newLibraryWithFile: filepath error: &mut error];
+
+    if error.is_nil() {
+      return Ok(lib);
+    } else {
+      return Err(error);
+    }
+  }
+}
+
+fn new_render_pipeline_state_with_descriptor<T: MTLRenderPipelineDescriptor>(&self, descriptor: T) -> Result<MTLRenderPipelineStateID, NSErrorID> {
+  let mut error = NSErrorID::nil();
+
+  unsafe {
+    let lib = msg_send![self.as_object(), newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
+
+    if error.is_nil() {
+      return Ok(lib);
+    } else {
+      return Err(error);
+    }
+  }
+}
+    </script>
+    
+    <script type="trait">
+fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
+  let mut result = Vec::new();
+
+  for i in 1 .. 128 {
+    if self.supports_texture_sample_count(i) {
+      result.push(i);
+    }
+  }
+
+  return result;
+}
+    </script>
+  </protocol>
 
   <protocol name="MTLDrawable" inherits="NSObject">
     <method selector="present" />

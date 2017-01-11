@@ -1,11 +1,27 @@
 #![allow(non_upper_case_globals)]
-
 use std;
 use objc;
 use super::ObjectiveC;
 use core_foundation::*;
 use foundation::*;
-use legacy_metal::*;
+
+#[link(name = "Metal", kind = "framework")]
+extern {
+  fn MTLCopyAllDevices() -> *mut std::os::raw::c_void;
+  fn MTLCreateSystemDefaultDevice() -> *mut std::os::raw::c_void;
+}
+pub fn all_devices() -> NSArrayID {
+  unsafe {
+    return NSArrayID::from_ptr(MTLCopyAllDevices());
+  }
+}
+
+pub fn system_default_device() -> MTLDeviceID {
+  unsafe {
+    return MTLDeviceID::from_ptr(MTLCreateSystemDefaultDevice());
+  }
+}
+
 bitflags! {
   pub flags MTLArgumentAccess: NSUInteger {
     const MTLArgumentAccessReadOnly = 0,
@@ -13,6 +29,7 @@ bitflags! {
     const MTLArgumentAccessWriteOnly = 2,
   }
 }
+
 bitflags! {
   pub flags MTLArgumentType: NSUInteger {
     const MTLArgumentTypeBuffer = 0,
@@ -21,6 +38,7 @@ bitflags! {
     const MTLArgumentTypeSampler = 4,
   }
 }
+
 bitflags! {
   pub flags MTLAttributeFormat: NSUInteger {
     const MTLAttributeFormatInvalid = 0,
@@ -67,6 +85,7 @@ bitflags! {
     const MTLAttributeFormatUInt1010102Normalized = 41,
   }
 }
+
 bitflags! {
   pub flags MTLBlendFactor: NSUInteger {
     const MTLBlendFactorZero = 0,
@@ -90,6 +109,7 @@ bitflags! {
     const MTLBlendFactorOneMinusSource1Alpha = 18,
   }
 }
+
 bitflags! {
   pub flags MTLBlendOperation: NSUInteger {
     const MTLBlendOperationAdd = 0,
@@ -99,6 +119,7 @@ bitflags! {
     const MTLBlendOperationMax = 4,
   }
 }
+
 bitflags! {
   pub flags MTLBlitOption: NSUInteger {
     const MTLBlitOptionNone = 0,
@@ -107,12 +128,14 @@ bitflags! {
     const MTLBlitOptionRowLinearPVRTC = 1 << 2,
   }
 }
+
 bitflags! {
   pub flags MTLCPUCacheMode: NSUInteger {
     const MTLCPUCacheModeDefaultCache = 0,
     const MTLCPUCacheModeWriteCombined = 1,
   }
 }
+
 bitflags! {
   pub flags MTLColorWriteMask: NSUInteger {
     const MTLColorWriteMaskNone = 0,
@@ -123,6 +146,7 @@ bitflags! {
     const MTLColorWriteMaskAll = 0xf,
   }
 }
+
 bitflags! {
   pub flags MTLCommandBufferError: NSUInteger {
     const MTLCommandBufferErrorNone = 0,
@@ -136,6 +160,7 @@ bitflags! {
     const MTLCommandBufferErrorMemoryless = 10,
   }
 }
+
 bitflags! {
   pub flags MTLCommandBufferStatus: NSUInteger {
     const MTLCommandBufferStatusNotEnqueued = 0,
@@ -146,6 +171,7 @@ bitflags! {
     const MTLCommandBufferStatusError = 5,
   }
 }
+
 bitflags! {
   pub flags MTLCompareFunction: NSUInteger {
     const MTLCompareFunctionNever = 0,
@@ -158,6 +184,7 @@ bitflags! {
     const MTLCompareFunctionAlways = 7,
   }
 }
+
 bitflags! {
   pub flags MTLCullMode: NSUInteger {
     const MTLCullModeNone = 0,
@@ -165,12 +192,14 @@ bitflags! {
     const MTLCullModeBack = 2,
   }
 }
+
 bitflags! {
   pub flags MTLDepthClipMode: NSUInteger {
     const MTLDepthClipModeClip = 0,
     const MTLDepthClipModeClamp = 1,
   }
 }
+
 bitflags! {
   pub flags MTLFeatureSet: NSUInteger {
     const MTLFeatureSet_iOS_GPUFamily1_v1 = 0,
@@ -188,6 +217,7 @@ bitflags! {
     const MTLFeatureSet_tvOS_GPUFamily1_v2 = 30001,
   }
 }
+
 bitflags! {
   pub flags MTLFunctionType: NSUInteger {
     const MTLFunctionTypeVertex = 1,
@@ -195,12 +225,14 @@ bitflags! {
     const MTLFunctionTypeKernel = 3,
   }
 }
+
 bitflags! {
   pub flags MTLIndexType: NSUInteger {
     const MTLIndexTypeUInt16 = 0,
     const MTLIndexTypeUInt32 = 1,
   }
 }
+
 bitflags! {
   pub flags MTLLanguageVersion: NSUInteger {
     const MTLLanguageVersion1_0 = (1 << 16),
@@ -208,6 +240,7 @@ bitflags! {
     const MTLLanguageVersion1_2 = (1 << 16) + 2,
   }
 }
+
 bitflags! {
   pub flags MTLLibraryError: NSUInteger {
     const MTLLibraryErrorUnsupported = 1,
@@ -218,6 +251,7 @@ bitflags! {
     const MTLLibraryErrorFileNotFound = 6,
   }
 }
+
 bitflags! {
   pub flags MTLLoadAction: NSUInteger {
     const MTLLoadActionDontCare = 0,
@@ -225,6 +259,7 @@ bitflags! {
     const MTLLoadActionClear = 2,
   }
 }
+
 bitflags! {
   pub flags MTLMultisampleDepthResolveFilter: NSUInteger {
     const MTLMultisampleDepthResolveFilterSample0 = 0,
@@ -232,6 +267,7 @@ bitflags! {
     const MTLMultisampleDepthResolveFilterMax = 2,
   }
 }
+
 bitflags! {
   pub flags MTLPatchType: NSUInteger {
     const MTLPatchTypeNone = 0,
@@ -239,6 +275,7 @@ bitflags! {
     const MTLPatchTypeQuad = 2,
   }
 }
+
 bitflags! {
   pub flags MTLPipelineOption: NSUInteger {
     const MTLPipelineOptionNone = 0,
@@ -246,6 +283,7 @@ bitflags! {
     const MTLPipelineOptionBufferTypeInfo = 1 << 1,
   }
 }
+
 bitflags! {
   pub flags MTLPixelFormat: NSUInteger {
     const MTLPixelFormatInvalid = 0,
@@ -374,6 +412,7 @@ bitflags! {
     const MTLPixelFormatX24_Stencil8 = 262,
   }
 }
+
 bitflags! {
   pub flags MTLPrimitiveTopologyClass: NSUInteger {
     const MTLPrimitiveTopologyClassUnspecified = 0,
@@ -382,6 +421,7 @@ bitflags! {
     const MTLPrimitiveTopologyClassTriangle = 3,
   }
 }
+
 bitflags! {
   pub flags MTLPrimitiveType: NSUInteger {
     const MTLPrimitiveTypePoint = 0,
@@ -391,6 +431,7 @@ bitflags! {
     const MTLPrimitiveTypeTriangleStrip = 4,
   }
 }
+
 bitflags! {
   pub flags MTLPurgeableState: NSUInteger {
     const MTLPurgeableStateKeepCurrent = 1,
@@ -399,6 +440,7 @@ bitflags! {
     const MTLPurgeableStateEmpty = 4,
   }
 }
+
 bitflags! {
   pub flags MTLRenderPipelineError: NSUInteger {
     const MTLRenderPipelineErrorInternal = 1,
@@ -406,12 +448,14 @@ bitflags! {
     const MTLRenderPipelineErrorInvalidInput = 3,
   }
 }
+
 bitflags! {
   pub flags MTLRenderStages: NSUInteger {
     const MTLRenderStageVertex = (1 << 0),
     const MTLRenderStageFragment = (1 << 1),
   }
 }
+
 bitflags! {
   pub flags MTLResourceOptions: NSUInteger {
     const MTLResourceCPUCacheModeDefaultCache = MTLCPUCacheModeDefaultCache.bits << 0,
@@ -423,6 +467,7 @@ bitflags! {
     const MTLResourceHazardTrackingModeUntracked = 0x1 << 8,
   }
 }
+
 bitflags! {
   pub flags MTLSamplerAddressMode: NSUInteger {
     const MTLSamplerAddressModeClampToEdge = 0,
@@ -433,6 +478,7 @@ bitflags! {
     const MTLSamplerAddressModeClampToBorderColor = 5,
   }
 }
+
 bitflags! {
   pub flags MTLSamplerBorderColor: NSUInteger {
     const MTLSamplerBorderColorTransparentBlack = 0,
@@ -440,12 +486,14 @@ bitflags! {
     const MTLSamplerBorderColorOpaqueWhite = 2,
   }
 }
+
 bitflags! {
   pub flags MTLSamplerMinMagFilter: NSUInteger {
     const MTLSamplerMinMagFilterNearest = 0,
     const MTLSamplerMinMagFilterLinear = 1,
   }
 }
+
 bitflags! {
   pub flags MTLSamplerMipFilter: NSUInteger {
     const MTLSamplerMipFilterNotMipmapped = 0,
@@ -453,6 +501,7 @@ bitflags! {
     const MTLSamplerMipFilterLinear = 2,
   }
 }
+
 bitflags! {
   pub flags MTLStencilOperation: NSUInteger {
     const MTLStencilOperationKeep = 0,
@@ -465,6 +514,7 @@ bitflags! {
     const MTLStencilOperationDecrementWrap = 7,
   }
 }
+
 bitflags! {
   pub flags MTLStepFunction: NSUInteger {
     const MTLStepFunctionConstant = 0,
@@ -478,6 +528,7 @@ bitflags! {
     const MTLStepFunctionThreadPositionInGridYIndexed = 8,
   }
 }
+
 bitflags! {
   pub flags MTLStorageMode: NSUInteger {
     const MTLStorageModeShared = 0,
@@ -486,6 +537,7 @@ bitflags! {
     const MTLStorageModeMemoryless = 3,
   }
 }
+
 bitflags! {
   pub flags MTLStoreAction: NSUInteger {
     const MTLStoreActionDontCare = 0,
@@ -495,6 +547,7 @@ bitflags! {
     const MTLStoreActionUnknown = 4,
   }
 }
+
 bitflags! {
   pub flags MTLTessellationControlPointIndexType: NSUInteger {
     const MTLTessellationControlPointIndexTypeNone = 0,
@@ -502,11 +555,13 @@ bitflags! {
     const MTLTessellationControlPointIndexTypeUInt32 = 2,
   }
 }
+
 bitflags! {
   pub flags MTLTessellationFactorFormat: NSUInteger {
     const MTLTessellationFactorFormatHalf = 0,
   }
 }
+
 bitflags! {
   pub flags MTLTessellationFactorStepFunction: NSUInteger {
     const MTLTessellationFactorStepFunctionConstant = 0,
@@ -515,6 +570,7 @@ bitflags! {
     const MTLTessellationFactorStepFunctionPerPatchAndPerInstance = 3,
   }
 }
+
 bitflags! {
   pub flags MTLTessellationPartitionMode: NSUInteger {
     const MTLTessellationPartitionModePow2 = 0,
@@ -523,6 +579,7 @@ bitflags! {
     const MTLTessellationPartitionModeFractionalEven = 3,
   }
 }
+
 bitflags! {
   pub flags MTLTextureType: NSUInteger {
     const MTLTextureType1D = 0,
@@ -535,6 +592,7 @@ bitflags! {
     const MTLTextureType3D = 7,
   }
 }
+
 bitflags! {
   pub flags MTLTextureUsage: NSUInteger {
     const MTLTextureUsageUnknown = 0x0000,
@@ -544,12 +602,14 @@ bitflags! {
     const MTLTextureUsagePixelFormatView = 0x0010,
   }
 }
+
 bitflags! {
   pub flags MTLTriangleFillMode: NSUInteger {
     const MTLTriangleFillModeFill = 0,
     const MTLTriangleFillModeLines = 1,
   }
 }
+
 bitflags! {
   pub flags MTLVertexFormat: NSUInteger {
     const MTLVertexFormatInvalid = 0,
@@ -596,6 +656,7 @@ bitflags! {
     const MTLVertexFormatUInt1010102Normalized = 41,
   }
 }
+
 bitflags! {
   pub flags MTLVertexStepFunction: NSUInteger {
     const MTLVertexStepFunctionConstant = 0,
@@ -605,6 +666,7 @@ bitflags! {
     const MTLVertexStepFunctionPerPatchControlPoint = 4,
   }
 }
+
 bitflags! {
   pub flags MTLVisibilityResultMode: NSUInteger {
     const MTLVisibilityResultModeDisabled = 0,
@@ -612,6 +674,7 @@ bitflags! {
     const MTLVisibilityResultModeCounting = 2,
   }
 }
+
 bitflags! {
   pub flags MTLWinding: NSUInteger {
     const MTLWindingClockwise = 0,
@@ -4901,6 +4964,309 @@ unsafe impl objc::Encode for MTLDepthStencilStateID {
 }
 
 impl std::fmt::Debug for MTLDepthStencilStateID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTLDevice : NSObject {
+  fn is_depth24_stencil8_pixel_format_supported(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(isDepth24Stencil8PixelFormatSupported), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn is_headless(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(isHeadless), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn is_low_power(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(isLowPower), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn max_threads_per_threadgroup(&self) -> MTLSize where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(maxThreadsPerThreadgroup), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn recommended_max_working_set_size(&self) -> u64 where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(recommendedMaxWorkingSetSize), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn name(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(name), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn supports_feature_set(&self, feature_set: MTLFeatureSet) -> bool where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(supportsFeatureSet:), (feature_set,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: bool = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn supports_texture_sample_count(&self, sample_count: NSUInteger) -> bool where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(supportsTextureSampleCount:), (sample_count,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: bool = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_default_library(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newDefaultLibrary), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_command_queue(&self) -> MTLCommandQueueID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newCommandQueue), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLCommandQueueID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_command_queue_with_max_command_buffer_count(&self, max_command_buffer_count: NSUInteger) -> MTLCommandQueueID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newCommandQueueWithMaxCommandBufferCount), (max_command_buffer_count,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLCommandQueueID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_buffer_with_length_options(&self, length: NSUInteger, options: MTLResourceOptions) -> MTLBufferID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newBufferWithLength:options:), (length, options)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLBufferID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_buffer_with_bytes_length_options(&self, pointer: *const std::os::raw::c_void, length: NSUInteger, options: MTLResourceOptions) -> MTLBufferID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newBufferWithBytes:length:options:), (pointer, length, options)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLBufferID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_fence(&self) -> MTLFenceID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newFence), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLFenceID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_sampler_state_with_descriptor<T5: 'static + MTLSamplerDescriptor>(&self, descriptor: T5) -> MTLSamplerStateID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newSamplerStateWithDescriptor:), (descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLSamplerStateID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_depth_stencil_state_with_descriptor<T5: 'static + MTLDepthStencilDescriptor>(&self, descriptor: T5) -> MTLDepthStencilStateID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newDepthStencilStateWithDescriptor:), (descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLDepthStencilStateID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_library_with_file<T: NSString>(&self, filepath: T) -> Result<MTLLibraryID, NSErrorID> {
+    let mut error = NSErrorID::nil();
+  
+    unsafe {
+      let lib = msg_send![self.as_object(), newLibraryWithFile: filepath error: &mut error];
+  
+      if error.is_nil() {
+        return Ok(lib);
+      } else {
+        return Err(error);
+      }
+    }
+  }
+  
+  fn new_render_pipeline_state_with_descriptor<T: MTLRenderPipelineDescriptor>(&self, descriptor: T) -> Result<MTLRenderPipelineStateID, NSErrorID> {
+    let mut error = NSErrorID::nil();
+  
+    unsafe {
+      let lib = msg_send![self.as_object(), newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
+  
+      if error.is_nil() {
+        return Ok(lib);
+      } else {
+        return Err(error);
+      }
+    }
+  }
+
+  fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
+    let mut result = Vec::new();
+  
+    for i in 1 .. 128 {
+      if self.supports_texture_sample_count(i) {
+        result.push(i);
+      }
+    }
+  
+    return result;
+  }
+}
+
+pub struct MTLDeviceID(*mut std::os::raw::c_void);
+
+impl MTLDeviceID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLDeviceID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTLDeviceID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTLDeviceID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+}
+
+impl NSObject for MTLDeviceID {}
+impl MTLDevice for MTLDeviceID {}
+
+impl Clone for MTLDeviceID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTLDeviceID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTLDeviceID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTLDeviceID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTLDeviceID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTLDeviceID {
   fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
     return write!(f, "{}", self.debug_description().as_str());
   }

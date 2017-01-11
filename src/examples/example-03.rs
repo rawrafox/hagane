@@ -66,15 +66,15 @@ impl RSMRenderer for Example03Renderer {
 
     let index_size = std::mem::size_of::<u16>();
     let buffer_size = INDICES.len() * index_size;
-    self.index_buffer = device.new_buffer_with_bytes_length_options(INDICES.as_ptr() as *const std::os::raw::c_void, buffer_size, 0);
+    self.index_buffer = device.new_buffer_with_bytes_length_options(INDICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let uniform_size = std::mem::size_of::<Uniform>();
     let buffer_size = 1 * uniform_size;
-    self.uniform_buffer = device.new_buffer_with_length_options(buffer_size, 0);
+    self.uniform_buffer = device.new_buffer_with_length_options(buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let vertex_size = std::mem::size_of::<Vertex>();
     let buffer_size = VERTICES.len() * vertex_size;
-    self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, 0);
+    self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-03.metallib")) {
       Ok(l) => l,
