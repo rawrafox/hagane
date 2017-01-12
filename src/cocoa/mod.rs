@@ -23,7 +23,7 @@ pub trait NSApplication : NSObject {
     }
   }
 
-  fn terminate<T5: 'static + ObjectiveC>(&self, sender: T5) where Self: 'static + Sized {
+  fn terminate<T0: 'static + ObjectiveC>(&self, sender: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(terminate:), (sender.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -98,6 +98,10 @@ impl ObjectiveC for NSApplicationID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSApplicationID {
@@ -170,6 +174,10 @@ impl ObjectiveC for NSViewID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSViewID {
@@ -198,7 +206,7 @@ pub trait NSWindow : NSObject {
     }
   }
 
-  fn make_key_and_order_front<T5: 'static + ObjectiveC>(&self, sender: T5) where Self: 'static + Sized {
+  fn make_key_and_order_front<T0: 'static + ObjectiveC>(&self, sender: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(makeKeyAndOrderFront:), (sender.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -345,6 +353,10 @@ impl ObjectiveC for NSWindowID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSWindowID {
@@ -415,6 +427,10 @@ impl ObjectiveC for NSWindowDelegateID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

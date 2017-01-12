@@ -97,7 +97,7 @@ bitflags! {
 }
 
 pub trait MDLAsset : NSObject {
-  fn init_with_url<T5: 'static + NSURL>(self, url: T5) -> Self where Self: 'static + Sized {
+  fn init_with_url<T0: 'static + NSURL>(self, url: T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:), (url.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -110,7 +110,7 @@ pub trait MDLAsset : NSObject {
     }
   }
 
-  fn init_with_url_vertex_descriptor_buffer_allocator<T5: 'static + NSURL, T4: 'static + MDLVertexDescriptor, T3: 'static + MDLMeshBufferAllocator>(self, url: T5, vertex_descriptor: T4, buffer_allocator: T3) -> Self where Self: 'static + Sized {
+  fn init_with_url_vertex_descriptor_buffer_allocator<T0: 'static + NSURL, T1: 'static + MDLVertexDescriptor, T2: 'static + MDLMeshBufferAllocator>(self, url: T0, vertex_descriptor: T1, buffer_allocator: T2) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:vertexDescriptor:bufferAllocator:), (url.as_ptr(), vertex_descriptor.as_ptr(), buffer_allocator.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -123,12 +123,12 @@ pub trait MDLAsset : NSObject {
     }
   }
 
-  fn object_at_index<T5: 'static + MDLObject>(&self, index: NSUInteger) -> T5 where Self: 'static + Sized {
+  fn object_at_index<T0: 'static + MDLObject>(&self, index: NSUInteger) -> T0 where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
-          let result: T5 = r;
+          let result: T0 = r;
 
           return result.retain();
         }
@@ -136,12 +136,12 @@ pub trait MDLAsset : NSObject {
     }
   }
 
-  fn object_at_indexed_subscript<T5: 'static + MDLObject>(&self, index: NSUInteger) -> T5 where Self: 'static + Sized {
+  fn object_at_indexed_subscript<T0: 'static + MDLObject>(&self, index: NSUInteger) -> T0 where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
-          let result: T5 = r;
+          let result: T0 = r;
 
           return result.retain();
         }
@@ -214,6 +214,10 @@ impl ObjectiveC for MDLAssetID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -388,6 +392,10 @@ impl ObjectiveC for MDLMeshID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MDLMeshID {
@@ -458,6 +466,10 @@ impl ObjectiveC for MDLMeshBufferDataID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -542,6 +554,10 @@ impl ObjectiveC for MDLMeshBufferMapID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MDLMeshBufferMapID {
@@ -612,6 +628,10 @@ impl ObjectiveC for MDLObjectID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -731,6 +751,10 @@ impl ObjectiveC for MDLSubmeshID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -918,6 +942,10 @@ impl ObjectiveC for MDLVertexAttributeID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MDLVertexAttributeID {
@@ -1013,6 +1041,10 @@ impl ObjectiveC for MDLVertexDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1121,6 +1153,10 @@ impl ObjectiveC for MDLMeshBufferID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MDLMeshBufferID {
@@ -1183,6 +1219,10 @@ impl ObjectiveC for MDLMeshBufferAllocatorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

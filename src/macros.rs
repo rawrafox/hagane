@@ -29,6 +29,10 @@ macro_rules! id {
       fn as_ptr(&self) -> *mut std::os::raw::c_void {
         return self.0;
       }
+
+      fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+        return self.0;
+      }
     }
 
     impl Clone for $id_name {

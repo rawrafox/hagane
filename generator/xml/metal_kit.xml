@@ -4,11 +4,16 @@
   <use>core_graphics::*</use>
   <use>foundation::*</use>
   <use>metal::*</use>
+  <use>model_io::*</use>
 
   <extern framework="MetalKit" />
 
   <!-- Classes -->
-  <!-- TODO: MTKMesh -->
+  <class name="MTKMesh" inherits="NSObject">
+    <!-- Initialization -->
+    <!-- TODO: initWithMesh:device:error: -->
+  </class>
+
   <!-- TODO: MTKMeshBuffer -->
   <!-- TODO: MTKMeshBufferAllocator -->
   <!-- TODO: MTKSubmesh -->

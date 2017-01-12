@@ -17,7 +17,7 @@ struct Uniforms {
 };
 
 
-vertex VertexOutput vertex_project(device VertexInput *vertices [[buffer(0)]], constant Uniforms &uniforms [[buffer(1)]], uint vid [[vertex_id]]) {
+vertex VertexOutput vertex_main(device VertexInput *vertices [[buffer(0)]], constant Uniforms &uniforms [[buffer(1)]], uint vid [[vertex_id]]) {
   VertexInput input = vertices[vid];
 
   VertexOutput output;
@@ -28,6 +28,6 @@ vertex VertexOutput vertex_project(device VertexInput *vertices [[buffer(0)]], c
   return output;
 }
 
-fragment half4 fragment_flatcolor(VertexOutput input [[stage_in]]) {
+fragment half4 fragment_main(VertexOutput input [[stage_in]]) {
     return half4(input.color);
 }

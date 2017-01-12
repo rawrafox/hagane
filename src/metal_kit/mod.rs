@@ -7,12 +7,89 @@ use core_animation::*;
 use core_graphics::*;
 use foundation::*;
 use metal::*;
+use model_io::*;
 
 #[link(name = "MetalKit", kind = "framework")]
 extern {}
 
+pub trait MTKMesh : NSObject {
+}
+
+pub struct MTKMeshID(*mut std::os::raw::c_void);
+
+impl MTKMeshID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKMeshID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKMeshID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTKMesh").unwrap();
+  }
+}
+
+impl NSObject for MTKMeshID {}
+impl MTKMesh for MTKMeshID {}
+
+impl Clone for MTKMeshID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKMeshID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTKMeshID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKMeshID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKMeshID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
 pub trait MTKView : NSView + NSObject {
-  fn init_with_coder<T5: 'static + NSCoder>(self, coder: T5) -> Self where Self: 'static + Sized {
+  fn init_with_coder<T0: 'static + NSCoder>(self, coder: T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithCoder:), (coder.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -25,7 +102,7 @@ pub trait MTKView : NSView + NSObject {
     }
   }
 
-  fn init_with_frame_device<T4: 'static + MTLDevice>(self, frame_rect: CGRect, device: T4) -> Self where Self: 'static + Sized {
+  fn init_with_frame_device<T1: 'static + MTLDevice>(self, frame_rect: CGRect, device: T1) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithFrame:device:), (frame_rect, device.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -519,6 +596,10 @@ impl ObjectiveC for MTKViewID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTKViewID {
@@ -534,7 +615,7 @@ impl std::fmt::Debug for MTKViewID {
 }
 
 pub trait MTKViewDelegate : NSObject {
-  fn mtk_view_drawable_size_will_change<T5: 'static + MTKView>(&self, view: T5, size: CGSize) where Self: 'static + Sized {
+  fn mtk_view_drawable_size_will_change<T0: 'static + MTKView>(&self, view: T0, size: CGSize) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(mtkView:drawableSizeWillChange:), (view.as_ptr(), size)) {
         Err(s) => panic!("{}", s),
@@ -547,7 +628,7 @@ pub trait MTKViewDelegate : NSObject {
     }
   }
 
-  fn draw_in_mtk_view<T5: 'static + MTKView>(&self, view: T5) where Self: 'static + Sized {
+  fn draw_in_mtk_view<T0: 'static + MTKView>(&self, view: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawInMTKView:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -606,6 +687,10 @@ impl ObjectiveC for MTKViewDelegateID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

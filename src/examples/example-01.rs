@@ -15,7 +15,7 @@ impl RSMRenderer for Example01Renderer {
   fn draw(&mut self, view: RSMViewID) {
     let command_queue = view.device().new_command_queue();
     let command_buffer = command_queue.command_buffer();
-    let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
+    let command_encoder = command_buffer.new_render_pipeline_state_with_descriptor_error(view.current_render_pass_descriptor());
 
     command_encoder.end_encoding();
     command_buffer.present_drawable(view.current_drawable());

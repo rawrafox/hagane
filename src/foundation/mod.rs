@@ -47,12 +47,12 @@ pub trait NSArray : NSObject {
     }
   }
 
-  fn object_at_index<T5: 'static + ObjectiveC>(&self, index: NSUInteger) -> T5 where Self: 'static + Sized {
+  fn object_at_index<T0: 'static + ObjectiveC>(&self, index: NSUInteger) -> T0 where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(objectAtIndex:), (index,)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
-          let result: T5 = r;
+          let result: T0 = r;
 
           return result.retain();
         }
@@ -60,12 +60,12 @@ pub trait NSArray : NSObject {
     }
   }
 
-  fn object_at_indexed_subscript<T5: 'static + ObjectiveC>(&self, index: NSUInteger) -> T5 where Self: 'static + Sized {
+  fn object_at_indexed_subscript<T0: 'static + ObjectiveC>(&self, index: NSUInteger) -> T0 where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(objectAtIndexedSubscript:), (index,)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
-          let result: T5 = r;
+          let result: T0 = r;
 
           return result.retain();
         }
@@ -140,6 +140,10 @@ impl ObjectiveC for NSArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSArrayID {
@@ -202,6 +206,10 @@ impl ObjectiveC for NSCoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -276,6 +284,10 @@ impl ObjectiveC for NSErrorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSErrorID {
@@ -347,6 +359,10 @@ impl ObjectiveC for NSMutableArrayID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -541,6 +557,10 @@ impl ObjectiveC for NSStringID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSStringID {
@@ -556,7 +576,7 @@ impl std::fmt::Debug for NSStringID {
 }
 
 pub trait NSURL : NSObject {
-  fn init_with_string<T5: 'static + NSString>(self, url_string: T5) -> Self where Self: 'static + Sized {
+  fn init_with_string<T0: 'static + NSString>(self, url_string: T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithString:), (url_string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -625,6 +645,10 @@ impl ObjectiveC for NSURLID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for NSURLID {
@@ -640,7 +664,7 @@ impl std::fmt::Debug for NSURLID {
 }
 
 pub trait NSObject : ObjectiveC {
-  fn is_equal<T5: 'static + NSObject>(&self, view: T5) -> bool where Self: 'static + Sized {
+  fn is_equal<T0: 'static + NSObject>(&self, view: T0) -> bool where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(isEqual:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -760,6 +784,10 @@ impl ObjectiveC for NSObjectID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

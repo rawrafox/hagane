@@ -32,26 +32,13 @@ impl RSMRenderer for Example02Renderer {
     let buffer_size = VERTICES.len() * vertex_size;
     self.buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
-    let library = match device.new_library_with_file(NSStringID::from_str("src/examples/example-02.metallib")) {
-      Ok(l) => l,
-      Err(_) => panic!("Error loading Metal library")
-    };
-
-    let vertex_function = library.new_function_with_name(NSStringID::from_str("vertex_main"));
-    let fragment_function = library.new_function_with_name(NSStringID::from_str("fragment_main"));
-
+    let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-02.metallib")).unwrap();
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
-    pipeline_descriptor.set_vertex_function(vertex_function);
-    pipeline_descriptor.set_fragment_function(fragment_function);
+    pipeline_descriptor.set_vertex_function(library.new_function_with_name(NSStringID::from_str("vertex_main")));
+    pipeline_descriptor.set_fragment_function(library.new_function_with_name(NSStringID::from_str("fragment_main")));
+    pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
 
-    let color_attachments = pipeline_descriptor.color_attachments();
-    let color_attachment = color_attachments.object_at_indexed_subscript(0);
-    color_attachment.set_pixel_format(MTLPixelFormatBGRA8Unorm);
-
-    self.pipeline_state = match device.new_render_pipeline_state_with_descriptor(pipeline_descriptor) {
-      Ok(p) => p,
-      Err(_) => panic!("Error creating Metal pipeline")
-    };
+    self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(pipeline_descriptor).unwrap();
   }
   
   fn draw(&mut self, view: RSMViewID) {

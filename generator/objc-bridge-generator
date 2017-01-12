@@ -232,6 +232,10 @@ module Bridge
         o.block("fn as_ptr(&self) -> *mut std::os::raw::c_void") do |o|
           o.puts("return self.0;")
         end
+        o.puts
+        o.block("fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void") do |o|
+          o.puts("return self.0;")
+        end
       end
       o.puts
       o.block("unsafe impl objc::Encode for #{self.name}ID") do |o|
@@ -283,12 +287,18 @@ module Bridge
     node "argument"
 
     attr_reader :name
-    attr_reader :kind, :protocol, :type
+    attr_reader :kind, :error, :protocol, :type
 
     def prepare(node)
       @name = node['name']
 
+      if node.has_attribute?('error')
+        @kind = 'error'
+        @error = node['error']
+      end
+
       if node.has_attribute?('protocol')
+        raise ArgumentError, "multiple values defined" if @kind
         @kind = 'protocol'
         @protocol = node['protocol']
       end
@@ -419,7 +429,7 @@ module Bridge
     end
 
     def to_rust(o)
-      generics = ["T0", "T1", "T2", "T3", "T4", "T5"]
+      generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
 
       arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         g = generics.pop
@@ -475,10 +485,16 @@ module Bridge
     end
 
     def to_rust(o)
-      generics = ["T0", "T1", "T2", "T3", "T4", "T5"]
+      generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
 
-      arguments = self.children.select { |x| x.is_a? Argument }.map do |argument|
+      error_arguments = self.children.select { |x| x.is_a?(Argument) && x.kind == "error" }
+      raise ArgumentError, "multiple error arguments" if error_arguments.count > 1
+      error_argument = error_arguments.first
+
+      arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         case argument.kind
+        when "error"
+          [nil, nil, "#{argument.name.underscore}.as_mut_ptr()"]
         when "protocol"
           g = generics.pop
 
@@ -499,17 +515,17 @@ module Bridge
         when "protocol"
           id_name = "#{return_value.protocol}ID"
 
-          [" -> #{id_name}", nil, id_name, owned ? "result" : "result.retain()"]
+          [id_name, nil, owned ? "result" : "result.retain()"]
         when "type"
           type_name = return_value.type.to_s
 
-          [" -> #{type_name}", nil, type_name, "result"]
+          [type_name, nil, "result"]
         when "generic"
           g = generics.pop
 
           raise Exception, "ran out of generics" unless g
 
-          [" -> #{g}", "#{g}: 'static + #{return_value.generic}", g, owned ? "result" : "result.retain()"]
+          [g, "#{g}: 'static + #{return_value.generic}", owned ? "result" : "result.retain()"]
         else
           raise Exception, "unknown kind #{return_value.kind}"
         end
@@ -518,21 +534,42 @@ module Bridge
       raise ArgumentError, "too many return values" if return_values.length > 1
 
       fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
-      fn_args = (["&self"] + arguments.map { |arg| arg[0] }).join(", ")
+      fn_args = (["&self"] + arguments.map { |arg| arg[0] }).compact.join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
-      return_value = return_values[0] || ["", nil, "()", "result"]
+      return_value = return_values[0] || ["()", nil, "result"]
       bounds_args = (arguments.map { |arg| arg[1] } + [return_value[1]]).compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
-      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value[0]} where Self: 'static + Sized", pad: true) do |o|
+      return_value_string = if error_argument
+        " -> Result<#{return_value[0]}, #{error_argument.error}ID>"
+      else
+         return_value[0] == "()" ? "" : " -> #{return_value[0]}"
+      end
+
+      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
+        if error_argument
+          o.puts("let mut #{error_argument.name} = #{error_argument.error}ID::nil();")
+          o.puts
+        end
+
         o.block("unsafe") do |o|
           o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
             o.puts("Err(s) => panic!(\"{}\", s),")
             o.block("Ok(r) =>") do |o|
-              o.puts("let result: #{return_value[2]} = r;")
-              o.puts
-              o.puts("return #{return_value[3]};")
+              if error_argument
+                o.block("if !#{error_argument.name}.is_nil()") do |o|
+                  o.puts("return Err(#{error_argument.name})")
+                end
+                o.puts
+                o.puts("let result: #{return_value[0]} = r;")
+                o.puts
+                o.puts("return Ok(#{return_value[2]});")
+              else
+                o.puts("let result: #{return_value[0]} = r;")
+                o.puts
+                o.puts("return #{return_value[2]};")
+              end
             end
           end
         end

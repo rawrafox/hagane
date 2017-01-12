@@ -12,14 +12,14 @@
     <function name="MTLCreateSystemDefaultDevice">
       <return type="*mut std::os::raw::c_void" />
     </function>
-    
+
     <!-- Creating an Image Location or Region -->
     <!-- TODO: MTLOriginMake -->
     <!-- TODO: MTLRegionMake1D -->
     <!-- TODO: MTLRegionMake2D -->
     <!-- TODO: MTLRegionMake3D -->
     <!-- TODO: MTLSizeMake -->
-    
+
     <!-- Creating a Color to Clear an Attachment -->
     <!-- TODO: MTLClearColorMake -->
   </extern>
@@ -1062,7 +1062,7 @@ pub fn system_default_device() -> MTLDeviceID {
   <protocol name="MTLDevice" inherits="NSObject">
     <!-- Identifying Properties -->
     <!-- TODO: All missing -->
-    
+
     <property name="depth24Stencil8PixelFormatSupported" getter="isDepth24Stencil8PixelFormatSupported" type="bool" read-only />
     <property name="headless" getter="isHeadless" type="bool" read-only />
     <property name="lowPower" getter="isLowPower" type="bool" read-only />
@@ -1082,25 +1082,32 @@ pub fn system_default_device() -> MTLDeviceID {
 
     <!-- Creating Metal Shader Libraries -->
     <method selector="newDefaultLibrary" />
+
+    <method selector="newLibraryWithFile:error:">
+      <argument name="filepath" protocol="NSString" />
+      <argument name="error" error="NSError" />
+      <return protocol="MTLLibrary" />
+    </method>
+
     <!-- TODO: All missing -->
-    
+
     <!-- Creating Command Queues -->
     <method selector="newCommandQueue">
       <return protocol="MTLCommandQueue" />
     </method>
-    
+
     <method selector="newCommandQueueWithMaxCommandBufferCount">
       <argument name="maxCommandBufferCount" type="NSUInteger" />
       <return protocol="MTLCommandQueue" />
     </method>
-    
+
     <!-- Creating Resources -->
     <method selector="newBufferWithLength:options:">
       <argument name="length" type="NSUInteger" />
       <argument name="options" type="MTLResourceOptions" />
       <return protocol="MTLBuffer" />
     </method>
-    
+
     <method selector="newBufferWithBytes:length:options:">
       <argument name="pointer" type="*const std::os::raw::c_void" />
       <argument name="length" type="NSUInteger" />
@@ -1111,14 +1118,21 @@ pub fn system_default_device() -> MTLDeviceID {
     <method selector="newFence">
       <return protocol="MTLFence" />
     </method>
-    
+
     <method selector="newSamplerStateWithDescriptor:">
       <argument name="descriptor" protocol="MTLSamplerDescriptor" />
       <return protocol="MTLSamplerState" />
     </method>
-    
+
     <!-- Creating Command Objects Needed to Render Graphics -->
     <!-- TODO: All missing -->
+    <method selector="newRenderPipelineStateWithDescriptor:error:">
+      <argument name="descriptor" protocol="MTLRenderPipelineDescriptor" />
+      <argument name="error" error="NSError" />
+      <return protocol="MTLRenderPipelineState" />
+    </method>
+    <!-- TODO: All missing -->
+
     <method selector="newDepthStencilStateWithDescriptor:">
       <argument name="descriptor" protocol="MTLDepthStencilDescriptor" />
       <return protocol="MTLDepthStencilState" />
@@ -1126,41 +1140,10 @@ pub fn system_default_device() -> MTLDeviceID {
 
     <!-- Creating Command Objects Needed to Perform Computational Tasks -->
     <!-- TODO: All missing -->
-    
+
     <!-- Instance Methods -->
     <!-- TODO: All missing -->
-    
-    <!-- TODO: This shouldn't be required -->
-    <script type="trait">
-fn new_library_with_file<T: NSString>(&self, filepath: T) -> Result<MTLLibraryID, NSErrorID> {
-  let mut error = NSErrorID::nil();
 
-  unsafe {
-    let lib = msg_send![self.as_object(), newLibraryWithFile: filepath error: &mut error];
-
-    if error.is_nil() {
-      return Ok(lib);
-    } else {
-      return Err(error);
-    }
-  }
-}
-
-fn new_render_pipeline_state_with_descriptor<T: MTLRenderPipelineDescriptor>(&self, descriptor: T) -> Result<MTLRenderPipelineStateID, NSErrorID> {
-  let mut error = NSErrorID::nil();
-
-  unsafe {
-    let lib = msg_send![self.as_object(), newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
-
-    if error.is_nil() {
-      return Ok(lib);
-    } else {
-      return Err(error);
-    }
-  }
-}
-    </script>
-    
     <script type="trait">
 fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
   let mut result = Vec::new();

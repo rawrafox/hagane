@@ -834,6 +834,10 @@ impl ObjectiveC for MTLArgumentID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLArgumentID {
@@ -904,6 +908,10 @@ impl ObjectiveC for MTLArrayTypeID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -978,6 +986,10 @@ impl ObjectiveC for MTLAttributeID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLAttributeID {
@@ -1048,6 +1060,10 @@ impl ObjectiveC for MTLAttributeDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1147,6 +1163,10 @@ impl ObjectiveC for MTLAttributeDescriptorArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLAttributeDescriptorArrayID {
@@ -1217,6 +1237,10 @@ impl ObjectiveC for MTLBufferLayoutDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1316,6 +1340,10 @@ impl ObjectiveC for MTLBufferLayoutDescriptorArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLBufferLayoutDescriptorArrayID {
@@ -1386,6 +1414,10 @@ impl ObjectiveC for MTLCompileOptionsID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1460,6 +1492,10 @@ impl ObjectiveC for MTLComputePipelineDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLComputePipelineDescriptorID {
@@ -1530,6 +1566,10 @@ impl ObjectiveC for MTLComputePipelineReflectionID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1738,6 +1778,10 @@ impl ObjectiveC for MTLDepthStencilDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLDepthStencilDescriptorID {
@@ -1808,6 +1852,10 @@ impl ObjectiveC for MTLFunctionConstantID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1882,6 +1930,10 @@ impl ObjectiveC for MTLFunctionConstantValuesID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLFunctionConstantValuesID {
@@ -1952,6 +2004,10 @@ impl ObjectiveC for MTLHeapDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2026,6 +2082,10 @@ impl ObjectiveC for MTLRenderPassAttachmentDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPassAttachmentDescriptorID {
@@ -2097,6 +2157,10 @@ impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2196,6 +2260,10 @@ impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPassColorAttachmentDescriptorArrayID {
@@ -2267,6 +2335,10 @@ impl ObjectiveC for MTLRenderPassDepthAttachmentDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2341,6 +2413,10 @@ impl ObjectiveC for MTLRenderPassDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPassDescriptorID {
@@ -2412,6 +2488,10 @@ impl ObjectiveC for MTLRenderPassStencilAttachmentDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2683,6 +2763,10 @@ impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPipelineColorAttachmentDescriptorID {
@@ -2778,6 +2862,10 @@ impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorArrayID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3051,6 +3139,10 @@ impl ObjectiveC for MTLRenderPipelineDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPipelineDescriptorID {
@@ -3121,6 +3213,10 @@ impl ObjectiveC for MTLRenderPipelineReflectionID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3195,6 +3291,10 @@ impl ObjectiveC for MTLSamplerDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLSamplerDescriptorID {
@@ -3265,6 +3365,10 @@ impl ObjectiveC for MTLStageInputOutputDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3339,6 +3443,10 @@ impl ObjectiveC for MTLStencilDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLStencilDescriptorID {
@@ -3409,6 +3517,10 @@ impl ObjectiveC for MTLStructMemberID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3483,6 +3595,10 @@ impl ObjectiveC for MTLStructTypeID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLStructTypeID {
@@ -3553,6 +3669,10 @@ impl ObjectiveC for MTLTextureDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3627,6 +3747,10 @@ impl ObjectiveC for MTLVertexAttributeID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLVertexAttributeID {
@@ -3697,6 +3821,10 @@ impl ObjectiveC for MTLVertexAttributeDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3796,6 +3924,10 @@ impl ObjectiveC for MTLVertexAttributeDescriptorArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLVertexAttributeDescriptorArrayID {
@@ -3866,6 +3998,10 @@ impl ObjectiveC for MTLVertexBufferLayoutDescriptorID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3965,6 +4101,10 @@ impl ObjectiveC for MTLVertexBufferLayoutDescriptorArrayID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLVertexBufferLayoutDescriptorArrayID {
@@ -4037,6 +4177,10 @@ impl ObjectiveC for MTLVertexDescriptorID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLVertexDescriptorID {
@@ -4100,6 +4244,10 @@ impl ObjectiveC for MTLBlitCommandEncoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4203,6 +4351,10 @@ impl ObjectiveC for MTLBufferID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLBufferID {
@@ -4218,7 +4370,7 @@ impl std::fmt::Debug for MTLBufferID {
 }
 
 pub trait MTLCommandBuffer : NSObject {
-  fn render_command_encoder_with_descriptor<T5: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T5) -> MTLRenderCommandEncoderID where Self: 'static + Sized {
+  fn render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T0) -> MTLRenderCommandEncoderID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(renderCommandEncoderWithDescriptor:), (render_pass_descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4257,7 +4409,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn parallel_render_command_encoder_with_descriptor<T5: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T5) -> MTLParallelRenderCommandEncoderID where Self: 'static + Sized {
+  fn parallel_render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T0) -> MTLParallelRenderCommandEncoderID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(parallelRenderCommandEncoderWithDescriptor:), (render_pass_descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4296,7 +4448,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn present_drawable<T5: 'static + MTLDrawable>(&self, drawable: T5) where Self: 'static + Sized {
+  fn present_drawable<T0: 'static + MTLDrawable>(&self, drawable: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(presentDrawable:), (drawable.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4309,7 +4461,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn present_drawable_at_time<T5: 'static + MTLDrawable>(&self, drawable: T5, time: CFTimeInterval) where Self: 'static + Sized {
+  fn present_drawable_at_time<T0: 'static + MTLDrawable>(&self, drawable: T0, time: CFTimeInterval) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(presentDrawable:atTime:), (drawable.as_ptr(), time)) {
         Err(s) => panic!("{}", s),
@@ -4463,6 +4615,10 @@ impl ObjectiveC for MTLCommandBufferID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLCommandBufferID {
@@ -4491,7 +4647,7 @@ pub trait MTLCommandEncoder : NSObject {
     }
   }
 
-  fn insert_debug_signpost<T5: 'static + NSString>(&self, string: T5) where Self: 'static + Sized {
+  fn insert_debug_signpost<T0: 'static + NSString>(&self, string: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(insertDebugSignpost), (string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4504,7 +4660,7 @@ pub trait MTLCommandEncoder : NSObject {
     }
   }
 
-  fn push_debug_group<T5: 'static + NSString>(&self, string: T5) where Self: 'static + Sized {
+  fn push_debug_group<T0: 'static + NSString>(&self, string: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(pushDebugGroup), (string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4617,6 +4773,10 @@ impl ObjectiveC for MTLCommandEncoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4762,6 +4922,10 @@ impl ObjectiveC for MTLCommandQueueID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLCommandQueueID {
@@ -4825,6 +4989,10 @@ impl ObjectiveC for MTLComputeCommandEncoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4891,6 +5059,10 @@ impl ObjectiveC for MTLComputePipelineStateID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLComputePipelineStateID {
@@ -4953,6 +5125,10 @@ impl ObjectiveC for MTLDepthStencilStateID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5079,6 +5255,25 @@ pub trait MTLDevice : NSObject {
     }
   }
 
+  fn new_library_with_file_error<T0: 'static + NSString>(&self, filepath: T0) -> Result<MTLLibraryID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newLibraryWithFile:error:), (filepath.as_ptr(), error.as_mut_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: MTLLibraryID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
   fn new_command_queue(&self) -> MTLCommandQueueID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newCommandQueue), ()) {
@@ -5144,7 +5339,7 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_sampler_state_with_descriptor<T5: 'static + MTLSamplerDescriptor>(&self, descriptor: T5) -> MTLSamplerStateID where Self: 'static + Sized {
+  fn new_sampler_state_with_descriptor<T0: 'static + MTLSamplerDescriptor>(&self, descriptor: T0) -> MTLSamplerStateID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newSamplerStateWithDescriptor:), (descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5157,7 +5352,26 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_depth_stencil_state_with_descriptor<T5: 'static + MTLDepthStencilDescriptor>(&self, descriptor: T5) -> MTLDepthStencilStateID where Self: 'static + Sized {
+  fn new_render_pipeline_state_with_descriptor_error<T0: 'static + MTLRenderPipelineDescriptor>(&self, descriptor: T0) -> Result<MTLRenderPipelineStateID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newRenderPipelineStateWithDescriptor:error:), (descriptor.as_ptr(), error.as_mut_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: MTLRenderPipelineStateID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
+  fn new_depth_stencil_state_with_descriptor<T0: 'static + MTLDepthStencilDescriptor>(&self, descriptor: T0) -> MTLDepthStencilStateID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newDepthStencilStateWithDescriptor:), (descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5166,34 +5380,6 @@ pub trait MTLDevice : NSObject {
 
           return result;
         }
-      }
-    }
-  }
-
-  fn new_library_with_file<T: NSString>(&self, filepath: T) -> Result<MTLLibraryID, NSErrorID> {
-    let mut error = NSErrorID::nil();
-  
-    unsafe {
-      let lib = msg_send![self.as_object(), newLibraryWithFile: filepath error: &mut error];
-  
-      if error.is_nil() {
-        return Ok(lib);
-      } else {
-        return Err(error);
-      }
-    }
-  }
-  
-  fn new_render_pipeline_state_with_descriptor<T: MTLRenderPipelineDescriptor>(&self, descriptor: T) -> Result<MTLRenderPipelineStateID, NSErrorID> {
-    let mut error = NSErrorID::nil();
-  
-    unsafe {
-      let lib = msg_send![self.as_object(), newRenderPipelineStateWithDescriptor: descriptor error: &mut error];
-  
-      if error.is_nil() {
-        return Ok(lib);
-      } else {
-        return Err(error);
       }
     }
   }
@@ -5256,6 +5442,10 @@ impl ObjectiveC for MTLDeviceID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5345,6 +5535,10 @@ impl ObjectiveC for MTLDrawableID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5451,6 +5645,10 @@ impl ObjectiveC for MTLFenceID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLFenceID {
@@ -5513,6 +5711,10 @@ impl ObjectiveC for MTLFunctionID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5579,6 +5781,10 @@ impl ObjectiveC for MTLHeapID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLHeapID {
@@ -5594,7 +5800,7 @@ impl std::fmt::Debug for MTLHeapID {
 }
 
 pub trait MTLLibrary : NSObject {
-  fn new_function_with_name<T5: 'static + NSString>(&self, function_name: T5) -> MTLFunctionID where Self: 'static + Sized {
+  fn new_function_with_name<T0: 'static + NSString>(&self, function_name: T0) -> MTLFunctionID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newFunctionWithName:), (function_name.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5711,6 +5917,10 @@ impl ObjectiveC for MTLLibraryID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLLibraryID {
@@ -5774,6 +5984,10 @@ impl ObjectiveC for MTLParallelRenderCommandEncoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5843,7 +6057,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_depth_stencil_state<T5: 'static + MTLDepthStencilState>(&self, depth_stencil_state: T5) where Self: 'static + Sized {
+  fn set_depth_stencil_state<T0: 'static + MTLDepthStencilState>(&self, depth_stencil_state: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setDepthStencilState:), (depth_stencil_state.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5869,7 +6083,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_render_pipeline_state<T5: 'static + MTLRenderPipelineState>(&self, pipeline_state: T5) where Self: 'static + Sized {
+  fn set_render_pipeline_state<T0: 'static + MTLRenderPipelineState>(&self, pipeline_state: T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setRenderPipelineState:), (pipeline_state.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5960,7 +6174,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_vertex_buffer_offset_at_index<T5: 'static + MTLBuffer>(&self, buffer: T5, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
+  fn set_vertex_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setVertexBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
         Err(s) => panic!("{}", s),
@@ -5986,7 +6200,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset<T5: 'static + MTLBuffer>(&self, primitive_type: MTLPrimitiveType, index_count: NSUInteger, index_type: MTLIndexType, index_buffer: T5, index_buffer_offset: NSUInteger) where Self: 'static + Sized {
+  fn draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset<T0: 'static + MTLBuffer>(&self, primitive_type: MTLPrimitiveType, index_count: NSUInteger, index_type: MTLIndexType, index_buffer: T0, index_buffer_offset: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type, index_count, index_type, index_buffer.as_ptr(), index_buffer_offset)) {
         Err(s) => panic!("{}", s),
@@ -6046,6 +6260,10 @@ impl ObjectiveC for MTLRenderCommandEncoderID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6112,6 +6330,10 @@ impl ObjectiveC for MTLRenderPipelineStateID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLRenderPipelineStateID {
@@ -6174,6 +6396,10 @@ impl ObjectiveC for MTLResourceID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6240,6 +6466,10 @@ impl ObjectiveC for MTLSamplerStateID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for MTLSamplerStateID {
@@ -6302,6 +6532,10 @@ impl ObjectiveC for MTLTextureID {
   }
 
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

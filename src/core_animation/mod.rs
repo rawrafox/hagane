@@ -56,6 +56,10 @@ impl ObjectiveC for CAMetalDrawableID {
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
     return self.0;
   }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
 }
 
 unsafe impl objc::Encode for CAMetalDrawableID {
