@@ -13,5 +13,3 @@ Dir.glob("#{__dir__}/../src/examples/*.metal") do |source|
   system("xcrun metallib -o #{target.shellescape} #{intermediate.shellescape}") or exit
   system("rm #{intermediate.shellescape}") or exit
 end
-
-puts "Done!"

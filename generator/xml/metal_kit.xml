@@ -11,19 +11,73 @@
   <!-- Classes -->
   <class name="MTKMesh" inherits="NSObject">
     <!-- Initialization -->
-    <!-- TODO: initWithMesh:device:error: -->
+    <initializer selector="initWithMesh:device:error:">
+      <argument name="mesh" protocol="MDLMesh" />
+      <argument name="device" protocol="MTLDevice" />
+      <argument name="error" error="NSError" />
+    </initializer>
+
+    <!-- Loading Meshes from an Asset -->
+    <!-- TODO: All missing -->
+
+    <!-- Submeshes -->
+    <property name="submeshes" protocol="NSArray" element="MTKSubmesh" read-only />
+
+    <!-- Vertex Properties -->
+    <property name="vertexBuffers" protocol="NSArray" element="MTKMeshBuffer" read-only />
+    <property name="vertexCount" type="NSUInteger" read-only />
+    <property name="vertexDescriptor" protocol="MDLVertexDescriptor" read-only />
+
+    <!-- Identifying Properties -->
+    <property name="name" protocol="NSString" />
   </class>
 
-  <!-- TODO: MTKMeshBuffer -->
-  <!-- TODO: MTKMeshBufferAllocator -->
-  <!-- TODO: MTKSubmesh -->
-  <!-- TODO: MTKTextureLoader -->
+  <class name="MTKMeshBuffer" inherits="NSObject">
+    <!-- Originating Objects -->
+    <property name="allocator" protocol="MTKMeshBufferAllocator" read-only />
+    <!-- TODO: <property name="zone" protocol="MDLMeshBufferZone" read-only /> -->
+    <!-- TODO: <property name="type" protocol="MDLMeshBufferType" read-only /> -->
+
+    <!-- Metal Buffer Properties -->
+    <property name="buffer" protocol="MTLBuffer" read-only />
+    <property name="length" type="NSUInteger" read-only />
+    <property name="offset" type="NSUInteger" read-only />
+  </class>
+
+  <class name="MTKMeshBufferAllocator" inherits="MDLMeshBufferAllocator, NSObject">
+    <!-- Initialization -->
+    <initializer selector="initWithDevice:">
+      <argument name="device" protocol="MTLDevice" />
+    </initializer>
+
+    <!-- Device -->
+    <property name="device" protocol="MTLDevice" />
+  </class>
+
+  <class name="MTKSubmesh" inherits="NSObject">
+    <!-- Parent Mesh -->
+    <property name="mesh" protocol="MTKMesh" weak read-only />
+
+    <!-- Properties used to Draw Indexed Primitives -->
+    <property name="indexBuffer" protocol="MTKMeshBuffer" read-only />
+    <property name="indexCount" type="NSUInteger" read-only />
+    <property name="indexType" type="MTLIndexType" read-only />
+    <property name="primitiveType" type="MTLPrimitiveType" read-only />
+
+    <!-- Identifying Properties -->
+    <property name="name" protocol="NSString" />
+  </class>
+
+  <class name="MTKTextureLoader" inherits="NSObject">
+    <!-- TODO: All missing -->
+  </class>
+
   <class name="MTKView" inherits_mac="NSView" inherits_ios="UIView" inherits="NSObject">
     <!-- Initialization -->
     <initializer selector="initWithCoder:">
       <argument name="coder" protocol="NSCoder" />
     </initializer>
-    
+
     <initializer selector="initWithFrame:device:">
       <argument name="frameRect" type="CGRect" />
       <argument name="device" protocol="MTLDevice" />
@@ -31,7 +85,7 @@
 
     <!-- Delegate -->
     <property name="delegate" protocol="MTKViewDelegate" />
-    
+
     <!-- Device -->
     <property name="device" protocol="MTLDevice" />
 
@@ -53,7 +107,7 @@
 
     <!-- Controlling Frame Updates -->
     <property name="paused" getter="isPaused" type="bool" />
-    
+
     <!-- Drawing Your View’s Contents -->
     <property name="enableSetNeedsDisplay" type="bool" />
     <method selector="draw" />
@@ -69,7 +123,7 @@
     <!-- Instance Properties -->
     <object-property name="colorspace" type="CGColorSpaceRef" />
   </class>
-  
+
   <protocol name="MTKViewDelegate" inherits="NSObject">
     <!-- Changing the View’s Layout -->
     <method selector="mtkView:drawableSizeWillChange:">

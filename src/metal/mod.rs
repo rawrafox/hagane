@@ -5259,7 +5259,7 @@ pub trait MTLDevice : NSObject {
     let mut error = NSErrorID::nil();
 
     unsafe {
-      match objc::__send_message(self.as_object(), sel!(newLibraryWithFile:error:), (filepath.as_ptr(), error.as_mut_ptr())) {
+      match objc::__send_message(self.as_object(), sel!(newLibraryWithFile:error:), (filepath.as_ptr(), &mut error)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
           if !error.is_nil() {
@@ -5356,7 +5356,7 @@ pub trait MTLDevice : NSObject {
     let mut error = NSErrorID::nil();
 
     unsafe {
-      match objc::__send_message(self.as_object(), sel!(newRenderPipelineStateWithDescriptor:error:), (descriptor.as_ptr(), error.as_mut_ptr())) {
+      match objc::__send_message(self.as_object(), sel!(newRenderPipelineStateWithDescriptor:error:), (descriptor.as_ptr(), &mut error)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
           if !error.is_nil() {

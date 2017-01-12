@@ -13,6 +13,106 @@ use model_io::*;
 extern {}
 
 pub trait MTKMesh : NSObject {
+  fn init_with_mesh_device_error<T0: 'static + MDLMesh, T1: 'static + MTLDevice>(self, mesh: T0, device: T1) -> Result<Self, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithMesh:device:error:), (mesh.as_ptr(), device.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
+  fn submeshes(&self) -> NSArrayID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(submeshes), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSArrayID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn vertex_buffers(&self) -> NSArrayID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(vertexBuffers), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSArrayID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn vertex_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(vertexCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn vertex_descriptor(&self) -> MDLVertexDescriptorID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(vertexDescriptor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MDLVertexDescriptorID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn name(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(name), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setName:), (name.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
 pub struct MTKMeshID(*mut std::os::raw::c_void);
@@ -83,6 +183,488 @@ unsafe impl objc::Encode for MTKMeshID {
 }
 
 impl std::fmt::Debug for MTKMeshID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTKMeshBuffer : NSObject {
+  fn allocator(&self) -> MTKMeshBufferAllocatorID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(allocator), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTKMeshBufferAllocatorID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn buffer(&self) -> MTLBufferID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(buffer), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLBufferID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn length(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(length), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn offset(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(offset), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+}
+
+pub struct MTKMeshBufferID(*mut std::os::raw::c_void);
+
+impl MTKMeshBufferID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshBufferID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKMeshBufferID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKMeshBufferID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTKMeshBuffer").unwrap();
+  }
+}
+
+impl NSObject for MTKMeshBufferID {}
+impl MTKMeshBuffer for MTKMeshBufferID {}
+
+impl Clone for MTKMeshBufferID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKMeshBufferID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTKMeshBufferID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshBufferID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKMeshBufferID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKMeshBufferID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTKMeshBufferAllocator : MDLMeshBufferAllocator + NSObject {
+  fn init_with_device<T0: 'static + MTLDevice>(self, device: T0) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithDevice:), (device.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn device(&self) -> MTLDeviceID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(device), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLDeviceID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDevice:), (device.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTKMeshBufferAllocatorID(*mut std::os::raw::c_void);
+
+impl MTKMeshBufferAllocatorID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshBufferAllocatorID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKMeshBufferAllocatorID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKMeshBufferAllocatorID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTKMeshBufferAllocator").unwrap();
+  }
+}
+
+impl MDLMeshBufferAllocator for MTKMeshBufferAllocatorID {}
+impl NSObject for MTKMeshBufferAllocatorID {}
+impl MTKMeshBufferAllocator for MTKMeshBufferAllocatorID {}
+
+impl Clone for MTKMeshBufferAllocatorID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKMeshBufferAllocatorID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTKMeshBufferAllocatorID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKMeshBufferAllocatorID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKMeshBufferAllocatorID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKMeshBufferAllocatorID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTKSubmesh : NSObject {
+  fn mesh(&self) -> MTKMeshID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(mesh), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTKMeshID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn index_buffer(&self) -> MTKMeshBufferID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(indexBuffer), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTKMeshBufferID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn index_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(indexCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn index_type(&self) -> MTLIndexType where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(indexType), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn primitive_type(&self) -> MTLPrimitiveType where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(primitiveType), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn name(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(name), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setName:), (name.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+}
+
+pub struct MTKSubmeshID(*mut std::os::raw::c_void);
+
+impl MTKSubmeshID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKSubmeshID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKSubmeshID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKSubmeshID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTKSubmesh").unwrap();
+  }
+}
+
+impl NSObject for MTKSubmeshID {}
+impl MTKSubmesh for MTKSubmeshID {}
+
+impl Clone for MTKSubmeshID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKSubmeshID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTKSubmeshID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKSubmeshID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKSubmeshID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKSubmeshID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait MTKTextureLoader : NSObject {
+}
+
+pub struct MTKTextureLoaderID(*mut std::os::raw::c_void);
+
+impl MTKTextureLoaderID {
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKTextureLoaderID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return MTKTextureLoaderID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return MTKTextureLoaderID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("MTKTextureLoader").unwrap();
+  }
+}
+
+impl NSObject for MTKTextureLoaderID {}
+impl MTKTextureLoader for MTKTextureLoaderID {}
+
+impl Clone for MTKTextureLoaderID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
+
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for MTKTextureLoaderID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for MTKTextureLoaderID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return MTKTextureLoaderID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for MTKTextureLoaderID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for MTKTextureLoaderID {
   fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
     return write!(f, "{}", self.debug_description().as_str());
   }

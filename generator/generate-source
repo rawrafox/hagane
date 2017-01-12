@@ -14,5 +14,3 @@ Dir.glob("#{__dir__}/xml/*.xml") do |source|
     Bridge.generate(File.read(source), Bridge::Output.new(f))
   end
 end
-
-puts "Done!"

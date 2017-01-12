@@ -431,10 +431,16 @@ module Bridge
     def to_rust(o)
       generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
 
+      error_arguments = self.children.select { |x| x.is_a?(Argument) && x.kind == "error" }
+      raise ArgumentError, "multiple error arguments" if error_arguments.count > 1
+      error_argument = error_arguments.first
+
       arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         g = generics.pop
 
         case argument.kind
+        when "error"
+          [nil, nil, "&mut #{argument.name.underscore}"]
         when "protocol"
           ["#{argument.name.underscore}: #{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
         when "type"
@@ -445,20 +451,41 @@ module Bridge
       end
 
       fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
-      fn_args = (["self"] + arguments.map { |arg| arg[0] }).join(", ")
+      fn_args = (["self"] + arguments.map { |arg| arg[0] }).compact.join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
       bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
-      o.block("fn #{fn_name}#{bounds_args}(#{fn_args}) -> Self where Self: 'static + Sized", pad: true) do |o|
+      return_value_string = if error_argument
+        " -> Result<Self, #{error_argument.error}ID>"
+      else
+        " -> Self"
+      end
+
+      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
+        if error_argument
+          o.puts("let mut #{error_argument.name} = #{error_argument.error}ID::nil();")
+          o.puts
+        end
+
         o.block("unsafe") do |o|
           o.block("match objc::__send_message(self.as_object(), sel!(#{self.selector}), #{msg_args})") do |o|
             o.puts("Err(s) => panic!(\"{}\", s),")
             o.block("Ok(result) =>") do |o|
-              o.puts("std::mem::forget(self);")
-              o.puts
-              o.puts("return result;")
+              if error_argument
+                o.puts("std::mem::forget(self);")
+                o.puts
+                o.block("if !#{error_argument.name}.is_nil()") do |o|
+                  o.puts("return Err(#{error_argument.name})")
+                end
+                o.puts
+                o.puts("return Ok(result);")
+              else
+                o.puts("std::mem::forget(self);")
+                o.puts
+                o.puts("return result;")
+              end
             end
           end
         end
@@ -494,7 +521,7 @@ module Bridge
       arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         case argument.kind
         when "error"
-          [nil, nil, "#{argument.name.underscore}.as_mut_ptr()"]
+          [nil, nil, "&mut #{argument.name.underscore}"]
         when "protocol"
           g = generics.pop
 

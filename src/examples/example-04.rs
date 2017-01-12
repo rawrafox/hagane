@@ -17,9 +17,9 @@ struct Uniform {
 
 struct Example04Renderer {
   time: std::time::Instant,
-  index_buffers: Vec<(MTLBufferID, usize)>,
   uniform_buffer: MTLBufferID,
-  vertex_buffer: MTLBufferID,
+  mesh_buffer: MTKMeshBufferID,
+  submeshes: Vec<MTKSubmeshID>,
   depth_stencil_state: MTLDepthStencilStateID,
   pipeline_state: MTLRenderPipelineStateID
 }
@@ -40,33 +40,17 @@ impl RSMRenderer for Example04Renderer {
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
 
-    let asset = MDLAssetID::alloc().init_with_url(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/ab3_t1/AB3_TShape1.obj")));
+    let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/ab3_t1/AB3_TShape1.obj")), MDLVertexDescriptorID::nil(), MTKMeshBufferAllocatorID::alloc().init_with_device(device.clone()));
 
-    if asset.count() != 1 {
-      panic!("Not one single mesh in file");
-    }
+    if asset.count() != 1 { panic!("Not one single mesh in file") }
 
     let mesh = asset.object_at_index::<MDLMeshID>(0);
-
-    let submeshes = mesh.submeshes().to_vec::<MDLSubmeshID>();
-
-    self.index_buffers = submeshes.into_iter().map(|submesh| {
-      let index_buffer = submesh.index_buffer();
-      let index_buffer = device.new_buffer_with_bytes_length_options(index_buffer.map().bytes(), index_buffer.length(), MTLResourceCPUCacheModeDefaultCache);
-
-      (index_buffer, submesh.index_count())
-    }).collect();
+    let mesh = MTKMeshID::alloc().init_with_mesh_device_error(mesh, device.clone()).unwrap();
+    
+    self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
+    self.submeshes = mesh.submeshes().to_vec::<MTKSubmeshID>();
 
     self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
-
-    let vertex_buffers = mesh.vertex_buffers();
-
-    if vertex_buffers.count() != 1 {
-      panic!("Not one vertex buffer in file");
-    }
-
-    let vertex_buffer = mesh.vertex_buffers().object_at_index::<MDLMeshBufferID>(0);
-    self.vertex_buffer = device.new_buffer_with_bytes_length_options(vertex_buffer.map().bytes(), vertex_buffer.length(), MTLResourceCPUCacheModeDefaultCache);
 
     let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-04.metallib")).unwrap();
 
@@ -121,11 +105,13 @@ impl RSMRenderer for Example04Renderer {
     command_encoder.set_depth_stencil_state(self.depth_stencil_state.clone());
     command_encoder.set_front_facing_winding(MTLWindingCounterClockwise);
     command_encoder.set_cull_mode(MTLCullModeBack);
-    command_encoder.set_vertex_buffer_offset_at_index(self.vertex_buffer.clone(), 0, 0);
+    command_encoder.set_vertex_buffer_offset_at_index(self.mesh_buffer.buffer(), self.mesh_buffer.offset(), 0);
     command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
 
-    for &(ref buffer, ref count) in &self.index_buffers {
-      command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, *count, MTLIndexTypeUInt32, buffer.clone(), 0);
+    for &ref submesh in &self.submeshes {
+      let index_buffer = submesh.index_buffer();
+
+      command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(submesh.primitive_type(), submesh.index_count(), submesh.index_type(), index_buffer.buffer(), index_buffer.offset());
     }
 
     command_encoder.end_encoding();
@@ -139,9 +125,9 @@ fn main() {
 
   let renderer = Box::new(Example04Renderer {
     time: std::time::Instant::now(),
-    index_buffers: vec![],
     uniform_buffer: MTLBufferID::nil(),
-    vertex_buffer: MTLBufferID::nil(),
+    mesh_buffer: MTKMeshBufferID::nil(),
+    submeshes: vec![],
     depth_stencil_state: MTLDepthStencilStateID::nil(),
     pipeline_state: MTLRenderPipelineStateID::nil()
   });
