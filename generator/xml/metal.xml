@@ -603,7 +603,6 @@ pub fn system_default_device() -> MTLDeviceID {
   </enumeration>
 
   <!-- Structures -->
-
   <structure name="MTLClearColor">
     <field name="red" type="f64" />
     <field name="green" type="f64" />

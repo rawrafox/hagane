@@ -2,6 +2,7 @@
 use std;
 use objc;
 use super::ObjectiveC;
+
 use core_foundation::*;
 use foundation::*;
 
@@ -681,21 +682,24 @@ bitflags! {
     const MTLWindingCounterClockwise = 1,
   }
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLClearColor {
   pub red: f64,
   pub green: f64,
   pub blue: f64,
   pub alpha: f64,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLDispatchThreadgroupsIndirectArguments {
   pub threadgroups_per_grid: [u32; 3],
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLDrawIndexedPrimitivesIndirectArguments {
   pub index_count: u32,
   pub instance_count: u32,
@@ -703,70 +707,80 @@ pub struct MTLDrawIndexedPrimitivesIndirectArguments {
   pub base_vertex: i32,
   pub base_instance: u32,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLDrawPatchIndirectArguments {
   pub patch_count: u32,
   pub instance_count: u32,
   pub patch_start: u32,
   pub base_instance: u32,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLDrawPrimitivesIndirectArguments {
   pub vertex_count: u32,
   pub instance_count: u32,
   pub vertex_start: u32,
   pub base_instance: u32,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLOrigin {
   pub x: NSUInteger,
   pub y: NSUInteger,
   pub z: NSUInteger,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLQuadTessellationFactorsHalf {
   pub edge_tessellation_factor: [u16; 4],
   pub inside_tessellation_factor: [u16; 2],
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLRegion {
   pub origin: MTLOrigin,
   pub size: MTLSize,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLScissorRect {
   pub x: NSUInteger,
   pub y: NSUInteger,
   pub width: NSUInteger,
   pub height: NSUInteger,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLSize {
   pub width: NSUInteger,
   pub height: NSUInteger,
   pub depth: NSUInteger,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLSizeAndAlign {
   pub size: NSUInteger,
   pub align: NSUInteger,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLTriangleTessellationFactorsHalf {
   pub edge_tessellation_factor: [u16; 3],
   pub inside_tessellation_factor: u16,
 }
+
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct MTLViewport {
   pub origin_x: f64,
   pub origin_y: f64,

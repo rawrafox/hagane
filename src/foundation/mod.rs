@@ -5,6 +5,7 @@ use super::ObjectiveC;
 
 #[link(name = "Foundation", kind = "framework")]
 extern {}
+
 pub type NSInteger = isize;
 pub type NSUInteger = usize;
 

@@ -3,6 +3,11 @@
 
   <extern framework="ModelIO" />
 
+  <enumeration name="MDLCameraProjection" type="NSUInteger">
+    <value name="MDLCameraProjectionPerspective" value="0" />
+    <value name="MDLCameraProjectionOrthographic" value="1" />
+  </enumeration>
+
   <enumeration name="MDLGeometryType" type="NSInteger">
     <value name="MDLGeometryTypePoints" value="0" />
     <value name="MDLGeometryTypeLines" value="1" />
@@ -86,6 +91,17 @@
     <value name="MDLVertexFormatUInt1010102Normalized" value="MDLVertexFormatUIntBits.bits | MDLVertexFormatPackedBit.bits | 4" />
   </enumeration>
 
+  <!-- Structures -->
+  <structure name="MDLAxisAlignedBoundingBox">
+    <field name="maxBounds" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+    <field name="minBounds" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+  </structure>
+
+  <!-- Classes -->
+  <class name="MDLAreaLight" inherits="MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLAsset" inherits="NSObject">
     <!-- TODO: Incomplete -->
 
@@ -110,6 +126,86 @@
     <property name="count" type="NSUInteger" read-only />
   </class>
 
+  <class name="MDLCamera" inherits="MDLObject, NSObject">
+    <!-- Managing Camera Position and Orientation -->
+    <method selector="frameBoundingBox:setNearAndFar:">
+      <argument name="boundingBox" type="MDLAxisAlignedBoundingBox" />
+      <argument name="setNearAndFar" type="bool" />
+    </method>
+
+    <method selector="lookAt:">
+      <argument name="focusPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+    </method>
+
+    <method selector="lookAt:from:">
+      <argument name="focusPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+      <argument name="cameraPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+    </method>
+
+    <!-- Managing Camera Perspective -->
+    <property name="projectionMatrix" type="[f32; 16]" read-only /> <!-- TODO: matrix_float4x4 -->
+    <property name="nearVisibilityDistance" type="f32" />
+    <property name="farVisibilityDistance" type="f32" />
+    <property name="fieldOfView" type="f32" />
+
+    <method selector="rayTo:forViewPort:">
+      <argument name="pixel" type="[i32; 2]" /> <!-- TODO: vector_int2 -->
+      <argument name="size" type="[i32; 2]" /> <!-- TODO: vector_int2 -->
+      <return type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+    </method>
+
+    <property name="worldToMetersConversionScale" type="f32" />
+
+    <!-- Modeling a Physical Lens -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Modeling a Physical Imaging Surface -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Importing Camera Objects from SceneKit -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Instance Properties -->
+    <property name="projection" type="MDLCameraProjection" />
+
+  </class>
+
+  <class name="MDLCheckerboardTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLColorSwatchTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLLight" inherits="MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLLightProbe" inherits="MDLLight, MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMaterial" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMaterialProperty" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMaterialPropertyConnection" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMaterialPropertyGraph" inherits="MDLMaterialPropertyNode, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLMaterialPropertyNode" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLMesh" inherits="MDLObject, NSObject">
     <!-- TODO: Incomplete -->
 
@@ -123,12 +219,56 @@
     <!-- TODO: Incomplete -->
   </class>
 
+  <class name="MDLMeshBufferDataAllocator" inherits="MDLMeshBufferAllocator, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLMeshBufferMap" inherits="NSObject">
     <!-- TODO: initWithBytes:deallocator: -->
     <property name="bytes" type="*const std::os::raw::c_void" read-only />
   </class>
 
+  <class name="MDLMeshBufferZoneDefault" inherits="MDLMeshBufferZone, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLNoiseTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLNormalMapTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLObject" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLObjectContainer" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLPhotometricLight" inherits="MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLPhysicallyPlausibleLight" inherits="MDLLight, MDLObject, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLPhysicallyPlausibleScatteringFunction" inherits="MDLScatteringFunction, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLScatteringFunction" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLSkyCubeTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLStereoscopicCamera" inherits="MDLCamera, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
@@ -141,6 +281,30 @@
     <property name="geometryType" type="MDLGeometryType" read-only />
   </class>
 
+  <class name="MDLSubmeshTopology" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLTexture" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLTextureFilter" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLTextureSampler" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLTransform" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLURLTexture" inherits="MDLTexture, NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLVertexAttribute" inherits="NSObject">
     <!-- TODO: Incomplete -->
 
@@ -151,22 +315,59 @@
     <property name="initializationValue" type="[f32; 4]" />
   </class>
 
+  <class name="MDLVertexAttributeData" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <class name="MDLVertexBufferLayout" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
   <class name="MDLVertexDescriptor" inherits="NSObject">
     <!-- TODO: Incomplete -->
 
     <property name="attributes" protocol="NSMutableArray" element="MDLVertexAttribute" />
   </class>
 
-  <class name="MDLMeshBuffer" inherits="NSObject">
+  <class name="MDLVoxelArray" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </class>
+
+  <!-- Protocols -->
+  <protocol name="MDLComponent" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLLightProbeIrradianceDataSource" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLMeshBuffer" inherits="NSObject">
     <!-- TODO: Incomplete -->
 
     <method selector="map">
       <return protocol="MDLMeshBufferMap" />
     </method>
     <property name="length" type="NSUInteger" />
-  </class>
+  </protocol>
 
   <protocol name="MDLMeshBufferAllocator" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLMeshBufferZone" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLNamed" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLObjectContainerComponent" inherits="NSObject">
+    <!-- TODO: Incomplete -->
+  </protocol>
+
+  <protocol name="MDLTransformComponent" inherits="NSObject">
     <!-- TODO: Incomplete -->
   </protocol>
 </framework>

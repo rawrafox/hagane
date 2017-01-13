@@ -18,11 +18,11 @@ module Bridge
 
     def puts(line = nil, comment: nil, pad: false, group: nil)
       if group
-        case @last_group
-        when nil, group
-        else
+        @last_group = group unless @last_group
+
+        if @last_group != group
           @last_group = group
-          @stream.puts
+          @stream.puts unless pad
         end
       end
 
@@ -764,8 +764,8 @@ module Bridge
     end
 
     def to_rust(o)
-      o.puts("#[repr(C)]")
-      o.puts("#[derive(Clone, Copy)]")
+      o.puts("#[repr(C)]", pad: true, group: "structure")
+      o.puts("#[derive(Clone, Copy, Debug)]")
       o.block("pub struct #{self.name}") do |o|
         self.children.each { |c| c.to_rust(o) }
       end
