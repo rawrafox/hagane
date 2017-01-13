@@ -111,6 +111,8 @@ module Bridge
         Enumeration.new(node)
       when "extern"
         Extern.new(node)
+      when "module"
+        Module.new(node)
       when "protocol"
         Protocol.new(node)
       when "script"
@@ -371,10 +373,11 @@ module Bridge
     def prepare(node)
       @name = node["name"]
       @type = node["type"]
+      @private = node.has_attribute?('private')
     end
 
     def to_rust(o)
-      o.puts("pub #{self.name.underscore}: #{self.type},")
+      o.puts("#{@private ? "" : "pub "}#{self.name.underscore}: #{self.type},")
     end
   end
 
@@ -604,6 +607,19 @@ module Bridge
     end
   end
 
+  class Module < Node
+    attr_reader :name
+
+    def prepare(node)
+      @name = node["name"]
+      @private = node.has_attribute?('private')
+    end
+
+    def to_rust(o)
+      o.puts("#{@private ? "" : "pub "}mod #{self.name.underscore};")
+    end
+  end
+
   class Property < Node
     node "property"
 
@@ -777,10 +793,11 @@ module Bridge
 
     def prepare(node)
       @use = node.text
+      @private = !node.has_attribute?('public')
     end
 
     def to_rust(o)
-      o.puts("use #{self.use};", group: "use")
+      o.puts("#{@private ? "" : "pub "}use #{self.use};", group: "use")
     end
   end
 

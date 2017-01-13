@@ -40,6 +40,7 @@ static INDICES: &'static [u16] = &[
 ];
 
 struct Example03Renderer {
+  command_queue: MTLCommandQueueID,
   time: std::time::Instant,
   index_buffer: MTLBufferID,
   uniform_buffer: MTLBufferID,
@@ -58,6 +59,7 @@ impl RSMRenderer for Example03Renderer {
     view.set_clear_depth(1.0);
 
     let device = view.device();
+    self.command_queue = device.new_command_queue();
 
     let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
@@ -77,10 +79,6 @@ impl RSMRenderer for Example03Renderer {
     self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-03.metallib")).unwrap();
-
-    let vertex_function = ;
-    let fragment_function = ;
-
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
     pipeline_descriptor.set_vertex_function(library.new_function_with_name(NSStringID::from_str("vertex_main")));
     pipeline_descriptor.set_fragment_function(library.new_function_with_name(NSStringID::from_str("fragment_main")));
@@ -117,10 +115,7 @@ impl RSMRenderer for Example03Renderer {
       std::intrinsics::copy(&slice, self.uniform_buffer.contents() as *mut [f32; 16], 1);
     }
 
-    let drawable = view.current_drawable();
-
-    let command_queue = view.device().new_command_queue();
-    let command_buffer = command_queue.command_buffer();
+    let command_buffer = self.command_queue.command_buffer();
     let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
     command_encoder.set_render_pipeline_state(self.pipeline_state.clone());
     command_encoder.set_depth_stencil_state(self.depth_stencil_state.clone());
@@ -130,7 +125,7 @@ impl RSMRenderer for Example03Renderer {
     command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
     command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, INDICES.len(), MTLIndexTypeUInt16, self.index_buffer.clone(), 0);
     command_encoder.end_encoding();
-    command_buffer.present_drawable(drawable);
+    command_buffer.present_drawable(view.current_drawable());
     command_buffer.commit();
   }
 }
@@ -139,6 +134,7 @@ fn main() {
   rust_metal::load_classes();
 
   let renderer = Box::new(Example03Renderer {
+    command_queue: MTLCommandQueueID::nil(),
     time: std::time::Instant::now(),
     index_buffer: MTLBufferID::nil(),
     uniform_buffer: MTLBufferID::nil(),
@@ -151,7 +147,7 @@ fn main() {
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 03"));
   window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
-  window.set_delegate(RSMWindowDelegateID::new().retain());
+  window.set_delegate(RSMWindowDelegateID::alloc().retain());
   window.make_key_and_order_front(NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

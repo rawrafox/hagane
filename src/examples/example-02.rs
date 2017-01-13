@@ -16,6 +16,7 @@ static VERTICES: &'static [Vertex] = &[
 ];
 
 struct Example02Renderer {
+  command_queue: MTLCommandQueueID,
   buffer: MTLBufferID,
   pipeline_state: MTLRenderPipelineStateID
 }
@@ -27,6 +28,7 @@ impl RSMRenderer for Example02Renderer {
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
 
     let device = view.device();
+    self.command_queue = device.new_command_queue();
 
     let vertex_size = std::mem::size_of::<Vertex>();
     let buffer_size = VERTICES.len() * vertex_size;
@@ -58,6 +60,7 @@ fn main() {
   rust_metal::load_classes();
 
   let renderer = Box::new(Example02Renderer {
+    command_queue: MTLCommandQueueID::nil(),
     buffer: MTLBufferID::nil(),
     pipeline_state: MTLRenderPipelineStateID::nil()
   });
@@ -66,7 +69,7 @@ fn main() {
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(NSStringID::from_str("Metal Example 02"));
   window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
-  window.set_delegate(RSMWindowDelegateID::new().retain());
+  window.set_delegate(RSMWindowDelegateID::alloc().retain());
   window.make_key_and_order_front(NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

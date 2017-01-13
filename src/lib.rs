@@ -3,8 +3,6 @@
 #[macro_use] extern crate bitflags;
 #[macro_use] extern crate objc;
 
-#[macro_use] mod macros;
-
 pub mod cocoa;
 pub use cocoa::*;
 

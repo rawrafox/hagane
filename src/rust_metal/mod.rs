@@ -1,104 +1,165 @@
+#![allow(non_upper_case_globals)]
 use std;
 use objc;
+use super::ObjectiveC;
+mod initializer;
 
-use objc::declare::ClassDecl;
-use objc::runtime::{Object, Sel};
+use foundation::*;
+use cocoa::*;
+use metal_kit::*;
+pub use self::initializer::*;
 
-use super::{ObjectiveC, CGRect, NSApplication, NSApplicationID, NSObject, NSObjectID, NSView, NSWindowDelegate, MTKView, MTKViewID, MTLDevice};
-
-pub trait RSMRenderer {
-  fn initialize(&mut self, view: RSMViewID);
-  fn draw(&mut self, view: RSMViewID);
+pub trait RSMView : MTKView + NSView + NSObject {
 }
 
-pub trait RSMView : MTKView {
-  forward!(initialize_object, sel!(initializeObject), () -> ());
-}
-
-id!(RSMViewID, RSMView, "RSMView");
+pub struct RSMViewID(*mut std::os::raw::c_void);
 
 impl RSMViewID {
-  pub fn from_renderer<T: MTLDevice + 'static>(renderer: Box<RSMRenderer>, frame: CGRect, device: T) -> RSMViewID {
-    let mut renderer = Box::new(renderer);
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return RSMViewID(ptr);
+  }
 
-    let view = RSMViewID::alloc().init_with_frame_device(frame, device);
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return RSMViewID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
 
-    (**renderer).initialize(view.clone());
+  pub fn nil() -> Self {
+    return RSMViewID(0 as *mut std::os::raw::c_void);
+  }
 
-    unsafe {
-      view.as_object().set_ivar("renderer", Box::into_raw(renderer) as *mut i8);
-    }
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
 
-    return view;
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("RSMView").unwrap();
   }
 }
 
-impl NSObject for RSMViewID {}
-impl NSView for RSMViewID {}
 impl MTKView for RSMViewID {}
+impl NSView for RSMViewID {}
+impl NSObject for RSMViewID {}
+impl RSMView for RSMViewID {}
 
-pub trait RSMWindowDelegate : NSObject { }
+impl Clone for RSMViewID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
 
-id!(RSMWindowDelegateID, RSMWindowDelegate, "RSMWindowDelegate");
+    return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Drop for RSMViewID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
+  }
+}
+
+impl ObjectiveC for RSMViewID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return RSMViewID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for RSMViewID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for RSMViewID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
+}
+
+pub trait RSMWindowDelegate : NSWindowDelegate + NSObject {
+}
+
+pub struct RSMWindowDelegateID(*mut std::os::raw::c_void);
 
 impl RSMWindowDelegateID {
-  pub fn new() -> RSMWindowDelegateID {
-    return RSMWindowDelegateID::alloc();
+  pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return RSMWindowDelegateID(ptr);
+  }
+
+  pub fn from_object(obj: &mut objc::runtime::Object) -> Self {
+    return RSMWindowDelegateID(obj as *mut objc::runtime::Object as *mut std::os::raw::c_void);
+  }
+
+  pub fn nil() -> Self {
+    return RSMWindowDelegateID(0 as *mut std::os::raw::c_void);
+  }
+
+  pub fn is_nil(&self) -> bool {
+    return self.0 as usize == 0;
+  }
+
+  pub fn alloc() -> Self {
+    return unsafe { msg_send![Self::class(), alloc] };
+  }
+
+  pub fn class() -> &'static objc::runtime::Class {
+    return objc::runtime::Class::get("RSMWindowDelegate").unwrap();
   }
 }
 
-impl NSObject for RSMWindowDelegateID {}
 impl NSWindowDelegate for RSMWindowDelegateID {}
+impl NSObject for RSMWindowDelegateID {}
+impl RSMWindowDelegate for RSMWindowDelegateID {}
 
-fn load_view() {
-  let mut view = ClassDecl::new("RSMView", MTKViewID::class()).unwrap();
+impl Clone for RSMWindowDelegateID {
+  fn clone(&self) -> Self {
+    let ptr = self.as_ptr();
 
-  extern fn dealloc(this: &mut Object, _cmd: Sel) {
-    unsafe {
-      let renderer_ptr: &*mut i8 = this.get_ivar("renderer");
-
-      Box::from_raw(std::mem::transmute::<*mut i8, *mut Box<RSMRenderer>>(*renderer_ptr));
-    }
+    return Self::from_ptr(ptr).retain();
   }
-
-  extern fn draw_rect(this: &mut Object, _cmd: Sel, _rect: usize) {
-    unsafe {
-      let view = RSMViewID::from_object(this);
-      let renderer_ptr: &*mut i8 = this.get_ivar("renderer");
-      let mut renderer = Box::from_raw(std::mem::transmute::<*mut i8, *mut Box<RSMRenderer>>(*renderer_ptr));
-
-      (**renderer).draw(view.clone());
-
-      Box::into_raw(renderer);
-
-      std::mem::forget(view);
-    }
-  }
-
-  unsafe {
-    view.add_method(sel!(dealloc), dealloc as extern fn(&mut Object, Sel));
-    view.add_method(sel!(drawRect:), draw_rect as extern fn(&mut Object, Sel, usize));
-  }
-
-  view.add_ivar::<*mut i8>("renderer");
-  view.register();
 }
 
-fn load_window_delegate() {
-  let mut window_delegate = ClassDecl::new("RSMWindowDelegate", NSObjectID::class()).unwrap();
-
-  extern fn window_will_close(this: &mut Object, _cmd: Sel, _notification: usize) {
-    NSApplicationID::shared_application().terminate(NSObjectID::from_object(this));
+impl Drop for RSMWindowDelegateID {
+  fn drop(&mut self) {
+    if !self.is_nil() {
+      unsafe { self.release() };
+    }
   }
-
-  unsafe {
-    window_delegate.add_method(sel!(windowWillClose:), window_will_close as extern fn(&mut Object, Sel, usize));
-  }
-
-  window_delegate.register();
 }
 
-pub fn load_classes() {
-  load_view();
-  load_window_delegate();
+impl ObjectiveC for RSMWindowDelegateID {
+  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
+    return RSMWindowDelegateID::from_ptr(ptr);
+  }
+
+  fn as_ptr(&self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+
+  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
+    return self.0;
+  }
+}
+
+unsafe impl objc::Encode for RSMWindowDelegateID {
+  fn encode() -> objc::Encoding {
+    return unsafe { objc::Encoding::from_str("@") };
+  }
+}
+
+impl std::fmt::Debug for RSMWindowDelegateID {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    return write!(f, "{}", self.debug_description().as_str());
+  }
 }
