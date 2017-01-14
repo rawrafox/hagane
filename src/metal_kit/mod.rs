@@ -596,6 +596,120 @@ impl std::fmt::Debug for MTKSubmeshID {
 }
 
 pub trait MTKTextureLoader : NSObject {
+  fn init_with_device<T0: 'static + MTLDevice>(self, device: T0) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithDevice:), (device.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn device(&self) -> MTLDeviceID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(device), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MTLDeviceID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDevice:), (device.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn new_texture_with_contents_of_url_options_error<T0: 'static + NSURL, T1: 'static + NSDictionary>(&self, url: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newTextureWithContentsOfURL:options:error:), (url.as_ptr(), options.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: MTLTextureID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
+  fn new_textures_with_contents_of_ur_ls_options_error<T0: 'static + NSArray, T1: 'static + NSDictionary>(&self, ur_ls: T0, options: T1) -> Result<NSArrayID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newTexturesWithContentsOfURLs:options:error:), (ur_ls.as_ptr(), options.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: NSArrayID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
+  fn new_texture_with_data_options_error<T0: 'static + NSData, T1: 'static + NSDictionary>(&self, data: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newTextureWithData:options:error:), (data.as_ptr(), options.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: MTLTextureID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
+
+  fn new_texture_with_mdl_texture_options_error<T0: 'static + MDLTexture, T1: 'static + NSDictionary>(&self, texture: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newTextureWithMDLTexture:options:error:), (texture.as_ptr(), options.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: MTLTextureID = r;
+
+          return Ok(result);
+        }
+      }
+    }
+  }
 }
 
 pub struct MTKTextureLoaderID(*mut std::os::raw::c_void);

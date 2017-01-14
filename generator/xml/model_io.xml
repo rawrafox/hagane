@@ -286,6 +286,19 @@
   </class>
 
   <class name="MDLTexture" inherits="NSObject">
+    <!-- Loading Textures from a Bundle -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Creating Textures -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Exporting Textures -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Accessing Texture Data -->
+    <!-- TODO: Incomplete -->
+
+    <!-- Examining Texture Attributes -->
     <!-- TODO: Incomplete -->
   </class>
 
@@ -302,7 +315,15 @@
   </class>
 
   <class name="MDLURLTexture" inherits="MDLTexture, NSObject">
-    <!-- TODO: Incomplete -->
+    <!-- Creating a URL Texture -->
+    <initializer selector="initWithURL:name:">
+      <argument name="URL" protocol="NSURL" />
+      <argument name="name" protocol="NSString" />
+    </initializer>
+
+    <!-- Inspecting the Texture URL -->
+    <property name="URL" protocol="NSURL" />
+
   </class>
 
   <class name="MDLVertexAttribute" inherits="NSObject">

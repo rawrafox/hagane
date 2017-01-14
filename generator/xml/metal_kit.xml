@@ -69,7 +69,57 @@
   </class>
 
   <class name="MTKTextureLoader" inherits="NSObject">
+    <!-- Creating a Texture Loader -->
+    <initializer selector="initWithDevice:">
+      <argument name="device" protocol="MTLDevice" />
+    </initializer>
+
+    <property name="device" protocol="MTLDevice" />
+
+    <!-- Loading Textures from URLs -->
+    <method selector="newTextureWithContentsOfURL:options:error:">
+      <argument name="URL" protocol="NSURL" />
+      <argument name="options" protocol="NSDictionary" element="NSString, NSObject" />
+      <argument name="error" error="NSError" />
+      <return protocol="MTLTexture" />
+    </method>
+
+    <!-- TODO: newTextureWithContentsOfURL:options:completionHandler: -->
+
+    <method selector="newTexturesWithContentsOfURLs:options:error:">
+      <argument name="URLs" protocol="NSArray" element="NSURL" />
+      <argument name="options" protocol="NSDictionary" element="NSString, NSObject" />
+      <argument name="error" error="NSError" />
+      <return protocol="NSArray" element="MTLTexture" />
+    </method>
+
+    <!-- TODO: newTexturesWithContentsOfURLs:options:completionHandler: -->
+
+    <!-- Loading Textures from Asset Catalogs -->
     <!-- TODO: All missing -->
+
+    <!-- Loading Textures from CoreGraphics Images -->
+    <!-- TODO: All missing -->
+
+    <!-- Loading Textures from In-Memory Data Representations -->
+    <method selector="newTextureWithData:options:error:">
+      <argument name="data" protocol="NSData" />
+      <argument name="options" protocol="NSDictionary" element="NSString, NSObject" />
+      <argument name="error" error="NSError" />
+      <return protocol="MTLTexture" />
+    </method>
+
+    <!-- TODO: newTextureWithData:options:completionHandler: -->
+
+    <!-- Loading Textures from Model I/O Representations -->
+    <method selector="newTextureWithMDLTexture:options:error:">
+      <argument name="texture" protocol="MDLTexture" />
+      <argument name="options" protocol="NSDictionary" element="NSString, NSObject" />
+      <argument name="error" error="NSError" />
+      <return protocol="MTLTexture" />
+    </method>
+
+    <!-- TODO: newTextureWithMDLTexture:options:completionHandler: -->
   </class>
 
   <class name="MTKView" inherits_mac="NSView" inherits_ios="UIView" inherits="NSObject">

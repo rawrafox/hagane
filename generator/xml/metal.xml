@@ -863,7 +863,23 @@ pub fn system_default_device() -> MTLDeviceID {
   </class>
 
   <class name="MTLSamplerDescriptor" inherits="NSObject">
-    <!-- TODO: All missing -->
+    <initializer selector="init" />
+    
+    <!-- Sampler Descriptor Properties -->
+    <property name="rAddressMode" type="MTLSamplerAddressMode" />
+    <property name="sAddressMode" type="MTLSamplerAddressMode" />
+    <property name="tAddressMode" type="MTLSamplerAddressMode" />
+    <property name="minFilter" type="MTLSamplerMinMagFilter" />
+    <property name="magFilter" type="MTLSamplerMinMagFilter" />
+    <property name="mipFilter" type="MTLSamplerMipFilter" />
+    <property name="lodMinClamp" type="f32" />
+    <property name="lodMaxClamp" type="f32" />
+    <property name="lodAverage" type="bool" />
+    <property name="maxAnisotropy" type="NSUInteger" />
+    <property name="normalizedCoordinates" type="bool" />
+    <property name="compareFunction" type="MTLCompareFunction" />
+    <property name="borderColor" type="MTLSamplerBorderColor" />
+    <property name="label" protocol="NSString" />
   </class>
 
   <class name="MTLStageInputOutputDescriptor" inherits="NSObject">
@@ -1272,7 +1288,26 @@ fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
     <!-- TODO: All missing -->
 
     <!-- Specifying Resources for a Fragment Shader Function -->
-    <!-- TODO: All missing -->
+    <method selector="setFragmentBuffer:offset:atIndex:">
+      <argument name="buffer" protocol="MTLBuffer" />
+      <argument name="offset" type="NSUInteger" />
+      <argument name="index" type="NSUInteger" />
+    </method>
+
+    <!-- TODO: Missing -->
+
+    <method selector="setFragmentSamplerState:atIndex:">
+      <argument name="sampler" protocol="MTLSamplerState" />
+      <argument name="index" type="NSUInteger" />
+    </method>
+
+    <!-- TODO: More missing -->
+
+    <method selector="setFragmentTexture:atIndex:">
+      <argument name="texture" protocol="MTLTexture" />
+      <argument name="index" type="NSUInteger" />
+    </method>
+    <!-- TODO: setFragmentTextures:withRange: -->
 
     <!-- Specifying Tessellation Factors -->
     <!-- TODO: All missing -->

@@ -1,6 +1,7 @@
 #[macro_use] extern crate metal;
 extern crate nalgebra;
 
+use std::io::Read;
 use std::ops::Mul;
 
 use metal::*;
@@ -15,17 +16,37 @@ struct Uniform {
   normal: [f32; 9]
 }
 
-struct Example04Renderer {
+fn load_texture(device: &MTLDeviceID, path: &str) -> MTLTextureID {
+  let mut f = std::fs::File::open(path).unwrap();
+  let mut texture_data = Vec::new();
+  f.read_to_end(&mut texture_data).unwrap();
+
+  let texture_data = NSDataID::alloc().init_with_bytes_length(texture_data.as_ptr() as *const std::os::raw::c_void, texture_data.len());
+  let texture_loader = MTKTextureLoaderID::alloc().init_with_device(device.clone());
+  return texture_loader.new_texture_with_data_options_error(texture_data, NSDictionaryID::alloc().init()).unwrap();
+}
+
+fn load_mesh(device: &MTLDeviceID, path: &str) -> MTKMeshID {
+  let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(NSURLID::alloc().init_with_string(NSStringID::from_str(path)), MDLVertexDescriptorID::nil(), MTKMeshBufferAllocatorID::alloc().init_with_device(device.clone()));
+
+  if asset.count() != 1 { panic!("Not one single mesh in file") }
+
+  return MTKMeshID::alloc().init_with_mesh_device_error(asset.object_at_index::<MDLMeshID>(0), device.clone()).unwrap();
+}
+
+struct Example05Renderer {
   command_queue: MTLCommandQueueID,
   time: std::time::Instant,
   uniform_buffer: MTLBufferID,
   mesh_buffer: MTKMeshBufferID,
   submeshes: Vec<MTKSubmeshID>,
   depth_stencil_state: MTLDepthStencilStateID,
-  pipeline_state: MTLRenderPipelineStateID
+  pipeline_state: MTLRenderPipelineStateID,
+  texture: MTLTextureID,
+  sampler_state: MTLSamplerStateID
 }
 
-impl RSMRenderer for Example04Renderer {
+impl RSMRenderer for Example05Renderer {
   fn initialize(&mut self, view: RSMViewID) {
     view.set_color_pixel_format(MTLPixelFormatBGRA8Unorm);
     view.set_depth_stencil_pixel_format(MTLPixelFormatDepth32Float);
@@ -42,19 +63,22 @@ impl RSMRenderer for Example04Renderer {
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
 
-    let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(NSURLID::alloc().init_with_string(NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")), MDLVertexDescriptorID::nil(), MTKMeshBufferAllocatorID::alloc().init_with_device(device.clone()));
-
-    if asset.count() != 1 { panic!("Not one single mesh in file") }
-
-    let mesh = asset.object_at_index::<MDLMeshID>(0);
-    let mesh = MTKMeshID::alloc().init_with_mesh_device_error(mesh, device.clone()).unwrap();
-    
+    let mesh = load_mesh(&device, "../engine/hulls/cc1_t2/CC1_TShape1.obj");
     self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
     self.submeshes = mesh.submeshes().to_vec::<MTKSubmeshID>();
-
     self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
+    self.texture = load_texture(&device, "../engine/res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds.0.png");
 
-    let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-04.metallib")).unwrap();
+    let sampler_descriptor = MTLSamplerDescriptorID::alloc().init();
+
+    sampler_descriptor.set_min_filter(MTLSamplerMinMagFilterNearest);
+    sampler_descriptor.set_mag_filter(MTLSamplerMinMagFilterLinear);
+    sampler_descriptor.set_s_address_mode(MTLSamplerAddressModeRepeat);
+    sampler_descriptor.set_t_address_mode(MTLSamplerAddressModeRepeat);
+
+    self.sampler_state = device.new_sampler_state_with_descriptor(sampler_descriptor);
+
+    let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-05.metallib")).unwrap();
 
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
     pipeline_descriptor.set_vertex_function(library.new_function_with_name(NSStringID::from_str("vertex_main")));
@@ -70,7 +94,7 @@ impl RSMRenderer for Example04Renderer {
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = 0.01f32;
+    let scale_factor = 0.02f32;
 
     let rotation = nalgebra::Rotation3::from_euler_angles(0.0, rotation_y, 0.0);
 
@@ -106,6 +130,8 @@ impl RSMRenderer for Example04Renderer {
     command_encoder.set_cull_mode(MTLCullModeBack);
     command_encoder.set_vertex_buffer_offset_at_index(self.mesh_buffer.buffer(), self.mesh_buffer.offset(), 0);
     command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
+    command_encoder.set_fragment_texture_at_index(self.texture.clone(), 0);
+    command_encoder.set_fragment_sampler_state_at_index(self.sampler_state.clone(), 0);
 
     for &ref submesh in &self.submeshes {
       let index_buffer = submesh.index_buffer();
@@ -122,19 +148,21 @@ impl RSMRenderer for Example04Renderer {
 fn main() {
   rust_metal::load_classes();
 
-  let renderer = Box::new(Example04Renderer {
+  let renderer = Box::new(Example05Renderer {
     command_queue: MTLCommandQueueID::nil(),
     time: std::time::Instant::now(),
     uniform_buffer: MTLBufferID::nil(),
     mesh_buffer: MTKMeshBufferID::nil(),
     submeshes: vec![],
     depth_stencil_state: MTLDepthStencilStateID::nil(),
-    pipeline_state: MTLRenderPipelineStateID::nil()
+    pipeline_state: MTLRenderPipelineStateID::nil(),
+    texture: MTLTextureID::nil(),
+    sampler_state: MTLSamplerStateID::nil()
   });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 04"));
+  window.set_title(NSStringID::from_str("Metal Example 05"));
   window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
   window.set_delegate(RSMWindowDelegateID::alloc().retain());
   window.make_key_and_order_front(NSObjectID::nil());

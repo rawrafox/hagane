@@ -27,6 +27,10 @@ path = "src/examples/example-03.rs"
 name = "example-04"
 path = "src/examples/example-04.rs"
 
+[[bin]]
+name = "example-05"
+path = "src/examples/example-05.rs"
+
 [dependencies]
 bitflags = "0.7.0"
 nalgebra = "0.10.*"

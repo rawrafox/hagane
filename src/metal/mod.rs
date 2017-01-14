@@ -3248,6 +3248,330 @@ impl std::fmt::Debug for MTLRenderPipelineReflectionID {
 }
 
 pub trait MTLSamplerDescriptor : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn r_address_mode(&self) -> MTLSamplerAddressMode where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(rAddressMode), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_r_address_mode(&self, r_address_mode: MTLSamplerAddressMode) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setRAddressMode:), (r_address_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn s_address_mode(&self) -> MTLSamplerAddressMode where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(sAddressMode), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_s_address_mode(&self, s_address_mode: MTLSamplerAddressMode) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setSAddressMode:), (s_address_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn t_address_mode(&self) -> MTLSamplerAddressMode where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(tAddressMode), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_t_address_mode(&self, t_address_mode: MTLSamplerAddressMode) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setTAddressMode:), (t_address_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn min_filter(&self) -> MTLSamplerMinMagFilter where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(minFilter), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_min_filter(&self, min_filter: MTLSamplerMinMagFilter) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMinFilter:), (min_filter,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn mag_filter(&self) -> MTLSamplerMinMagFilter where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(magFilter), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_mag_filter(&self, mag_filter: MTLSamplerMinMagFilter) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMagFilter:), (mag_filter,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn mip_filter(&self) -> MTLSamplerMipFilter where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(mipFilter), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_mip_filter(&self, mip_filter: MTLSamplerMipFilter) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMipFilter:), (mip_filter,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn lod_min_clamp(&self) -> f32 where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(lodMinClamp), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_lod_min_clamp(&self, lod_min_clamp: f32) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLodMinClamp:), (lod_min_clamp,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn lod_max_clamp(&self) -> f32 where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(lodMaxClamp), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_lod_max_clamp(&self, lod_max_clamp: f32) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLodMaxClamp:), (lod_max_clamp,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn lod_average(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(lodAverage), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_lod_average(&self, lod_average: bool) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLodAverage:), (lod_average,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn max_anisotropy(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(maxAnisotropy), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_max_anisotropy(&self, max_anisotropy: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMaxAnisotropy:), (max_anisotropy,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn normalized_coordinates(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(normalizedCoordinates), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_normalized_coordinates(&self, normalized_coordinates: bool) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setNormalizedCoordinates:), (normalized_coordinates,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn compare_function(&self) -> MTLCompareFunction where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(compareFunction), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_compare_function(&self, compare_function: MTLCompareFunction) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setCompareFunction:), (compare_function,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn border_color(&self) -> MTLSamplerBorderColor where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(borderColor), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_border_color(&self, border_color: MTLSamplerBorderColor) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setBorderColor:), (border_color,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn label(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(label), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLabel:), (label.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
 pub struct MTLSamplerDescriptorID(*mut std::os::raw::c_void);
@@ -6191,6 +6515,45 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
   fn set_vertex_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setVertexBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_fragment_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setFragmentBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_fragment_sampler_state_at_index<T0: 'static + MTLSamplerState>(&self, sampler: T0, index: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setFragmentSamplerState:atIndex:), (sampler.as_ptr(), index)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_fragment_texture_at_index<T0: 'static + MTLTexture>(&self, texture: T0, index: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setFragmentTexture:atIndex:), (texture.as_ptr(), index)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
           let result: () = r;

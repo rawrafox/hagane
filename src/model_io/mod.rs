@@ -3034,6 +3034,44 @@ impl std::fmt::Debug for MDLTransformID {
 }
 
 pub trait MDLURLTexture : MDLTexture + NSObject {
+  fn init_with_url_name<T0: 'static + NSURL, T1: 'static + NSString>(self, url: T0, name: T1) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithURL:name:), (url.as_ptr(), name.as_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn url(&self) -> NSURLID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(URL), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSURLID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_url<T: 'static + ObjectiveC + NSURL>(&self, url: T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setURL:), (url.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
 pub struct MDLURLTextureID(*mut std::os::raw::c_void);

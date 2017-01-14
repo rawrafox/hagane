@@ -185,7 +185,17 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
   <!-- TODO: NSCountCommand -->
   <!-- TODO: NSCountedSet -->
   <!-- TODO: NSCreateCommand -->
-  <!-- TODO: NSData -->
+
+  <class name="NSData" inherits="NSObject">
+    <initializer selector="initWithBytes:length:">
+      <argument name="bytes" type="*const std::os::raw::c_void" />
+      <argument name="length" type="NSUInteger" />
+    </initializer>
+
+    <!-- TODO: All… -->
+  </class>
+
+
   <!-- TODO: NSDataDetector -->
   <!-- TODO: NSDate -->
   <!-- TODO: NSDateComponents -->
@@ -196,7 +206,13 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
   <!-- TODO: NSDecimalNumber -->
   <!-- TODO: NSDecimalNumberHandler -->
   <!-- TODO: NSDeleteCommand -->
-  <!-- TODO: NSDictionary -->
+
+  <class name="NSDictionary" inherits="NSObject">
+    <initializer selector="init" />
+
+    <!-- TODO: All… -->
+  </class>
+
   <!-- TODO: NSDimension, really a protocols from before protocols -->
   <!-- TODO: NSDirectoryEnumerator -->
   <!-- TODO: NSDistantObject -->
@@ -260,11 +276,11 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
   <!-- TODO: NSMethodSignature -->
   <!-- TODO: NSMiddleSpecifier -->
   <!-- TODO: NSMoveCommand -->
-  
+
   <class name="NSMutableArray" inherits="NSArray, NSObject">
     <!-- TODO: NSMutableArray -->
   </class>
-  
+
   <!-- TODO: NSMutableAttributedString -->
   <!-- TODO: NSMutableCharacterSet -->
   <!-- TODO: NSMutableData -->
@@ -401,13 +417,13 @@ fn len(&self) -> usize where Self: 'static + Sized {
   <!-- TODO: NSTimeZone -->
   <!-- TODO: NSTimer -->
   <!-- TODO: NSURL -->
-  
+
   <class name="NSURL" inherits="NSObject">
     <initializer selector="initWithString:">
       <argument name="URLString" protocol="NSString" />
     </initializer>
   </class>
-  
+
   <!-- TODO: NSURLAuthenticationChallenge -->
   <!-- TODO: NSURLCache -->
   <!-- TODO: NSURLComponents -->
