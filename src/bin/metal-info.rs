@@ -2,13 +2,13 @@ extern crate metal;
 
 use metal::{NSObject, NSArray, NSString, MTLDevice, MTLDeviceID};
 
-fn print_device_info(device: MTLDeviceID, default_device: bool) {
+fn print_device_info(device: &MTLDeviceID, default_device: bool) {
   println!("\tDevice name: {}{}", device.name().as_str(), if default_device { " (default)" } else { "" });
   println!("\tHeadless: {}", device.is_headless());
   println!("\tLow power: {}", device.is_low_power());
   println!("\tDepth 24 / Stencil 8: {}", device.is_depth24_stencil8_pixel_format_supported());
   println!("\tTexture sample counts: {:?}", device.texture_sample_counts());
-  // println!("\tRecommended maximum working set size: {:?}", device.recommended_max_working_set_size()); 10.12+ only :C
+  println!("\tRecommended maximum working set size: {:?}", device.recommended_max_working_set_size());
 
   let max_tg_size = device.max_threads_per_threadgroup();
 
@@ -39,6 +39,6 @@ pub fn main() {
 
   println!("Devices ({} found)", devices.len());
   for device in devices {
-    print_device_info(device.clone(), device.is_equal(default_device.clone()));
+    print_device_info(&device, device.is_equal(&default_device));
   }
 }

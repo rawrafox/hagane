@@ -793,7 +793,7 @@ pub struct MTLViewport {
 pub trait MTLArgument : NSObject {
 }
 
-pub struct MTLArgumentID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLArgumentID(*mut std::os::raw::c_void);
 
 impl MTLArgumentID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -861,7 +861,7 @@ impl std::fmt::Debug for MTLArgumentID {
 pub trait MTLArrayType : NSObject {
 }
 
-pub struct MTLArrayTypeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLArrayTypeID(*mut std::os::raw::c_void);
 
 impl MTLArrayTypeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -929,7 +929,7 @@ impl std::fmt::Debug for MTLArrayTypeID {
 pub trait MTLAttribute : NSObject {
 }
 
-pub struct MTLAttributeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLAttributeID(*mut std::os::raw::c_void);
 
 impl MTLAttributeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -997,7 +997,7 @@ impl std::fmt::Debug for MTLAttributeID {
 pub trait MTLAttributeDescriptor : NSObject {
 }
 
-pub struct MTLAttributeDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLAttributeDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLAttributeDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1090,7 +1090,7 @@ pub trait MTLAttributeDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLAttributeDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLAttributeDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLAttributeDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1158,7 +1158,7 @@ impl std::fmt::Debug for MTLAttributeDescriptorArrayID {
 pub trait MTLBufferLayoutDescriptor : NSObject {
 }
 
-pub struct MTLBufferLayoutDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLBufferLayoutDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLBufferLayoutDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1251,7 +1251,7 @@ pub trait MTLBufferLayoutDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLBufferLayoutDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1319,7 +1319,7 @@ impl std::fmt::Debug for MTLBufferLayoutDescriptorArrayID {
 pub trait MTLCompileOptions : NSObject {
 }
 
-pub struct MTLCompileOptionsID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLCompileOptionsID(*mut std::os::raw::c_void);
 
 impl MTLCompileOptionsID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1387,7 +1387,7 @@ impl std::fmt::Debug for MTLCompileOptionsID {
 pub trait MTLComputePipelineDescriptor : NSObject {
 }
 
-pub struct MTLComputePipelineDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLComputePipelineDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLComputePipelineDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1455,7 +1455,7 @@ impl std::fmt::Debug for MTLComputePipelineDescriptorID {
 pub trait MTLComputePipelineReflection : NSObject {
 }
 
-pub struct MTLComputePipelineReflectionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLComputePipelineReflectionID(*mut std::os::raw::c_void);
 
 impl MTLComputePipelineReflectionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1657,7 +1657,7 @@ pub trait MTLDepthStencilDescriptor : NSObject {
   }
 }
 
-pub struct MTLDepthStencilDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLDepthStencilDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLDepthStencilDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1729,7 +1729,7 @@ impl std::fmt::Debug for MTLDepthStencilDescriptorID {
 pub trait MTLFunctionConstant : NSObject {
 }
 
-pub struct MTLFunctionConstantID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLFunctionConstantID(*mut std::os::raw::c_void);
 
 impl MTLFunctionConstantID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1797,7 +1797,7 @@ impl std::fmt::Debug for MTLFunctionConstantID {
 pub trait MTLFunctionConstantValues : NSObject {
 }
 
-pub struct MTLFunctionConstantValuesID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLFunctionConstantValuesID(*mut std::os::raw::c_void);
 
 impl MTLFunctionConstantValuesID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1865,7 +1865,7 @@ impl std::fmt::Debug for MTLFunctionConstantValuesID {
 pub trait MTLHeapDescriptor : NSObject {
 }
 
-pub struct MTLHeapDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLHeapDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLHeapDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1933,7 +1933,7 @@ impl std::fmt::Debug for MTLHeapDescriptorID {
 pub trait MTLRenderPassAttachmentDescriptor : NSObject {
 }
 
-pub struct MTLRenderPassAttachmentDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassAttachmentDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassAttachmentDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2001,7 +2001,7 @@ impl std::fmt::Debug for MTLRenderPassAttachmentDescriptorID {
 pub trait MTLRenderPassColorAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
 }
 
-pub struct MTLRenderPassColorAttachmentDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassColorAttachmentDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassColorAttachmentDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2095,7 +2095,7 @@ pub trait MTLRenderPassColorAttachmentDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLRenderPassColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassColorAttachmentDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2163,7 +2163,7 @@ impl std::fmt::Debug for MTLRenderPassColorAttachmentDescriptorArrayID {
 pub trait MTLRenderPassDepthAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
 }
 
-pub struct MTLRenderPassDepthAttachmentDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassDepthAttachmentDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassDepthAttachmentDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2232,7 +2232,7 @@ impl std::fmt::Debug for MTLRenderPassDepthAttachmentDescriptorID {
 pub trait MTLRenderPassDescriptor : NSObject {
 }
 
-pub struct MTLRenderPassDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2300,7 +2300,7 @@ impl std::fmt::Debug for MTLRenderPassDescriptorID {
 pub trait MTLRenderPassStencilAttachmentDescriptor : MTLRenderPassAttachmentDescriptor + NSObject {
 }
 
-pub struct MTLRenderPassStencilAttachmentDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPassStencilAttachmentDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPassStencilAttachmentDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2566,7 +2566,7 @@ pub trait MTLRenderPipelineColorAttachmentDescriptor : NSObject {
   }
 }
 
-pub struct MTLRenderPipelineColorAttachmentDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPipelineColorAttachmentDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPipelineColorAttachmentDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2659,7 +2659,7 @@ pub trait MTLRenderPipelineColorAttachmentDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLRenderPipelineColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPipelineColorAttachmentDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLRenderPipelineColorAttachmentDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2926,7 +2926,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
   }
 }
 
-pub struct MTLRenderPipelineDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPipelineDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLRenderPipelineDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2998,7 +2998,7 @@ impl std::fmt::Debug for MTLRenderPipelineDescriptorID {
 pub trait MTLRenderPipelineReflection : NSObject {
 }
 
-pub struct MTLRenderPipelineReflectionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPipelineReflectionID(*mut std::os::raw::c_void);
 
 impl MTLRenderPipelineReflectionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3390,7 +3390,7 @@ pub trait MTLSamplerDescriptor : NSObject {
   }
 }
 
-pub struct MTLSamplerDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLSamplerDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLSamplerDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3462,7 +3462,7 @@ impl std::fmt::Debug for MTLSamplerDescriptorID {
 pub trait MTLStageInputOutputDescriptor : NSObject {
 }
 
-pub struct MTLStageInputOutputDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLStageInputOutputDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLStageInputOutputDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3530,7 +3530,7 @@ impl std::fmt::Debug for MTLStageInputOutputDescriptorID {
 pub trait MTLStencilDescriptor : NSObject {
 }
 
-pub struct MTLStencilDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLStencilDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLStencilDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3598,7 +3598,7 @@ impl std::fmt::Debug for MTLStencilDescriptorID {
 pub trait MTLStructMember : NSObject {
 }
 
-pub struct MTLStructMemberID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLStructMemberID(*mut std::os::raw::c_void);
 
 impl MTLStructMemberID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3666,7 +3666,7 @@ impl std::fmt::Debug for MTLStructMemberID {
 pub trait MTLStructType : NSObject {
 }
 
-pub struct MTLStructTypeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLStructTypeID(*mut std::os::raw::c_void);
 
 impl MTLStructTypeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3734,7 +3734,7 @@ impl std::fmt::Debug for MTLStructTypeID {
 pub trait MTLTextureDescriptor : NSObject {
 }
 
-pub struct MTLTextureDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLTextureDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLTextureDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3802,7 +3802,7 @@ impl std::fmt::Debug for MTLTextureDescriptorID {
 pub trait MTLVertexAttribute : NSObject {
 }
 
-pub struct MTLVertexAttributeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexAttributeID(*mut std::os::raw::c_void);
 
 impl MTLVertexAttributeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3870,7 +3870,7 @@ impl std::fmt::Debug for MTLVertexAttributeID {
 pub trait MTLVertexAttributeDescriptor : NSObject {
 }
 
-pub struct MTLVertexAttributeDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexAttributeDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLVertexAttributeDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3963,7 +3963,7 @@ pub trait MTLVertexAttributeDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLVertexAttributeDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexAttributeDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLVertexAttributeDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4031,7 +4031,7 @@ impl std::fmt::Debug for MTLVertexAttributeDescriptorArrayID {
 pub trait MTLVertexBufferLayoutDescriptor : NSObject {
 }
 
-pub struct MTLVertexBufferLayoutDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexBufferLayoutDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLVertexBufferLayoutDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4124,7 +4124,7 @@ pub trait MTLVertexBufferLayoutDescriptorArray : NSObject {
   }
 }
 
-pub struct MTLVertexBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexBufferLayoutDescriptorArrayID(*mut std::os::raw::c_void);
 
 impl MTLVertexBufferLayoutDescriptorArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4192,7 +4192,7 @@ impl std::fmt::Debug for MTLVertexBufferLayoutDescriptorArrayID {
 pub trait MTLVertexDescriptor : NSObject {
 }
 
-pub struct MTLVertexDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLVertexDescriptorID(*mut std::os::raw::c_void);
 
 impl MTLVertexDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4260,7 +4260,7 @@ impl std::fmt::Debug for MTLVertexDescriptorID {
 pub trait MTLBlitCommandEncoder : MTLCommandEncoder + NSObject {
 }
 
-pub struct MTLBlitCommandEncoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLBlitCommandEncoderID(*mut std::os::raw::c_void);
 
 impl MTLBlitCommandEncoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4357,7 +4357,7 @@ pub trait MTLBuffer : MTLResource + NSObject {
   }
 }
 
-pub struct MTLBufferID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLBufferID(*mut std::os::raw::c_void);
 
 impl MTLBufferID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4614,7 +4614,7 @@ pub trait MTLCommandBuffer : NSObject {
   }
 }
 
-pub struct MTLCommandBufferID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLCommandBufferID(*mut std::os::raw::c_void);
 
 impl MTLCommandBufferID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4766,7 +4766,7 @@ pub trait MTLCommandEncoder : NSObject {
   }
 }
 
-pub struct MTLCommandEncoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLCommandEncoderID(*mut std::os::raw::c_void);
 
 impl MTLCommandEncoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4905,7 +4905,7 @@ pub trait MTLCommandQueue : NSObject {
   }
 }
 
-pub struct MTLCommandQueueID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLCommandQueueID(*mut std::os::raw::c_void);
 
 impl MTLCommandQueueID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -4965,7 +4965,7 @@ impl std::fmt::Debug for MTLCommandQueueID {
 pub trait MTLComputeCommandEncoder : MTLCommandEncoder + NSObject {
 }
 
-pub struct MTLComputeCommandEncoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLComputeCommandEncoderID(*mut std::os::raw::c_void);
 
 impl MTLComputeCommandEncoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5026,7 +5026,7 @@ impl std::fmt::Debug for MTLComputeCommandEncoderID {
 pub trait MTLComputePipelineState : NSObject {
 }
 
-pub struct MTLComputePipelineStateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLComputePipelineStateID(*mut std::os::raw::c_void);
 
 impl MTLComputePipelineStateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5086,7 +5086,7 @@ impl std::fmt::Debug for MTLComputePipelineStateID {
 pub trait MTLDepthStencilState : NSObject {
 }
 
-pub struct MTLDepthStencilStateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLDepthStencilStateID(*mut std::os::raw::c_void);
 
 impl MTLDepthStencilStateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5395,7 +5395,7 @@ pub trait MTLDevice : NSObject {
   }
 }
 
-pub struct MTLDeviceID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLDeviceID(*mut std::os::raw::c_void);
 
 impl MTLDeviceID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5480,7 +5480,7 @@ pub trait MTLDrawable : NSObject {
   }
 }
 
-pub struct MTLDrawableID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLDrawableID(*mut std::os::raw::c_void);
 
 impl MTLDrawableID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5580,7 +5580,7 @@ pub trait MTLFence : NSObject {
   }
 }
 
-pub struct MTLFenceID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLFenceID(*mut std::os::raw::c_void);
 
 impl MTLFenceID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5640,7 +5640,7 @@ impl std::fmt::Debug for MTLFenceID {
 pub trait MTLFunction : NSObject {
 }
 
-pub struct MTLFunctionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLFunctionID(*mut std::os::raw::c_void);
 
 impl MTLFunctionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5700,7 +5700,7 @@ impl std::fmt::Debug for MTLFunctionID {
 pub trait MTLHeap : NSObject {
 }
 
-pub struct MTLHeapID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLHeapID(*mut std::os::raw::c_void);
 
 impl MTLHeapID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5828,7 +5828,7 @@ pub trait MTLLibrary : NSObject {
   }
 }
 
-pub struct MTLLibraryID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLLibraryID(*mut std::os::raw::c_void);
 
 impl MTLLibraryID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -5888,7 +5888,7 @@ impl std::fmt::Debug for MTLLibraryID {
 pub trait MTLParallelRenderCommandEncoder : MTLCommandEncoder + NSObject {
 }
 
-pub struct MTLParallelRenderCommandEncoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLParallelRenderCommandEncoderID(*mut std::os::raw::c_void);
 
 impl MTLParallelRenderCommandEncoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -6195,7 +6195,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
   }
 }
 
-pub struct MTLRenderCommandEncoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderCommandEncoderID(*mut std::os::raw::c_void);
 
 impl MTLRenderCommandEncoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -6256,7 +6256,7 @@ impl std::fmt::Debug for MTLRenderCommandEncoderID {
 pub trait MTLRenderPipelineState : NSObject {
 }
 
-pub struct MTLRenderPipelineStateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLRenderPipelineStateID(*mut std::os::raw::c_void);
 
 impl MTLRenderPipelineStateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -6316,7 +6316,7 @@ impl std::fmt::Debug for MTLRenderPipelineStateID {
 pub trait MTLResource : NSObject {
 }
 
-pub struct MTLResourceID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLResourceID(*mut std::os::raw::c_void);
 
 impl MTLResourceID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -6376,7 +6376,7 @@ impl std::fmt::Debug for MTLResourceID {
 pub trait MTLSamplerState : NSObject {
 }
 
-pub struct MTLSamplerStateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLSamplerStateID(*mut std::os::raw::c_void);
 
 impl MTLSamplerStateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -6436,7 +6436,7 @@ impl std::fmt::Debug for MTLSamplerStateID {
 pub trait MTLTexture : NSObject {
 }
 
-pub struct MTLTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTLTextureID(*mut std::os::raw::c_void);
 
 impl MTLTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

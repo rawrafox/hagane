@@ -54,7 +54,7 @@
     <property name="device" protocol="MTLDevice" />
   </class>
 
-  <class name="MTKSubmesh" inherits="NSObject">
+  <class name="MTKSubmesh" inherits="MDLNamed, NSObject">
     <!-- Parent Mesh -->
     <property name="mesh" protocol="MTKMesh" weak read-only />
 

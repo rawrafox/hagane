@@ -1,4 +1,4 @@
-#[macro_use] extern crate metal;
+extern crate metal;
 
 use metal::*;
 use metal::rust_metal::*;

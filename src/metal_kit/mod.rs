@@ -116,7 +116,7 @@ pub trait MTKMesh : NSObject {
   }
 }
 
-pub struct MTKMeshID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKMeshID(*mut std::os::raw::c_void);
 
 impl MTKMeshID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -239,7 +239,7 @@ pub trait MTKMeshBuffer : NSObject {
   }
 }
 
-pub struct MTKMeshBufferID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKMeshBufferID(*mut std::os::raw::c_void);
 
 impl MTKMeshBufferID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -345,7 +345,7 @@ pub trait MTKMeshBufferAllocator : MDLMeshBufferAllocator + NSObject {
   }
 }
 
-pub struct MTKMeshBufferAllocatorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKMeshBufferAllocatorID(*mut std::os::raw::c_void);
 
 impl MTKMeshBufferAllocatorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -415,7 +415,7 @@ impl std::fmt::Debug for MTKMeshBufferAllocatorID {
   }
 }
 
-pub trait MTKSubmesh : NSObject {
+pub trait MTKSubmesh : MDLNamed + NSObject {
   fn mesh(&self) -> MTKMeshID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -506,7 +506,7 @@ pub trait MTKSubmesh : NSObject {
   }
 }
 
-pub struct MTKSubmeshID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKSubmeshID(*mut std::os::raw::c_void);
 
 impl MTKSubmeshID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -534,6 +534,7 @@ impl MTKSubmeshID {
   }
 }
 
+impl MDLNamed for MTKSubmeshID {}
 impl NSObject for MTKSubmeshID {}
 impl MTKSubmesh for MTKSubmeshID {}
 
@@ -688,7 +689,7 @@ pub trait MTKTextureLoader : NSObject {
   }
 }
 
-pub struct MTKTextureLoaderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKTextureLoaderID(*mut std::os::raw::c_void);
 
 impl MTKTextureLoaderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1209,7 +1210,7 @@ pub trait MTKView : NSView + NSObject {
   }
 }
 
-pub struct MTKViewID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKViewID(*mut std::os::raw::c_void);
 
 impl MTKViewID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1311,7 +1312,7 @@ pub trait MTKViewDelegate : NSObject {
   }
 }
 
-pub struct MTKViewDelegateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MTKViewDelegateID(*mut std::os::raw::c_void);
 
 impl MTKViewDelegateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

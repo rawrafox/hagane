@@ -9,7 +9,7 @@ use metal::*;
 pub trait CAMetalDrawable : MTLDrawable + NSObject {
 }
 
-pub struct CAMetalDrawableID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct CAMetalDrawableID(*mut std::os::raw::c_void);
 
 impl CAMetalDrawableID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

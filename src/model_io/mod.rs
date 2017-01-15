@@ -6,7 +6,23 @@ use super::ObjectiveC;
 use foundation::*;
 
 #[link(name = "ModelIO", kind = "framework")]
-extern {}
+extern {
+  pub static MDLVertexAttributeAnisotropy: NSStringID;
+  pub static MDLVertexAttributeBinormal: NSStringID;
+  pub static MDLVertexAttributeBitangent: NSStringID;
+  pub static MDLVertexAttributeColor: NSStringID;
+  pub static MDLVertexAttributeEdgeCrease: NSStringID;
+  pub static MDLVertexAttributeJointIndices: NSStringID;
+  pub static MDLVertexAttributeJointWeights: NSStringID;
+  pub static MDLVertexAttributeNormal: NSStringID;
+  pub static MDLVertexAttributeOcclusionValue: NSStringID;
+  pub static MDLVertexAttributePosition: NSStringID;
+  pub static MDLVertexAttributeShadingBasisU: NSStringID;
+  pub static MDLVertexAttributeShadingBasisV: NSStringID;
+  pub static MDLVertexAttributeSubdivisionStencil: NSStringID;
+  pub static MDLVertexAttributeTangent: NSStringID;
+  pub static MDLVertexAttributeTextureCoordinate: NSStringID;
+}
 
 bitflags! {
   pub flags MDLCameraProjection: NSUInteger {
@@ -32,6 +48,13 @@ bitflags! {
     const MDLIndexBitDepthUInt8 = 8,
     const MDLIndexBitDepthUInt16 = 16,
     const MDLIndexBitDepthUInt32 = 32,
+  }
+}
+
+bitflags! {
+  pub flags MDLMeshBufferType: NSUInteger {
+    const MDLMeshBufferTypeVertex = 1,
+    const MDLMeshBufferTypeIndex = 2,
   }
 }
 
@@ -111,10 +134,10 @@ pub struct MDLAxisAlignedBoundingBox {
   pub min_bounds: [f32; 3],
 }
 
-pub trait MDLAreaLight : MDLPhysicallyPlausibleLight + MDLLight + MDLObject + NSObject {
+pub trait MDLAreaLight : MDLNamed + MDLPhysicallyPlausibleLight + MDLLight + MDLObject + NSObject {
 }
 
-pub struct MDLAreaLightID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLAreaLightID(*mut std::os::raw::c_void);
 
 impl MDLAreaLightID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -142,6 +165,7 @@ impl MDLAreaLightID {
   }
 }
 
+impl MDLNamed for MDLAreaLightID {}
 impl MDLPhysicallyPlausibleLight for MDLAreaLightID {}
 impl MDLLight for MDLAreaLightID {}
 impl MDLObject for MDLAreaLightID {}
@@ -183,6 +207,19 @@ impl std::fmt::Debug for MDLAreaLightID {
 }
 
 pub trait MDLAsset : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn init_with_url<T0: 'static + NSURL>(self, url: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:), (url.as_ptr(),)) {
@@ -204,6 +241,38 @@ pub trait MDLAsset : NSObject {
           std::mem::forget(self);
 
           return result;
+        }
+      }
+    }
+  }
+
+  fn export_asset_to_url<T0: 'static + NSURL>(&self, url: &T0) -> bool where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(exportAssetToURL:), (url.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: bool = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn export_asset_to_url_error<T0: 'static + NSURL>(&self, url: &T0) -> Result<bool, NSErrorID> where Self: 'static + Sized {
+    let mut error = NSErrorID::nil();
+
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(exportAssetToURL:error:), (url.as_ptr(), &mut error)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          if !error.is_nil() {
+            return Err(error)
+          }
+
+          let result: bool = r;
+
+          return Ok(result);
         }
       }
     }
@@ -245,9 +314,22 @@ pub trait MDLAsset : NSObject {
       }
     }
   }
+
+  fn add_object<T0: 'static + MDLObject>(&self, object: &T0) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(addObject:), (object.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
-pub struct MDLAssetID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLAssetID(*mut std::os::raw::c_void);
 
 impl MDLAssetID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -272,6 +354,10 @@ impl MDLAssetID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLAsset").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MDLAssetID::alloc().init();
   }
 
   pub fn new_with_url<T0: 'static + NSURL>(url: &T0) -> Self where Self: 'static + Sized {
@@ -320,7 +406,7 @@ impl std::fmt::Debug for MDLAssetID {
   }
 }
 
-pub trait MDLCamera : MDLObject + NSObject {
+pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
   fn frame_bounding_box_set_near_and_far(&self, bounding_box: MDLAxisAlignedBoundingBox, set_near_and_far: bool) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(frameBoundingBox:setNearAndFar:), (bounding_box, set_near_and_far)) {
@@ -495,7 +581,7 @@ pub trait MDLCamera : MDLObject + NSObject {
   }
 }
 
-pub struct MDLCameraID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLCameraID(*mut std::os::raw::c_void);
 
 impl MDLCameraID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -523,6 +609,7 @@ impl MDLCameraID {
   }
 }
 
+impl MDLNamed for MDLCameraID {}
 impl MDLObject for MDLCameraID {}
 impl NSObject for MDLCameraID {}
 impl MDLCamera for MDLCameraID {}
@@ -561,10 +648,10 @@ impl std::fmt::Debug for MDLCameraID {
   }
 }
 
-pub trait MDLCheckerboardTexture : MDLTexture + NSObject {
+pub trait MDLCheckerboardTexture : MDLNamed + MDLTexture + NSObject {
 }
 
-pub struct MDLCheckerboardTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLCheckerboardTextureID(*mut std::os::raw::c_void);
 
 impl MDLCheckerboardTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -592,6 +679,7 @@ impl MDLCheckerboardTextureID {
   }
 }
 
+impl MDLNamed for MDLCheckerboardTextureID {}
 impl MDLTexture for MDLCheckerboardTextureID {}
 impl NSObject for MDLCheckerboardTextureID {}
 impl MDLCheckerboardTexture for MDLCheckerboardTextureID {}
@@ -630,10 +718,10 @@ impl std::fmt::Debug for MDLCheckerboardTextureID {
   }
 }
 
-pub trait MDLColorSwatchTexture : MDLTexture + NSObject {
+pub trait MDLColorSwatchTexture : MDLNamed + MDLTexture + NSObject {
 }
 
-pub struct MDLColorSwatchTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLColorSwatchTextureID(*mut std::os::raw::c_void);
 
 impl MDLColorSwatchTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -661,6 +749,7 @@ impl MDLColorSwatchTextureID {
   }
 }
 
+impl MDLNamed for MDLColorSwatchTextureID {}
 impl MDLTexture for MDLColorSwatchTextureID {}
 impl NSObject for MDLColorSwatchTextureID {}
 impl MDLColorSwatchTexture for MDLColorSwatchTextureID {}
@@ -699,10 +788,10 @@ impl std::fmt::Debug for MDLColorSwatchTextureID {
   }
 }
 
-pub trait MDLLight : MDLObject + NSObject {
+pub trait MDLLight : MDLNamed + MDLObject + NSObject {
 }
 
-pub struct MDLLightID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLLightID(*mut std::os::raw::c_void);
 
 impl MDLLightID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -730,6 +819,7 @@ impl MDLLightID {
   }
 }
 
+impl MDLNamed for MDLLightID {}
 impl MDLObject for MDLLightID {}
 impl NSObject for MDLLightID {}
 impl MDLLight for MDLLightID {}
@@ -768,10 +858,10 @@ impl std::fmt::Debug for MDLLightID {
   }
 }
 
-pub trait MDLLightProbe : MDLLight + MDLObject + NSObject {
+pub trait MDLLightProbe : MDLNamed + MDLLight + MDLObject + NSObject {
 }
 
-pub struct MDLLightProbeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLLightProbeID(*mut std::os::raw::c_void);
 
 impl MDLLightProbeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -799,6 +889,7 @@ impl MDLLightProbeID {
   }
 }
 
+impl MDLNamed for MDLLightProbeID {}
 impl MDLLight for MDLLightProbeID {}
 impl MDLObject for MDLLightProbeID {}
 impl NSObject for MDLLightProbeID {}
@@ -838,10 +929,10 @@ impl std::fmt::Debug for MDLLightProbeID {
   }
 }
 
-pub trait MDLMaterial : NSObject {
+pub trait MDLMaterial : MDLNamed + NSObject {
 }
 
-pub struct MDLMaterialID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMaterialID(*mut std::os::raw::c_void);
 
 impl MDLMaterialID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -869,6 +960,7 @@ impl MDLMaterialID {
   }
 }
 
+impl MDLNamed for MDLMaterialID {}
 impl NSObject for MDLMaterialID {}
 impl MDLMaterial for MDLMaterialID {}
 
@@ -906,10 +998,10 @@ impl std::fmt::Debug for MDLMaterialID {
   }
 }
 
-pub trait MDLMaterialProperty : NSObject {
+pub trait MDLMaterialProperty : MDLNamed + NSObject {
 }
 
-pub struct MDLMaterialPropertyID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMaterialPropertyID(*mut std::os::raw::c_void);
 
 impl MDLMaterialPropertyID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -937,6 +1029,7 @@ impl MDLMaterialPropertyID {
   }
 }
 
+impl MDLNamed for MDLMaterialPropertyID {}
 impl NSObject for MDLMaterialPropertyID {}
 impl MDLMaterialProperty for MDLMaterialPropertyID {}
 
@@ -974,10 +1067,10 @@ impl std::fmt::Debug for MDLMaterialPropertyID {
   }
 }
 
-pub trait MDLMaterialPropertyConnection : NSObject {
+pub trait MDLMaterialPropertyConnection : MDLNamed + NSObject {
 }
 
-pub struct MDLMaterialPropertyConnectionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMaterialPropertyConnectionID(*mut std::os::raw::c_void);
 
 impl MDLMaterialPropertyConnectionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1005,6 +1098,7 @@ impl MDLMaterialPropertyConnectionID {
   }
 }
 
+impl MDLNamed for MDLMaterialPropertyConnectionID {}
 impl NSObject for MDLMaterialPropertyConnectionID {}
 impl MDLMaterialPropertyConnection for MDLMaterialPropertyConnectionID {}
 
@@ -1042,10 +1136,10 @@ impl std::fmt::Debug for MDLMaterialPropertyConnectionID {
   }
 }
 
-pub trait MDLMaterialPropertyGraph : MDLMaterialPropertyNode + NSObject {
+pub trait MDLMaterialPropertyGraph : MDLNamed + MDLMaterialPropertyNode + NSObject {
 }
 
-pub struct MDLMaterialPropertyGraphID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMaterialPropertyGraphID(*mut std::os::raw::c_void);
 
 impl MDLMaterialPropertyGraphID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1073,6 +1167,7 @@ impl MDLMaterialPropertyGraphID {
   }
 }
 
+impl MDLNamed for MDLMaterialPropertyGraphID {}
 impl MDLMaterialPropertyNode for MDLMaterialPropertyGraphID {}
 impl NSObject for MDLMaterialPropertyGraphID {}
 impl MDLMaterialPropertyGraph for MDLMaterialPropertyGraphID {}
@@ -1111,10 +1206,10 @@ impl std::fmt::Debug for MDLMaterialPropertyGraphID {
   }
 }
 
-pub trait MDLMaterialPropertyNode : NSObject {
+pub trait MDLMaterialPropertyNode : MDLNamed + NSObject {
 }
 
-pub struct MDLMaterialPropertyNodeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMaterialPropertyNodeID(*mut std::os::raw::c_void);
 
 impl MDLMaterialPropertyNodeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1142,6 +1237,7 @@ impl MDLMaterialPropertyNodeID {
   }
 }
 
+impl MDLNamed for MDLMaterialPropertyNodeID {}
 impl NSObject for MDLMaterialPropertyNodeID {}
 impl MDLMaterialPropertyNode for MDLMaterialPropertyNodeID {}
 
@@ -1179,7 +1275,20 @@ impl std::fmt::Debug for MDLMaterialPropertyNodeID {
   }
 }
 
-pub trait MDLMesh : MDLObject + NSObject {
+pub trait MDLMesh : MDLNamed + MDLObject + NSObject {
+  fn init_with_vertex_buffer_vertex_count_descriptor_submeshes<T0: 'static + MDLMeshBuffer, T2: 'static + MDLVertexDescriptor, T3: 'static + NSArray>(self, vertex_buffer: &T0, vertex_count: NSUInteger, descriptor: &T2, submeshes: &T3) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithVertexBuffer:vertexCount:descriptor:submeshes:), (vertex_buffer.as_ptr(), vertex_count, descriptor.as_ptr(), submeshes.as_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn submeshes(&self) -> NSMutableArrayID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -1281,7 +1390,7 @@ pub trait MDLMesh : MDLObject + NSObject {
   }
 }
 
-pub struct MDLMeshID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshID(*mut std::os::raw::c_void);
 
 impl MDLMeshID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1307,8 +1416,13 @@ impl MDLMeshID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLMesh").unwrap();
   }
+
+  pub fn new_with_vertex_buffer_vertex_count_descriptor_submeshes<T0: 'static + MDLMeshBuffer, T2: 'static + MDLVertexDescriptor, T3: 'static + NSArray>(vertex_buffer: &T0, vertex_count: NSUInteger, descriptor: &T2, submeshes: &T3) -> Self where Self: 'static + Sized {
+    return MDLMeshID::alloc().init_with_vertex_buffer_vertex_count_descriptor_submeshes(vertex_buffer, vertex_count, descriptor, submeshes);
+  }
 }
 
+impl MDLNamed for MDLMeshID {}
 impl MDLObject for MDLMeshID {}
 impl NSObject for MDLMeshID {}
 impl MDLMesh for MDLMeshID {}
@@ -1347,10 +1461,50 @@ impl std::fmt::Debug for MDLMeshID {
   }
 }
 
-pub trait MDLMeshBufferData : NSObject {
+pub trait MDLMeshBufferData : MDLMeshBuffer + NSObject {
+  fn init_with_type_data<T1: 'static + NSData>(self, buffer_type: MDLMeshBufferType, data: &T1) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithType:data:), (buffer_type, data.as_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn init_with_type_length(self, buffer_type: MDLMeshBufferType, length: NSUInteger) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithType:length:), (buffer_type, length)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn data(&self) -> NSDataID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(data), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSDataID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
 }
 
-pub struct MDLMeshBufferDataID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferDataID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferDataID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1376,8 +1530,17 @@ impl MDLMeshBufferDataID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLMeshBufferData").unwrap();
   }
+
+  pub fn new_with_type_data<T1: 'static + NSData>(buffer_type: MDLMeshBufferType, data: &T1) -> Self where Self: 'static + Sized {
+    return MDLMeshBufferDataID::alloc().init_with_type_data(buffer_type, data);
+  }
+
+  pub fn new_with_type_length(buffer_type: MDLMeshBufferType, length: NSUInteger) -> Self where Self: 'static + Sized {
+    return MDLMeshBufferDataID::alloc().init_with_type_length(buffer_type, length);
+  }
 }
 
+impl MDLMeshBuffer for MDLMeshBufferDataID {}
 impl NSObject for MDLMeshBufferDataID {}
 impl MDLMeshBufferData for MDLMeshBufferDataID {}
 
@@ -1418,7 +1581,7 @@ impl std::fmt::Debug for MDLMeshBufferDataID {
 pub trait MDLMeshBufferDataAllocator : MDLMeshBufferAllocator + NSObject {
 }
 
-pub struct MDLMeshBufferDataAllocatorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferDataAllocatorID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferDataAllocatorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1497,7 +1660,7 @@ pub trait MDLMeshBufferMap : NSObject {
   }
 }
 
-pub struct MDLMeshBufferMapID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferMapID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferMapID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1565,7 +1728,7 @@ impl std::fmt::Debug for MDLMeshBufferMapID {
 pub trait MDLMeshBufferZoneDefault : MDLMeshBufferZone + NSObject {
 }
 
-pub struct MDLMeshBufferZoneDefaultID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferZoneDefaultID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferZoneDefaultID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1631,10 +1794,10 @@ impl std::fmt::Debug for MDLMeshBufferZoneDefaultID {
   }
 }
 
-pub trait MDLNoiseTexture : MDLTexture + NSObject {
+pub trait MDLNoiseTexture : MDLNamed + MDLTexture + NSObject {
 }
 
-pub struct MDLNoiseTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLNoiseTextureID(*mut std::os::raw::c_void);
 
 impl MDLNoiseTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1662,6 +1825,7 @@ impl MDLNoiseTextureID {
   }
 }
 
+impl MDLNamed for MDLNoiseTextureID {}
 impl MDLTexture for MDLNoiseTextureID {}
 impl NSObject for MDLNoiseTextureID {}
 impl MDLNoiseTexture for MDLNoiseTextureID {}
@@ -1700,10 +1864,10 @@ impl std::fmt::Debug for MDLNoiseTextureID {
   }
 }
 
-pub trait MDLNormalMapTexture : MDLTexture + NSObject {
+pub trait MDLNormalMapTexture : MDLNamed + MDLTexture + NSObject {
 }
 
-pub struct MDLNormalMapTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLNormalMapTextureID(*mut std::os::raw::c_void);
 
 impl MDLNormalMapTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1731,6 +1895,7 @@ impl MDLNormalMapTextureID {
   }
 }
 
+impl MDLNamed for MDLNormalMapTextureID {}
 impl MDLTexture for MDLNormalMapTextureID {}
 impl NSObject for MDLNormalMapTextureID {}
 impl MDLNormalMapTexture for MDLNormalMapTextureID {}
@@ -1769,10 +1934,10 @@ impl std::fmt::Debug for MDLNormalMapTextureID {
   }
 }
 
-pub trait MDLObject : NSObject {
+pub trait MDLObject : MDLNamed + NSObject {
 }
 
-pub struct MDLObjectID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLObjectID(*mut std::os::raw::c_void);
 
 impl MDLObjectID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1800,6 +1965,7 @@ impl MDLObjectID {
   }
 }
 
+impl MDLNamed for MDLObjectID {}
 impl NSObject for MDLObjectID {}
 impl MDLObject for MDLObjectID {}
 
@@ -1840,7 +2006,7 @@ impl std::fmt::Debug for MDLObjectID {
 pub trait MDLObjectContainer : NSObject {
 }
 
-pub struct MDLObjectContainerID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLObjectContainerID(*mut std::os::raw::c_void);
 
 impl MDLObjectContainerID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1905,10 +2071,10 @@ impl std::fmt::Debug for MDLObjectContainerID {
   }
 }
 
-pub trait MDLPhotometricLight : MDLPhysicallyPlausibleLight + MDLLight + MDLObject + NSObject {
+pub trait MDLPhotometricLight : MDLNamed + MDLPhysicallyPlausibleLight + MDLLight + MDLObject + NSObject {
 }
 
-pub struct MDLPhotometricLightID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLPhotometricLightID(*mut std::os::raw::c_void);
 
 impl MDLPhotometricLightID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -1936,6 +2102,7 @@ impl MDLPhotometricLightID {
   }
 }
 
+impl MDLNamed for MDLPhotometricLightID {}
 impl MDLPhysicallyPlausibleLight for MDLPhotometricLightID {}
 impl MDLLight for MDLPhotometricLightID {}
 impl MDLObject for MDLPhotometricLightID {}
@@ -1976,10 +2143,10 @@ impl std::fmt::Debug for MDLPhotometricLightID {
   }
 }
 
-pub trait MDLPhysicallyPlausibleLight : MDLLight + MDLObject + NSObject {
+pub trait MDLPhysicallyPlausibleLight : MDLNamed + MDLLight + MDLObject + NSObject {
 }
 
-pub struct MDLPhysicallyPlausibleLightID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLPhysicallyPlausibleLightID(*mut std::os::raw::c_void);
 
 impl MDLPhysicallyPlausibleLightID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2007,6 +2174,7 @@ impl MDLPhysicallyPlausibleLightID {
   }
 }
 
+impl MDLNamed for MDLPhysicallyPlausibleLightID {}
 impl MDLLight for MDLPhysicallyPlausibleLightID {}
 impl MDLObject for MDLPhysicallyPlausibleLightID {}
 impl NSObject for MDLPhysicallyPlausibleLightID {}
@@ -2046,10 +2214,10 @@ impl std::fmt::Debug for MDLPhysicallyPlausibleLightID {
   }
 }
 
-pub trait MDLPhysicallyPlausibleScatteringFunction : MDLScatteringFunction + NSObject {
+pub trait MDLPhysicallyPlausibleScatteringFunction : MDLNamed + MDLScatteringFunction + NSObject {
 }
 
-pub struct MDLPhysicallyPlausibleScatteringFunctionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLPhysicallyPlausibleScatteringFunctionID(*mut std::os::raw::c_void);
 
 impl MDLPhysicallyPlausibleScatteringFunctionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2077,6 +2245,7 @@ impl MDLPhysicallyPlausibleScatteringFunctionID {
   }
 }
 
+impl MDLNamed for MDLPhysicallyPlausibleScatteringFunctionID {}
 impl MDLScatteringFunction for MDLPhysicallyPlausibleScatteringFunctionID {}
 impl NSObject for MDLPhysicallyPlausibleScatteringFunctionID {}
 impl MDLPhysicallyPlausibleScatteringFunction for MDLPhysicallyPlausibleScatteringFunctionID {}
@@ -2115,10 +2284,10 @@ impl std::fmt::Debug for MDLPhysicallyPlausibleScatteringFunctionID {
   }
 }
 
-pub trait MDLScatteringFunction : NSObject {
+pub trait MDLScatteringFunction : MDLNamed + NSObject {
 }
 
-pub struct MDLScatteringFunctionID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLScatteringFunctionID(*mut std::os::raw::c_void);
 
 impl MDLScatteringFunctionID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2146,6 +2315,7 @@ impl MDLScatteringFunctionID {
   }
 }
 
+impl MDLNamed for MDLScatteringFunctionID {}
 impl NSObject for MDLScatteringFunctionID {}
 impl MDLScatteringFunction for MDLScatteringFunctionID {}
 
@@ -2183,10 +2353,10 @@ impl std::fmt::Debug for MDLScatteringFunctionID {
   }
 }
 
-pub trait MDLSkyCubeTexture : MDLTexture + NSObject {
+pub trait MDLSkyCubeTexture : MDLNamed + MDLTexture + NSObject {
 }
 
-pub struct MDLSkyCubeTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLSkyCubeTextureID(*mut std::os::raw::c_void);
 
 impl MDLSkyCubeTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2214,6 +2384,7 @@ impl MDLSkyCubeTextureID {
   }
 }
 
+impl MDLNamed for MDLSkyCubeTextureID {}
 impl MDLTexture for MDLSkyCubeTextureID {}
 impl NSObject for MDLSkyCubeTextureID {}
 impl MDLSkyCubeTexture for MDLSkyCubeTextureID {}
@@ -2252,10 +2423,10 @@ impl std::fmt::Debug for MDLSkyCubeTextureID {
   }
 }
 
-pub trait MDLStereoscopicCamera : MDLCamera + MDLObject + NSObject {
+pub trait MDLStereoscopicCamera : MDLNamed + MDLCamera + MDLObject + NSObject {
 }
 
-pub struct MDLStereoscopicCameraID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLStereoscopicCameraID(*mut std::os::raw::c_void);
 
 impl MDLStereoscopicCameraID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2283,6 +2454,7 @@ impl MDLStereoscopicCameraID {
   }
 }
 
+impl MDLNamed for MDLStereoscopicCameraID {}
 impl MDLCamera for MDLStereoscopicCameraID {}
 impl MDLObject for MDLStereoscopicCameraID {}
 impl NSObject for MDLStereoscopicCameraID {}
@@ -2322,7 +2494,20 @@ impl std::fmt::Debug for MDLStereoscopicCameraID {
   }
 }
 
-pub trait MDLSubmesh : NSObject {
+pub trait MDLSubmesh : MDLNamed + NSObject {
+  fn init_with_index_buffer_index_count_index_type_geometry_type_material<T0: 'static + MDLMeshBuffer, T4: 'static + MDLMaterial>(self, index_buffer: &T0, index_count: NSUInteger, index_type: MDLIndexBitDepth, geometry_type: MDLGeometryType, material: &T4) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithIndexBuffer:indexCount:indexType:geometryType:material:), (index_buffer.as_ptr(), index_count, index_type, geometry_type, material.as_ptr())) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn index_buffer(&self) -> MDLMeshBufferID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -2370,9 +2555,61 @@ pub trait MDLSubmesh : NSObject {
       }
     }
   }
+
+  fn topology(&self) -> MDLSubmeshTopologyID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(topology), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MDLSubmeshTopologyID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_topology<T: 'static + ObjectiveC + MDLSubmeshTopology>(&self, topology: &T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setTopology:), (topology.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn material(&self) -> MDLMaterialID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(material), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: MDLMaterialID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_material<T: 'static + ObjectiveC + MDLMaterial>(&self, material: &T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMaterial:), (material.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
-pub struct MDLSubmeshID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLSubmeshID(*mut std::os::raw::c_void);
 
 impl MDLSubmeshID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2398,8 +2635,13 @@ impl MDLSubmeshID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLSubmesh").unwrap();
   }
+
+  pub fn new_with_index_buffer_index_count_index_type_geometry_type_material<T0: 'static + MDLMeshBuffer, T4: 'static + MDLMaterial>(index_buffer: &T0, index_count: NSUInteger, index_type: MDLIndexBitDepth, geometry_type: MDLGeometryType, material: &T4) -> Self where Self: 'static + Sized {
+    return MDLSubmeshID::alloc().init_with_index_buffer_index_count_index_type_geometry_type_material(index_buffer, index_count, index_type, geometry_type, material);
+  }
 }
 
+impl MDLNamed for MDLSubmeshID {}
 impl NSObject for MDLSubmeshID {}
 impl MDLSubmesh for MDLSubmeshID {}
 
@@ -2440,7 +2682,7 @@ impl std::fmt::Debug for MDLSubmeshID {
 pub trait MDLSubmeshTopology : NSObject {
 }
 
-pub struct MDLSubmeshTopologyID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLSubmeshTopologyID(*mut std::os::raw::c_void);
 
 impl MDLSubmeshTopologyID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2505,10 +2747,10 @@ impl std::fmt::Debug for MDLSubmeshTopologyID {
   }
 }
 
-pub trait MDLTexture : NSObject {
+pub trait MDLTexture : MDLNamed + NSObject {
 }
 
-pub struct MDLTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLTextureID(*mut std::os::raw::c_void);
 
 impl MDLTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2536,6 +2778,7 @@ impl MDLTextureID {
   }
 }
 
+impl MDLNamed for MDLTextureID {}
 impl NSObject for MDLTextureID {}
 impl MDLTexture for MDLTextureID {}
 
@@ -2576,7 +2819,7 @@ impl std::fmt::Debug for MDLTextureID {
 pub trait MDLTextureFilter : NSObject {
 }
 
-pub struct MDLTextureFilterID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLTextureFilterID(*mut std::os::raw::c_void);
 
 impl MDLTextureFilterID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2644,7 +2887,7 @@ impl std::fmt::Debug for MDLTextureFilterID {
 pub trait MDLTextureSampler : NSObject {
 }
 
-pub struct MDLTextureSamplerID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLTextureSamplerID(*mut std::os::raw::c_void);
 
 impl MDLTextureSamplerID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2712,7 +2955,7 @@ impl std::fmt::Debug for MDLTextureSamplerID {
 pub trait MDLTransform : NSObject {
 }
 
-pub struct MDLTransformID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLTransformID(*mut std::os::raw::c_void);
 
 impl MDLTransformID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2777,7 +3020,7 @@ impl std::fmt::Debug for MDLTransformID {
   }
 }
 
-pub trait MDLURLTexture : MDLTexture + NSObject {
+pub trait MDLURLTexture : MDLNamed + MDLTexture + NSObject {
   fn init_with_url_name<T0: 'static + NSURL, T1: 'static + NSString>(self, url: &T0, name: &T1) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:name:), (url.as_ptr(), name.as_ptr())) {
@@ -2818,7 +3061,7 @@ pub trait MDLURLTexture : MDLTexture + NSObject {
   }
 }
 
-pub struct MDLURLTextureID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLURLTextureID(*mut std::os::raw::c_void);
 
 impl MDLURLTextureID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -2850,6 +3093,7 @@ impl MDLURLTextureID {
   }
 }
 
+impl MDLNamed for MDLURLTextureID {}
 impl MDLTexture for MDLURLTextureID {}
 impl NSObject for MDLURLTextureID {}
 impl MDLURLTexture for MDLURLTextureID {}
@@ -2889,6 +3133,19 @@ impl std::fmt::Debug for MDLURLTextureID {
 }
 
 pub trait MDLVertexAttribute : NSObject {
+  fn init_with_name_format_offset_buffer_index<T0: 'static + NSString>(self, name: &T0, format: MDLVertexFormat, offset: NSUInteger, buffer_index: NSUInteger) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithName:format:offset:bufferIndex:), (name.as_ptr(), format, offset, buffer_index)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn name(&self) -> NSStringID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -3004,7 +3261,7 @@ pub trait MDLVertexAttribute : NSObject {
   }
 }
 
-pub struct MDLVertexAttributeID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLVertexAttributeID(*mut std::os::raw::c_void);
 
 impl MDLVertexAttributeID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3029,6 +3286,10 @@ impl MDLVertexAttributeID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLVertexAttribute").unwrap();
+  }
+
+  pub fn new_with_name_format_offset_buffer_index<T0: 'static + NSString>(name: &T0, format: MDLVertexFormat, offset: NSUInteger, buffer_index: NSUInteger) -> Self where Self: 'static + Sized {
+    return MDLVertexAttributeID::alloc().init_with_name_format_offset_buffer_index(name, format, offset, buffer_index);
   }
 }
 
@@ -3072,7 +3333,7 @@ impl std::fmt::Debug for MDLVertexAttributeID {
 pub trait MDLVertexAttributeData : NSObject {
 }
 
-pub struct MDLVertexAttributeDataID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLVertexAttributeDataID(*mut std::os::raw::c_void);
 
 impl MDLVertexAttributeDataID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3138,9 +3399,43 @@ impl std::fmt::Debug for MDLVertexAttributeDataID {
 }
 
 pub trait MDLVertexBufferLayout : NSObject {
+  fn stride(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(stride), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_stride(&self, stride: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setStride:), (stride,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn init_with_stride(self, stride: NSUInteger) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithStride:), (stride,)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
-pub struct MDLVertexBufferLayoutID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLVertexBufferLayoutID(*mut std::os::raw::c_void);
 
 impl MDLVertexBufferLayoutID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3165,6 +3460,10 @@ impl MDLVertexBufferLayoutID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLVertexBufferLayout").unwrap();
+  }
+
+  pub fn new_with_stride(stride: NSUInteger) -> Self where Self: 'static + Sized {
+    return MDLVertexBufferLayoutID::alloc().init_with_stride(stride);
   }
 }
 
@@ -3206,6 +3505,19 @@ impl std::fmt::Debug for MDLVertexBufferLayoutID {
 }
 
 pub trait MDLVertexDescriptor : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn attributes(&self) -> NSMutableArrayID where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -3231,9 +3543,126 @@ pub trait MDLVertexDescriptor : NSObject {
       }
     }
   }
+
+  fn attribute_named<T0: 'static + NSString>(&self, name: &T0) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(attributeNamed:), (name.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn add_or_replace_attribute<T0: 'static + MDLVertexAttribute>(&self, attribute: &T0) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(addOrReplaceAttribute:), (attribute.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn set_packed_offsets(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setPackedOffsets), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn layouts(&self) -> NSMutableArrayID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(layouts), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSMutableArrayID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_layouts<T: 'static + ObjectiveC + NSMutableArray>(&self, layouts: &T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setLayouts:), (layouts.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn set_packed_strides(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(setPackedStrides), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn reset(&self) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(reset), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn init_with_vertex_descriptor<T0: 'static + MDLVertexDescriptor>(self, vertex_descriptor: &T0) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(initWithVertexDescriptor:), (vertex_descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn remove_attribute_named<T0: 'static + MDLVertexAttribute>(&self, attribute: &T0) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(removeAttributeNamed:), (attribute.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
-pub struct MDLVertexDescriptorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLVertexDescriptorID(*mut std::os::raw::c_void);
 
 impl MDLVertexDescriptorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3258,6 +3687,14 @@ impl MDLVertexDescriptorID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLVertexDescriptor").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MDLVertexDescriptorID::alloc().init();
+  }
+
+  pub fn new_with_vertex_descriptor<T0: 'static + MDLVertexDescriptor>(vertex_descriptor: &T0) -> Self where Self: 'static + Sized {
+    return MDLVertexDescriptorID::alloc().init_with_vertex_descriptor(vertex_descriptor);
   }
 }
 
@@ -3301,7 +3738,7 @@ impl std::fmt::Debug for MDLVertexDescriptorID {
 pub trait MDLVoxelArray : NSObject {
 }
 
-pub struct MDLVoxelArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLVoxelArrayID(*mut std::os::raw::c_void);
 
 impl MDLVoxelArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3369,7 +3806,7 @@ impl std::fmt::Debug for MDLVoxelArrayID {
 pub trait MDLComponent : NSObject {
 }
 
-pub struct MDLComponentID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLComponentID(*mut std::os::raw::c_void);
 
 impl MDLComponentID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3429,7 +3866,7 @@ impl std::fmt::Debug for MDLComponentID {
 pub trait MDLLightProbeIrradianceDataSource : NSObject {
 }
 
-pub struct MDLLightProbeIrradianceDataSourceID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLLightProbeIrradianceDataSourceID(*mut std::os::raw::c_void);
 
 impl MDLLightProbeIrradianceDataSourceID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3523,7 +3960,7 @@ pub trait MDLMeshBuffer : NSObject {
   }
 }
 
-pub struct MDLMeshBufferID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3583,7 +4020,7 @@ impl std::fmt::Debug for MDLMeshBufferID {
 pub trait MDLMeshBufferAllocator : NSObject {
 }
 
-pub struct MDLMeshBufferAllocatorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferAllocatorID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferAllocatorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3643,7 +4080,7 @@ impl std::fmt::Debug for MDLMeshBufferAllocatorID {
 pub trait MDLMeshBufferZone : NSObject {
 }
 
-pub struct MDLMeshBufferZoneID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLMeshBufferZoneID(*mut std::os::raw::c_void);
 
 impl MDLMeshBufferZoneID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3701,9 +4138,34 @@ impl std::fmt::Debug for MDLMeshBufferZoneID {
 }
 
 pub trait MDLNamed : NSObject {
+  fn name(&self) -> NSStringID where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      match objc::__send_message(target, sel!(name), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let r: NSStringID = r;
+
+          return r.retain();
+        }
+      }
+    }
+  }
+
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: &T) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setName:), (name.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
-pub struct MDLNamedID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLNamedID(*mut std::os::raw::c_void);
 
 impl MDLNamedID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3763,7 +4225,7 @@ impl std::fmt::Debug for MDLNamedID {
 pub trait MDLObjectContainerComponent : NSObject {
 }
 
-pub struct MDLObjectContainerComponentID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLObjectContainerComponentID(*mut std::os::raw::c_void);
 
 impl MDLObjectContainerComponentID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -3823,7 +4285,7 @@ impl std::fmt::Debug for MDLObjectContainerComponentID {
 pub trait MDLTransformComponent : NSObject {
 }
 
-pub struct MDLTransformComponentID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct MDLTransformComponentID(*mut std::os::raw::c_void);
 
 impl MDLTransformComponentID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

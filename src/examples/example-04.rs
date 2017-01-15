@@ -1,4 +1,4 @@
-#[macro_use] extern crate metal;
+extern crate metal;
 extern crate nalgebra;
 
 use std::ops::Mul;

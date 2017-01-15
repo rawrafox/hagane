@@ -20,3 +20,7 @@ Hello and welcome to this work in progress thing!
  - [ ] Figure out how to handle weak properties.
  - [ ] Write some demoes.
  - [ ] Figure out what should be on this list.
+ - [ ] Indexing.
+ - [ ] Fast iteration.
+ - [ ] Extern statics.
+ - [ ] Inheriting initializers correctly.

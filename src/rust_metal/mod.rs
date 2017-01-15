@@ -12,7 +12,7 @@ pub use self::initializer::*;
 pub trait RSMView : MTKView + NSView + NSObject {
 }
 
-pub struct RSMViewID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct RSMViewID(*mut std::os::raw::c_void);
 
 impl RSMViewID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -94,7 +94,7 @@ pub trait RSMWindowDelegate : NSWindowDelegate + NSObject {
   }
 }
 
-pub struct RSMWindowDelegateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct RSMWindowDelegateID(*mut std::os::raw::c_void);
 
 impl RSMWindowDelegateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

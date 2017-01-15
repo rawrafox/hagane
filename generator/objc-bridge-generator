@@ -51,8 +51,10 @@ module Bridge
     def block(line, comment: nil, pad: false, &block)
       self.puts(line + ' {', comment: comment, pad: pad)
       old, @pre_padded = @pre_padded, true
+      @last_group = nil
       self.indent(&block)
       @pre_padded = old
+      @last_group = nil
       self.puts("}\n")
     end
   end
@@ -195,7 +197,7 @@ module Bridge
         end
       end
       o.puts
-      o.puts("pub struct #{self.name}ID(*mut std::os::raw::c_void);")
+      o.puts("#[repr(C)] pub struct #{self.name}ID(*mut std::os::raw::c_void);")
       o.puts
       o.block("impl #{self.name}ID") do |o|
         self.impl_for_self(o)
@@ -359,6 +361,8 @@ module Bridge
       case node.name
       when "function"
         Function.new(node)
+      when "static"
+        Static.new(node)
       end
     end
 
@@ -676,8 +680,8 @@ module Bridge
 
       raise ArgumentError, "no value defined" unless @kind
 
-      @read_only = true if node.has_attribute?('read-only')
-      @weak = true if node.has_attribute?('weak')
+      @read_only = node.has_attribute?('read-only')
+      @weak = node.has_attribute?('weak')
 
       @getter = node['getter'] || @name
       @setter = node['setter'] || "set#{@name.upcase_first}"
@@ -785,6 +789,38 @@ module Bridge
 
     def to_rust(o)
       @content.lines.each { |line| o.puts(line) }
+    end
+  end
+
+  class Static < Node
+    attr_reader :name
+    attr_reader :kind, :protocol, :type
+
+    def prepare(node)
+      @name = node["name"]
+      @public = node.has_attribute?('public')
+      
+      if node.has_attribute?('protocol')
+        @kind = 'protocol'
+        @protocol = node['protocol']
+      end
+
+      if node.has_attribute?('type')
+        raise ArgumentError, "multiple values defined" if @kind
+        @kind = 'type'
+        @type = node['type']
+      end
+    end
+
+    def to_rust(o)
+      case self.kind
+      when "type"
+        o.puts("#{@public ? "pub " : ""}static #{self.name}: #{self.type};", group: "static")
+      when "protocol"
+        o.puts("#{@public ? "pub " : ""}static #{self.name}: #{self.protocol}ID;", group: "static")
+      else
+        raise ArgumentError, "invalid kind #{self.kind}"
+      end
     end
   end
 

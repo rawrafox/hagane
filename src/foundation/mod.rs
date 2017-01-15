@@ -7,6 +7,13 @@ use super::ObjectiveC;
 extern {}
 
 pub type NSInteger = isize;
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct NSRange {
+  pub location: NSUInteger,
+  pub length: NSUInteger,
+}
 pub type NSUInteger = usize;
 
 bitflags! {
@@ -37,6 +44,19 @@ bitflags! {
 }
 
 pub trait NSArray : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn count(&self) -> NSUInteger where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
@@ -86,7 +106,7 @@ pub trait NSArray : NSObject {
   }
 }
 
-pub struct NSArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSArrayID(*mut std::os::raw::c_void);
 
 impl NSArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -111,6 +131,10 @@ impl NSArrayID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("NSArray").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return NSArrayID::alloc().init();
   }
 }
 
@@ -154,7 +178,7 @@ impl std::fmt::Debug for NSArrayID {
 pub trait NSCoder : NSObject {
 }
 
-pub struct NSCoderID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSCoderID(*mut std::os::raw::c_void);
 
 impl NSCoderID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -224,9 +248,22 @@ pub trait NSData : NSObject {
       }
     }
   }
+
+  fn subdata_with_range(&self, range: NSRange) -> NSDataID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(subdataWithRange:), (range,)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: NSDataID = r;
+
+          return result.retain();
+        }
+      }
+    }
+  }
 }
 
-pub struct NSDataID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSDataID(*mut std::os::raw::c_void);
 
 impl NSDataID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -310,7 +347,7 @@ pub trait NSDictionary : NSObject {
   }
 }
 
-pub struct NSDictionaryID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSDictionaryID(*mut std::os::raw::c_void);
 
 impl NSDictionaryID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -382,7 +419,7 @@ impl std::fmt::Debug for NSDictionaryID {
 pub trait NSError : NSObject {
 }
 
-pub struct NSErrorID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSErrorID(*mut std::os::raw::c_void);
 
 impl NSErrorID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -448,9 +485,21 @@ impl std::fmt::Debug for NSErrorID {
 }
 
 pub trait NSMutableArray : NSArray + NSObject {
+  fn insert_object_at_index<T0: 'static + ObjectiveC>(&self, an_object: &T0, index: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(insertObject:atIndex:), (an_object.as_ptr(), index)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
-pub struct NSMutableArrayID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSMutableArrayID(*mut std::os::raw::c_void);
 
 impl NSMutableArrayID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -633,7 +682,7 @@ pub trait NSString : NSObject {
   }
 }
 
-pub struct NSStringID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSStringID(*mut std::os::raw::c_void);
 
 impl NSStringID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -727,7 +776,7 @@ pub trait NSURL : NSObject {
   }
 }
 
-pub struct NSURLID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSURLID(*mut std::os::raw::c_void);
 
 impl NSURLID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -865,7 +914,7 @@ pub trait NSObject : ObjectiveC {
   }
 }
 
-pub struct NSObjectID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSObjectID(*mut std::os::raw::c_void);
 
 impl NSObjectID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

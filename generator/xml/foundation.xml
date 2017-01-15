@@ -38,7 +38,12 @@
   <!-- TODO: NSProgressUnpublishingHandler -->
   <!-- TODO: NSPropertyListReadOptions -->
   <!-- TODO: NSPropertyListWriteOptions -->
-  <!-- TODO: NSRange -->
+
+  <structure name="NSRange">
+    <field name="location" type="NSUInteger" />
+    <field name="length" type="NSUInteger" />
+  </structure>
+
   <!-- TODO: NSRangePointer -->
   <!-- TODO: NSRect -->
   <!-- TODO: NSRectArray -->
@@ -122,6 +127,8 @@
   <!-- TODO: NSArchiver -->
 
   <class name="NSArray" inherits="NSObject">
+    <initializer selector="init" />
+
     <!-- TODO: Loads missing -->
 
     <!-- Querying an Array -->
@@ -191,6 +198,11 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
       <argument name="bytes" type="*const std::os::raw::c_void" />
       <argument name="length" type="NSUInteger" />
     </initializer>
+
+    <method selector="subdataWithRange:">
+      <argument name="range" type="NSRange" />
+      <return protocol="NSData" />
+    </method>
 
     <!-- TODO: All… -->
   </class>
@@ -278,7 +290,12 @@ fn to_vec<T: 'static + ObjectiveC>(&self) -> Vec<T> where Self: 'static + Sized 
   <!-- TODO: NSMoveCommand -->
 
   <class name="NSMutableArray" inherits="NSArray, NSObject">
-    <!-- TODO: NSMutableArray -->
+    <!-- TODO: Incomplete -->
+
+    <method selector="insertObject:atIndex:">
+      <argument name="anObject" protocol="ObjectiveC" />
+      <argument name="index" type="NSUInteger" />
+    </method>
   </class>
 
   <!-- TODO: NSMutableAttributedString -->

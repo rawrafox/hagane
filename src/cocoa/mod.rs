@@ -39,7 +39,7 @@ pub trait NSApplication : NSObject {
   }
 }
 
-pub struct NSApplicationID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSApplicationID(*mut std::os::raw::c_void);
 
 impl NSApplicationID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -113,7 +113,7 @@ impl std::fmt::Debug for NSApplicationID {
 pub trait NSView : NSObject {
 }
 
-pub struct NSViewID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSViewID(*mut std::os::raw::c_void);
 
 impl NSViewID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -284,7 +284,7 @@ pub trait NSWindow : NSObject {
   }
 }
 
-pub struct NSWindowID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSWindowID(*mut std::os::raw::c_void);
 
 impl NSWindowID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
@@ -356,7 +356,7 @@ impl std::fmt::Debug for NSWindowID {
 pub trait NSWindowDelegate : NSObject {
 }
 
-pub struct NSWindowDelegateID(*mut std::os::raw::c_void);
+#[repr(C)] pub struct NSWindowDelegateID(*mut std::os::raw::c_void);
 
 impl NSWindowDelegateID {
   pub fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {

@@ -1,7 +1,23 @@
 <framework module="model_io">
   <use>foundation::*</use>
 
-  <extern framework="ModelIO" />
+  <extern framework="ModelIO">
+    <static name="MDLVertexAttributeAnisotropy" protocol="NSString" public />
+    <static name="MDLVertexAttributeBinormal" protocol="NSString" public />
+    <static name="MDLVertexAttributeBitangent" protocol="NSString" public />
+    <static name="MDLVertexAttributeColor" protocol="NSString" public />
+    <static name="MDLVertexAttributeEdgeCrease" protocol="NSString" public />
+    <static name="MDLVertexAttributeJointIndices" protocol="NSString" public />
+    <static name="MDLVertexAttributeJointWeights" protocol="NSString" public />
+    <static name="MDLVertexAttributeNormal" protocol="NSString" public />
+    <static name="MDLVertexAttributeOcclusionValue" protocol="NSString" public />
+    <static name="MDLVertexAttributePosition" protocol="NSString" public />
+    <static name="MDLVertexAttributeShadingBasisU" protocol="NSString" public />
+    <static name="MDLVertexAttributeShadingBasisV" protocol="NSString" public />
+    <static name="MDLVertexAttributeSubdivisionStencil" protocol="NSString" public />
+    <static name="MDLVertexAttributeTangent" protocol="NSString" public />
+    <static name="MDLVertexAttributeTextureCoordinate" protocol="NSString" public />
+  </extern>
 
   <enumeration name="MDLCameraProjection" type="NSUInteger">
     <value name="MDLCameraProjectionPerspective" value="0" />
@@ -22,6 +38,11 @@
     <value name="MDLIndexBitDepthUInt8" value="8" />
     <value name="MDLIndexBitDepthUInt16" value="16" />
     <value name="MDLIndexBitDepthUInt32" value="32" />
+  </enumeration>
+
+  <enumeration name="MDLMeshBufferType" type="NSUInteger">
+    <value name="MDLMeshBufferTypeVertex" value="1" />
+    <value name="MDLMeshBufferTypeIndex" value="2" />
   </enumeration>
 
   <enumeration name="MDLVertexFormat" type="NSUInteger">
@@ -98,13 +119,15 @@
   </structure>
 
   <!-- Classes -->
-  <class name="MDLAreaLight" inherits="MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
+  <class name="MDLAreaLight" inherits="MDLNamed, MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
   <class name="MDLAsset" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+    <initializer selector="init" />
 
+    <!-- Creating an Asset -->
+    <!-- TODO: Incomplete -->
     <initializer selector="initWithURL:">
       <argument name="URL" protocol="NSURL" />
     </initializer>
@@ -115,18 +138,40 @@
       <argument name="bufferAllocator" protocol="MDLMeshBufferAllocator" />
     </initializer>
 
+    <!-- Exporting an Asset -->
+    <!-- TODO: Incomplete -->
+
+    <method selector="exportAssetToURL:">
+      <argument name="URL" protocol="NSURL" />
+      <return type="bool" />
+    </method>
+
+    <method selector="exportAssetToURL:error:">
+      <argument name="URL" protocol="NSURL" />
+      <argument name="error" error="NSError" />
+      <return type="bool" />
+    </method>
+
+    <!-- Working with Asset Content -->
     <method selector="objectAtIndex:">
       <argument name="index" type="NSUInteger" />
       <return generic="MDLObject" />
     </method>
+
     <method selector="objectAtIndexedSubscript:">
       <argument name="index" type="NSUInteger" />
       <return generic="MDLObject" />
     </method>
+
     <property name="count" type="NSUInteger" read-only />
+
+    <method selector="addObject:">
+      <argument name="object" protocol="MDLObject" />
+    </method>
+    <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLCamera" inherits="MDLObject, NSObject">
+  <class name="MDLCamera" inherits="MDLNamed, MDLObject, NSObject">
     <!-- Managing Camera Position and Orientation -->
     <method selector="frameBoundingBox:setNearAndFar:">
       <argument name="boundingBox" type="MDLAxisAlignedBoundingBox" />
@@ -170,53 +215,75 @@
 
   </class>
 
-  <class name="MDLCheckerboardTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLCheckerboardTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLColorSwatchTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLColorSwatchTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLLight" inherits="MDLObject, NSObject">
+  <class name="MDLLight" inherits="MDLNamed, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLLightProbe" inherits="MDLLight, MDLObject, NSObject">
+  <class name="MDLLightProbe" inherits="MDLNamed, MDLLight, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMaterial" inherits="NSObject">
+  <class name="MDLMaterial" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMaterialProperty" inherits="NSObject">
+  <class name="MDLMaterialProperty" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMaterialPropertyConnection" inherits="NSObject">
+  <class name="MDLMaterialPropertyConnection" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMaterialPropertyGraph" inherits="MDLMaterialPropertyNode, NSObject">
+  <class name="MDLMaterialPropertyGraph" inherits="MDLNamed, MDLMaterialPropertyNode, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMaterialPropertyNode" inherits="NSObject">
+  <class name="MDLMaterialPropertyNode" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMesh" inherits="MDLObject, NSObject">
+  <class name="MDLMesh" inherits="MDLNamed, MDLObject, NSObject">
+    <!-- Creating a Custom Mesh -->
+    <initializer selector="initWithVertexBuffer:vertexCount:descriptor:submeshes:">
+      <argument name="vertexBuffer" protocol="MDLMeshBuffer" />
+      <argument name="vertexCount" type="NSUInteger" />
+      <argument name="descriptor" protocol="MDLVertexDescriptor" />
+      <argument name="submeshes" protocol="NSArray" elements="MDLSubmesh" />
+    </initializer>
     <!-- TODO: Incomplete -->
 
+    <!-- Working with Vertex Data -->
+    <!-- TODO: Incomplete -->
     <property name="submeshes" protocol="NSMutableArray" element="MDLSubmesh" />
     <property name="vertexBuffers" protocol="NSArray" element="MDLMeshBuffer" />
     <property name="vertexCount" type="NSUInteger" />
     <property name="vertexDescriptor" protocol="MDLVertexDescriptor" />
+    <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLMeshBufferData" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+  <class name="MDLMeshBufferData" inherits="MDLMeshBuffer, NSObject">
+    <!-- Creating a Buffer -->
+    <initializer selector="initWithType:data:">
+      <argument name="bufferType" type="MDLMeshBufferType" />
+      <argument name="data" protocol="NSData" />
+    </initializer>
+
+    <initializer selector="initWithType:length:">
+      <argument name="bufferType" type="MDLMeshBufferType" />
+      <argument name="length" type="NSUInteger" />
+    </initializer>
+
+    <!-- Accessing a Buffer’s Data -->
+    <property name="data" protocol="NSData" read-only />
   </class>
 
   <class name="MDLMeshBufferDataAllocator" inherits="MDLMeshBufferAllocator, NSObject">
@@ -232,15 +299,15 @@
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLNoiseTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLNoiseTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLNormalMapTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLNormalMapTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLObject" inherits="NSObject">
+  <class name="MDLObject" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
@@ -248,44 +315,63 @@
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLPhotometricLight" inherits="MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
+  <class name="MDLPhotometricLight" inherits="MDLNamed, MDLPhysicallyPlausibleLight, MDLLight, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLPhysicallyPlausibleLight" inherits="MDLLight, MDLObject, NSObject">
+  <class name="MDLPhysicallyPlausibleLight" inherits="MDLNamed, MDLLight, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLPhysicallyPlausibleScatteringFunction" inherits="MDLScatteringFunction, NSObject">
+  <class name="MDLPhysicallyPlausibleScatteringFunction" inherits="MDLNamed, MDLScatteringFunction, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLScatteringFunction" inherits="NSObject">
+  <class name="MDLScatteringFunction" inherits="MDLNamed, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLSkyCubeTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLSkyCubeTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLStereoscopicCamera" inherits="MDLCamera, MDLObject, NSObject">
+  <class name="MDLStereoscopicCamera" inherits="MDLNamed, MDLCamera, MDLObject, NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLSubmesh" inherits="NSObject">
+  <class name="MDLSubmesh" inherits="MDLNamed, NSObject">
+    <!-- Creating a Submesh -->
+    <initializer selector="initWithIndexBuffer:indexCount:indexType:geometryType:material:">
+      <argument name="indexBuffer" protocol="MDLMeshBuffer" />
+      <argument name="indexCount" type="NSUInteger" />
+      <argument name="indexType" type="MDLIndexBitDepth" />
+      <argument name="geometryType" type="MDLGeometryType" />
+      <argument name="material" protocol="MDLMaterial" />
+    </initializer>
     <!-- TODO: Incomplete -->
 
+    <!-- Working with a Submesh’s Index Buffer -->
     <property name="indexBuffer" protocol="MDLMeshBuffer" read-only />
     <property name="indexCount" type="NSUInteger" read-only />
     <property name="indexType" type="MDLIndexBitDepth" read-only />
     <property name="geometryType" type="MDLGeometryType" read-only />
+    <property name="topology" protocol="MDLSubmeshTopology" />
+
+    <!-- Associating Materials with a Submesh -->
+    <property name="material" protocol="MDLMaterial" />
+
+    <!-- Identifying a Submesh -->
+    <!-- Actually in MDLNamed -->
+
+    <!-- Importing Submesh Objects from SceneKit -->
+    <!-- TODO: Incomplete -->
   </class>
 
   <class name="MDLSubmeshTopology" inherits="NSObject">
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLTexture" inherits="NSObject">
+  <class name="MDLTexture" inherits="MDLNamed, NSObject">
     <!-- Loading Textures from a Bundle -->
     <!-- TODO: Incomplete -->
 
@@ -314,7 +400,7 @@
     <!-- TODO: Incomplete -->
   </class>
 
-  <class name="MDLURLTexture" inherits="MDLTexture, NSObject">
+  <class name="MDLURLTexture" inherits="MDLNamed, MDLTexture, NSObject">
     <!-- Creating a URL Texture -->
     <initializer selector="initWithURL:name:">
       <argument name="URL" protocol="NSURL" />
@@ -327,8 +413,15 @@
   </class>
 
   <class name="MDLVertexAttribute" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+    <!-- Creating a Vertex Attribute -->
+    <initializer selector="initWithName:format:offset:bufferIndex:">
+      <argument name="name" protocol="NSString" />
+      <argument name="format" type="MDLVertexFormat" />
+      <argument name="offset" type="NSUInteger" />
+      <argument name="bufferIndex" type="NSUInteger" />
+    </initializer>
 
+    <!-- Inspecting a Vertex Attribute -->
     <property name="name" protocol="NSString" />
     <property name="format" type="MDLVertexFormat" />
     <property name="offset" type="NSUInteger" />
@@ -341,13 +434,47 @@
   </class>
 
   <class name="MDLVertexBufferLayout" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+    <!-- Working with Layout Information -->
+    <property name="stride" type="NSUInteger" />
+
+    <!-- Initializers -->
+    <initializer selector="initWithStride:">
+      <argument name="stride" type="NSUInteger" />
+    </initializer>
   </class>
 
   <class name="MDLVertexDescriptor" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+    <initializer selector="init" />
 
+    <!-- Working with Vertex Attributes -->
     <property name="attributes" protocol="NSMutableArray" element="MDLVertexAttribute" />
+
+    <method selector="attributeNamed:">
+      <argument name="name" protocol="NSString" />
+    </method>
+
+    <method selector="addOrReplaceAttribute:">
+      <argument name="attribute" protocol="MDLVertexAttribute" />
+    </method>
+
+    <method selector="setPackedOffsets" />
+
+    <!-- Working with Vertex Buffer Layouts -->
+    <property name="layouts" protocol="NSMutableArray" element="MDLVertexBufferLayout" />
+    <method selector="setPackedStrides" />
+
+    <!-- Resetting a Vertex Descriptor -->
+    <method selector="reset" />
+
+    <!-- Copying a Vertex Descriptor -->
+    <initializer selector="initWithVertexDescriptor:">
+      <argument name="vertexDescriptor" protocol="MDLVertexDescriptor" />
+    </initializer>
+
+    <!-- Instance Methods -->
+    <method selector="removeAttributeNamed:">
+      <argument name="attribute" protocol="MDLVertexAttribute" />
+    </method>
   </class>
 
   <class name="MDLVoxelArray" inherits="NSObject">
@@ -381,7 +508,8 @@
   </protocol>
 
   <protocol name="MDLNamed" inherits="NSObject">
-    <!-- TODO: Incomplete -->
+    <!-- Naming an Object -->
+    <property name="name" protocol="NSString" />
   </protocol>
 
   <protocol name="MDLObjectContainerComponent" inherits="NSObject">
