@@ -142,6 +142,10 @@ impl MTKMeshID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTKMesh").unwrap();
   }
+
+  pub fn new_with_mesh_device_error<T0: 'static + MDLMesh, T1: 'static + MTLDevice>(mesh: &T0, device: &T1) -> Result<Self, NSErrorID> where Self: 'static + Sized {
+    return MTKMeshID::alloc().init_with_mesh_device_error(mesh, device);
+  }
 }
 
 impl NSObject for MTKMeshID {}
@@ -366,6 +370,10 @@ impl MTKMeshBufferAllocatorID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTKMeshBufferAllocator").unwrap();
+  }
+
+  pub fn new_with_device<T0: 'static + MTLDevice>(device: &T0) -> Self where Self: 'static + Sized {
+    return MTKMeshBufferAllocatorID::alloc().init_with_device(device);
   }
 }
 
@@ -705,6 +713,10 @@ impl MTKTextureLoaderID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTKTextureLoader").unwrap();
+  }
+
+  pub fn new_with_device<T0: 'static + MTLDevice>(device: &T0) -> Self where Self: 'static + Sized {
+    return MTKTextureLoaderID::alloc().init_with_device(device);
   }
 }
 
@@ -1222,6 +1234,14 @@ impl MTKViewID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTKView").unwrap();
+  }
+
+  pub fn new_with_coder<T0: 'static + NSCoder>(coder: &T0) -> Self where Self: 'static + Sized {
+    return MTKViewID::alloc().init_with_coder(coder);
+  }
+
+  pub fn new_with_frame_device<T1: 'static + MTLDevice>(frame_rect: CGRect, device: &T1) -> Self where Self: 'static + Sized {
+    return MTKViewID::alloc().init_with_frame_device(frame_rect, device);
   }
 }
 

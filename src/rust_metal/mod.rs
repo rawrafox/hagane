@@ -80,6 +80,18 @@ impl std::fmt::Debug for RSMViewID {
 }
 
 pub trait RSMWindowDelegate : NSWindowDelegate + NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
 }
 
 pub struct RSMWindowDelegateID(*mut std::os::raw::c_void);
@@ -107,6 +119,10 @@ impl RSMWindowDelegateID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("RSMWindowDelegate").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return RSMWindowDelegateID::alloc().init();
   }
 }
 

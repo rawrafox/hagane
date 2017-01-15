@@ -310,6 +310,10 @@ impl NSWindowID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("NSWindow").unwrap();
   }
+
+  pub fn new_with_content_rect_style_mask_backing_defer(content_rect: NSRect, style: usize, buffering_type: usize, flag: bool) -> Self where Self: 'static + Sized {
+    return NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, style, buffering_type, flag);
+  }
 }
 
 impl NSObject for NSWindowID {}

@@ -1683,6 +1683,10 @@ impl MTLDepthStencilDescriptorID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTLDepthStencilDescriptor").unwrap();
   }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MTLDepthStencilDescriptorID::alloc().init();
+  }
 }
 
 impl NSObject for MTLDepthStencilDescriptorID {}
@@ -2948,6 +2952,10 @@ impl MTLRenderPipelineDescriptorID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTLRenderPipelineDescriptor").unwrap();
   }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MTLRenderPipelineDescriptorID::alloc().init();
+  }
 }
 
 impl NSObject for MTLRenderPipelineDescriptorID {}
@@ -3407,6 +3415,10 @@ impl MTLSamplerDescriptorID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTLSamplerDescriptor").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MTLSamplerDescriptorID::alloc().init();
   }
 }
 

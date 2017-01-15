@@ -21,17 +21,17 @@ fn load_texture(device: &MTLDeviceID, path: &str) -> MTLTextureID {
   let mut texture_data = Vec::new();
   f.read_to_end(&mut texture_data).unwrap();
 
-  let texture_data = NSDataID::alloc().init_with_bytes_length(texture_data.as_ptr() as *const std::os::raw::c_void, texture_data.len());
-  let texture_loader = MTKTextureLoaderID::alloc().init_with_device(device);
-  return texture_loader.new_texture_with_data_options_error(&texture_data, &NSDictionaryID::alloc().init()).unwrap();
+  let texture_data = NSDataID::new_with_bytes_length(texture_data.as_ptr() as *const std::os::raw::c_void, texture_data.len());
+  let texture_loader = MTKTextureLoaderID::new_with_device(device);
+  return texture_loader.new_texture_with_data_options_error(&texture_data, &NSDictionaryID::new()).unwrap();
 }
 
 fn load_mesh(device: &MTLDeviceID, path: &str) -> MTKMeshID {
-  let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(&NSURLID::alloc().init_with_string(&NSStringID::from_str(path)), &MDLVertexDescriptorID::nil(), &MTKMeshBufferAllocatorID::alloc().init_with_device(device));
+  let asset = MDLAssetID::new_with_url_vertex_descriptor_buffer_allocator(&NSURLID::new_with_string(&NSStringID::from_str(path)), &MDLVertexDescriptorID::nil(), &MTKMeshBufferAllocatorID::new_with_device(device));
 
   if asset.count() != 1 { panic!("Not one single mesh in file") }
 
-  return MTKMeshID::alloc().init_with_mesh_device_error(&asset.object_at_index::<MDLMeshID>(0), device).unwrap();
+  return MTKMeshID::new_with_mesh_device_error(&asset.object_at_index::<MDLMeshID>(0), device).unwrap();
 }
 
 struct Example05Renderer {
@@ -57,7 +57,7 @@ impl RSMRenderer for Example05Renderer {
     let device = view.device();
     self.command_queue = device.new_command_queue();
 
-    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
+    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::new();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(&depth_stencil_descriptor);
@@ -68,7 +68,7 @@ impl RSMRenderer for Example05Renderer {
     self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
     self.texture = load_texture(&device, "../engine/res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds.0.png");
 
-    let sampler_descriptor = MTLSamplerDescriptorID::alloc().init();
+    let sampler_descriptor = MTLSamplerDescriptorID::new();
 
     sampler_descriptor.set_min_filter(MTLSamplerMinMagFilterNearest);
     sampler_descriptor.set_mag_filter(MTLSamplerMinMagFilterLinear);
@@ -79,7 +79,7 @@ impl RSMRenderer for Example05Renderer {
 
     let library = device.new_library_with_file_error(&NSStringID::from_str("src/examples/example-05.metallib")).unwrap();
 
-    let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
+    let pipeline_descriptor = MTLRenderPipelineDescriptorID::new();
     pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
     pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
@@ -160,10 +160,10 @@ fn main() {
   });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-  let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
+  let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(&NSStringID::from_str("Metal Example 05"));
   window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));
-  window.set_delegate(&RSMWindowDelegateID::alloc().retain());
+  window.set_delegate(&RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(&NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

@@ -252,6 +252,10 @@ impl NSDataID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("NSData").unwrap();
   }
+
+  pub fn new_with_bytes_length(bytes: *const std::os::raw::c_void, length: NSUInteger) -> Self where Self: 'static + Sized {
+    return NSDataID::alloc().init_with_bytes_length(bytes, length);
+  }
 }
 
 impl NSObject for NSDataID {}
@@ -331,6 +335,10 @@ impl NSDictionaryID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("NSDictionary").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return NSDictionaryID::alloc().init();
   }
 }
 
@@ -652,6 +660,14 @@ impl NSStringID {
     return objc::runtime::Class::get("NSString").unwrap();
   }
 
+  pub fn new() -> Self where Self: 'static + Sized {
+    return NSStringID::alloc().init();
+  }
+
+  pub fn new_with_bytes_length_encoding(bytes: *const std::os::raw::c_void, len: NSUInteger, encoding: NSStringEncoding) -> Self where Self: 'static + Sized {
+    return NSStringID::alloc().init_with_bytes_length_encoding(bytes, len, encoding);
+  }
+
   pub fn from_str(string: &str) -> NSStringID {
     let bytes = string.as_ptr() as *const std::os::raw::c_void;
   
@@ -736,6 +752,10 @@ impl NSURLID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("NSURL").unwrap();
+  }
+
+  pub fn new_with_string<T0: 'static + NSString>(url_string: &T0) -> Self where Self: 'static + Sized {
+    return NSURLID::alloc().init_with_string(url_string);
   }
 }
 

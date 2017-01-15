@@ -199,6 +199,22 @@ module Bridge
       o.puts
       o.block("impl #{self.name}ID") do |o|
         self.impl_for_self(o)
+        self.children.select { |x| x.is_a?(Initializer) }.each do |initializer|
+          o.puts
+          generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
+
+          error_argument = initializer.error_argument
+          arguments = initializer.arguments(generics)
+
+          fn_args = arguments.map { |arg| arg[0] }.compact.join(", ")
+          bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
+          bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
+          call_args = arguments.map { |arg| arg[3] }.compact.join(", ")
+
+          o.block("pub fn #{initializer.name.gsub(/\Ainit/, "new")}#{bounds_args}(#{fn_args}) -> #{initializer.return_type} where Self: 'static + Sized") do |o|
+            o.puts "return #{self.name}ID::alloc().#{initializer.name.underscore}(#{call_args});"
+          end
+        end
         self.children.select { |x| x.is_a?(Script) && x.type == "id" }.each do |script|
           o.puts
           script.to_rust(o)
@@ -422,42 +438,57 @@ module Bridge
       end
     end
 
-    def to_rust(o)
-      generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
-
-      error_arguments = self.children.select { |x| x.is_a?(Argument) && x.kind == "error" }
-      raise ArgumentError, "multiple error arguments" if error_arguments.count > 1
-      error_argument = error_arguments.first
-
-      arguments = self.children.select { |x| x.is_a?(Argument) }.map do |argument|
+    def arguments(generics)
+      self.children.select { |x| x.is_a?(Argument) }.map do |argument|
         g = generics.pop
 
         case argument.kind
         when "error"
-          [nil, nil, "&mut #{argument.name.underscore}"]
+          [nil, nil, "&mut #{argument.name.underscore}", nil]
         when "protocol"
-          ["#{argument.name.underscore}: &#{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+          ["#{argument.name.underscore}: &#{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()", argument.name.underscore]
         when "type"
-          ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
+          ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}", argument.name.underscore]
         else
           raise Exception, "unknown kind #{argument.kind}"
         end
       end
+    end
+    
+    def error_argument
+      error_arguments = self.children.select { |x| x.is_a?(Argument) && x.kind == "error" }
+      raise ArgumentError, "multiple error arguments" if error_arguments.count > 1
 
-      fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
+      error_arguments.first
+    end
+
+    def name
+      self.selector.gsub(/:\z/, "").tr(":", "_").underscore
+    end
+
+    def return_type
+      if self.error_argument
+        "Result<Self, #{error_argument.error}ID>"
+      else
+        "Self"
+      end
+    end
+
+    def to_rust(o)
+      generics = ["T5", "T4", "T3", "T2", "T1", "T0"]
+
+      error_argument = self.error_argument
+      arguments = self.arguments(generics)
+
       fn_args = (["self"] + arguments.map { |arg| arg[0] }).compact.join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
       bounds_args = arguments.map { |arg| arg[1] }.compact.join(", ")
       bounds_args = bounds_args.length > 0 ? "<#{bounds_args}>" : ""
 
-      return_value_string = if error_argument
-        " -> Result<Self, #{error_argument.error}ID>"
-      else
-        " -> Self"
-      end
+      return_value_string = " -> #{return_type}"
 
-      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
+      o.block("fn #{self.name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
         if error_argument
           o.puts("let mut #{error_argument.name} = #{error_argument.error}ID::nil();")
           o.puts
@@ -503,6 +534,10 @@ module Bridge
       when "return"
         Return.new(node)
       end
+    end
+
+    def name
+      self.selector.gsub(/:\z/, "").tr(":", "_").underscore
     end
 
     def to_rust(o)
@@ -554,7 +589,6 @@ module Bridge
 
       raise ArgumentError, "too many return values" if return_values.length > 1
 
-      fn_name = self.selector.gsub(/:\z/, "").tr(":", "_").underscore
       fn_args = (["&self"] + arguments.map { |arg| arg[0] }).compact.join(", ")
       msg_args = arguments.map { |arg| arg[2] }
       msg_args = "(#{msg_args.length == 1 ? "#{msg_args[0]}," : msg_args.join(", ")})"
@@ -568,7 +602,7 @@ module Bridge
          return_value[0] == "()" ? "" : " -> #{return_value[0]}"
       end
 
-      o.block("fn #{fn_name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
+      o.block("fn #{self.name}#{bounds_args}(#{fn_args})#{return_value_string} where Self: 'static + Sized", pad: true) do |o|
         if error_argument
           o.puts("let mut #{error_argument.name} = #{error_argument.error}ID::nil();")
           o.puts

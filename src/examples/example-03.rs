@@ -60,7 +60,7 @@ impl RSMRenderer for Example03Renderer {
     let device = view.device();
     self.command_queue = device.new_command_queue();
 
-    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
+    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::new();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(&depth_stencil_descriptor);
@@ -75,7 +75,7 @@ impl RSMRenderer for Example03Renderer {
     self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
     let library = device.new_library_with_file_error(&NSStringID::from_str("src/examples/example-03.metallib")).unwrap();
-    let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
+    let pipeline_descriptor = MTLRenderPipelineDescriptorID::new();
     pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
     pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
@@ -140,10 +140,10 @@ fn main() {
   });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-  let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
+  let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(&NSStringID::from_str("Metal Example 03"));
   window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));
-  window.set_delegate(&RSMWindowDelegateID::alloc().retain());
+  window.set_delegate(&RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(&NSObjectID::nil());
 
   NSApplicationID::shared_application().run();

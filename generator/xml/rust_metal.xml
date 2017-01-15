@@ -1,6 +1,6 @@
 <framework module="rust_metal">
   <module name="initializer" private />
-  
+
   <use>foundation::*</use>
   <use>cocoa::*</use>
   <use>metal_kit::*</use>
@@ -9,7 +9,8 @@
 
   <class name="RSMView" inherits="MTKView, NSView, NSObject">
   </class>
-  
+
   <class name="RSMWindowDelegate" inherits="NSWindowDelegate, NSObject">
+    <initializer selector="init" />
   </class>
 </framework>

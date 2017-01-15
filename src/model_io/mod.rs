@@ -273,6 +273,14 @@ impl MDLAssetID {
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLAsset").unwrap();
   }
+
+  pub fn new_with_url<T0: 'static + NSURL>(url: &T0) -> Self where Self: 'static + Sized {
+    return MDLAssetID::alloc().init_with_url(url);
+  }
+
+  pub fn new_with_url_vertex_descriptor_buffer_allocator<T0: 'static + NSURL, T1: 'static + MDLVertexDescriptor, T2: 'static + MDLMeshBufferAllocator>(url: &T0, vertex_descriptor: &T1, buffer_allocator: &T2) -> Self where Self: 'static + Sized {
+    return MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(url, vertex_descriptor, buffer_allocator);
+  }
 }
 
 impl NSObject for MDLAssetID {}
@@ -2835,6 +2843,10 @@ impl MDLURLTextureID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLURLTexture").unwrap();
+  }
+
+  pub fn new_with_url_name<T0: 'static + NSURL, T1: 'static + NSString>(url: &T0, name: &T1) -> Self where Self: 'static + Sized {
+    return MDLURLTextureID::alloc().init_with_url_name(url, name);
   }
 }
 

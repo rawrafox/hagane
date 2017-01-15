@@ -36,17 +36,17 @@ impl RSMRenderer for Example04Renderer {
     let device = view.device();
     self.command_queue = device.new_command_queue();
 
-    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
+    let depth_stencil_descriptor = MTLDepthStencilDescriptorID::new();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
     depth_stencil_descriptor.set_depth_write_enabled(true);
     self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(&depth_stencil_descriptor);
 
-    let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(&NSURLID::alloc().init_with_string(&NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")), &MDLVertexDescriptorID::nil(), &MTKMeshBufferAllocatorID::alloc().init_with_device(&device));
+    let asset = MDLAssetID::new_with_url_vertex_descriptor_buffer_allocator(&NSURLID::new_with_string(&NSStringID::from_str("../engine/hulls/cc1_t2/CC1_TShape1.obj")), &MDLVertexDescriptorID::nil(), &MTKMeshBufferAllocatorID::new_with_device(&device));
 
     if asset.count() != 1 { panic!("Not one single mesh in file") }
 
     let mesh = asset.object_at_index::<MDLMeshID>(0);
-    let mesh = MTKMeshID::alloc().init_with_mesh_device_error(&mesh, &device).unwrap();
+    let mesh = MTKMeshID::new_with_mesh_device_error(&mesh, &device).unwrap();
     
     self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
     self.submeshes = mesh.submeshes().to_vec::<MTKSubmeshID>();
@@ -55,7 +55,7 @@ impl RSMRenderer for Example04Renderer {
 
     let library = device.new_library_with_file_error(&NSStringID::from_str("src/examples/example-04.metallib")).unwrap();
 
-    let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
+    let pipeline_descriptor = MTLRenderPipelineDescriptorID::new();
     pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
     pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
@@ -132,10 +132,10 @@ fn main() {
   });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
-  let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
+  let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(&NSStringID::from_str("Metal Example 04"));
   window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));
-  window.set_delegate(&RSMWindowDelegateID::alloc().retain());
+  window.set_delegate(&RSMWindowDelegateID::new().retain());
   window.make_key_and_order_front(&NSObjectID::nil());
 
   NSApplicationID::shared_application().run();
