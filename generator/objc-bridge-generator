@@ -205,10 +205,9 @@ module Bridge
         end
       end
       o.puts
-      self.inherits.each do |inherit|
+      (self.inherits + [self.name]).each do |inherit|
         o.puts("impl #{inherit} for #{self.name}ID {}")
       end
-      o.puts("impl #{self.name} for #{self.name}ID {}")
       o.puts
       o.block("impl Clone for #{self.name}ID") do |o|
         o.block("fn clone(&self) -> Self") do |o|
@@ -227,15 +226,7 @@ module Bridge
       end
       o.puts
       o.block("impl ObjectiveC for #{self.name}ID") do |o|
-        o.block("fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self") do |o|
-          o.puts("return #{self.name}ID::from_ptr(ptr);")
-        end
-        o.puts
         o.block("fn as_ptr(&self) -> *mut std::os::raw::c_void") do |o|
-          o.puts("return self.0;")
-        end
-        o.puts
-        o.block("fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void") do |o|
           o.puts("return self.0;")
         end
       end
@@ -445,7 +436,7 @@ module Bridge
         when "error"
           [nil, nil, "&mut #{argument.name.underscore}"]
         when "protocol"
-          ["#{argument.name.underscore}: #{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+          ["#{argument.name.underscore}: &#{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
         when "type"
           ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
         else
@@ -530,7 +521,7 @@ module Bridge
 
           raise Exception, "ran out of generics" unless g
 
-          ["#{argument.name.underscore}: #{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
+          ["#{argument.name.underscore}: &#{g}", "#{g}: 'static + #{argument.protocol}", "#{argument.name.underscore}.as_ptr()"]
         when "type"
           ["#{argument.name.underscore}: #{argument.type}", nil, "#{argument.name.underscore}"]
         else
@@ -704,7 +695,7 @@ module Bridge
         end
         unless self.read_only?
           o.puts
-          o.block("fn #{self.setter.underscore}<T: 'static + ObjectiveC + #{self.protocol}>(&self, #{self.name.underscore}: T) where Self: 'static + Sized") do |o|
+          o.block("fn #{self.setter.underscore}<T: 'static + ObjectiveC + #{self.protocol}>(&self, #{self.name.underscore}: &T) where Self: 'static + Sized") do |o|
             o.block("unsafe") do |o|
               o.puts("let target = self.as_object();")
               o.puts

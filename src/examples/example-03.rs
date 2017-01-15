@@ -54,7 +54,6 @@ impl RSMRenderer for Example03Renderer {
     view.set_color_pixel_format(MTLPixelFormatBGRA8Unorm);
     view.set_depth_stencil_pixel_format(MTLPixelFormatDepth32Float);
 
-    view.set_preferred_frames_per_second(60);
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
     view.set_clear_depth(1.0);
 
@@ -64,27 +63,24 @@ impl RSMRenderer for Example03Renderer {
     let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
     depth_stencil_descriptor.set_depth_write_enabled(true);
-    self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
+    self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(&depth_stencil_descriptor);
 
-    let index_size = std::mem::size_of::<u16>();
-    let buffer_size = INDICES.len() * index_size;
+    let buffer_size = INDICES.len() * std::mem::size_of::<u16>();
     self.index_buffer = device.new_buffer_with_bytes_length_options(INDICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
-    let uniform_size = std::mem::size_of::<Uniform>();
-    let buffer_size = 1 * uniform_size;
+    let buffer_size = 1 * std::mem::size_of::<Uniform>();
     self.uniform_buffer = device.new_buffer_with_length_options(buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
-    let vertex_size = std::mem::size_of::<Vertex>();
-    let buffer_size = VERTICES.len() * vertex_size;
+    let buffer_size = VERTICES.len() * std::mem::size_of::<Vertex>();
     self.vertex_buffer = device.new_buffer_with_bytes_length_options(VERTICES.as_ptr() as *const std::os::raw::c_void, buffer_size, MTLResourceCPUCacheModeDefaultCache);
 
-    let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-03.metallib")).unwrap();
+    let library = device.new_library_with_file_error(&NSStringID::from_str("src/examples/example-03.metallib")).unwrap();
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
-    pipeline_descriptor.set_vertex_function(library.new_function_with_name(NSStringID::from_str("vertex_main")));
-    pipeline_descriptor.set_fragment_function(library.new_function_with_name(NSStringID::from_str("fragment_main")));
+    pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
+    pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
 
-    self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(pipeline_descriptor).unwrap();
+    self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(&pipeline_descriptor).unwrap();
   }
 
   fn draw(&mut self, view: RSMViewID) {
@@ -116,16 +112,16 @@ impl RSMRenderer for Example03Renderer {
     }
 
     let command_buffer = self.command_queue.command_buffer();
-    let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
-    command_encoder.set_render_pipeline_state(self.pipeline_state.clone());
-    command_encoder.set_depth_stencil_state(self.depth_stencil_state.clone());
+    let command_encoder = command_buffer.render_command_encoder_with_descriptor(&view.current_render_pass_descriptor());
+    command_encoder.set_render_pipeline_state(&self.pipeline_state);
+    command_encoder.set_depth_stencil_state(&self.depth_stencil_state);
     command_encoder.set_front_facing_winding(MTLWindingCounterClockwise);
     command_encoder.set_cull_mode(MTLCullModeBack);
-    command_encoder.set_vertex_buffer_offset_at_index(self.vertex_buffer.clone(), 0, 0);
-    command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
-    command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, INDICES.len(), MTLIndexTypeUInt16, self.index_buffer.clone(), 0);
+    command_encoder.set_vertex_buffer_offset_at_index(&self.vertex_buffer, 0, 0);
+    command_encoder.set_vertex_buffer_offset_at_index(&self.uniform_buffer, 0, 1);
+    command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(MTLPrimitiveTypeTriangle, INDICES.len(), MTLIndexTypeUInt16, &self.index_buffer, 0);
     command_encoder.end_encoding();
-    command_buffer.present_drawable(view.current_drawable());
+    command_buffer.present_drawable(&view.current_drawable());
     command_buffer.commit();
   }
 }
@@ -145,10 +141,10 @@ fn main() {
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 03"));
-  window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
-  window.set_delegate(RSMWindowDelegateID::alloc().retain());
-  window.make_key_and_order_front(NSObjectID::nil());
+  window.set_title(&NSStringID::from_str("Metal Example 03"));
+  window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));
+  window.set_delegate(&RSMWindowDelegateID::alloc().retain());
+  window.make_key_and_order_front(&NSObjectID::nil());
 
   NSApplicationID::shared_application().run();
 }

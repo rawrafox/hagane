@@ -22,16 +22,16 @@ fn load_texture(device: &MTLDeviceID, path: &str) -> MTLTextureID {
   f.read_to_end(&mut texture_data).unwrap();
 
   let texture_data = NSDataID::alloc().init_with_bytes_length(texture_data.as_ptr() as *const std::os::raw::c_void, texture_data.len());
-  let texture_loader = MTKTextureLoaderID::alloc().init_with_device(device.clone());
-  return texture_loader.new_texture_with_data_options_error(texture_data, NSDictionaryID::alloc().init()).unwrap();
+  let texture_loader = MTKTextureLoaderID::alloc().init_with_device(device);
+  return texture_loader.new_texture_with_data_options_error(&texture_data, &NSDictionaryID::alloc().init()).unwrap();
 }
 
 fn load_mesh(device: &MTLDeviceID, path: &str) -> MTKMeshID {
-  let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(NSURLID::alloc().init_with_string(NSStringID::from_str(path)), MDLVertexDescriptorID::nil(), MTKMeshBufferAllocatorID::alloc().init_with_device(device.clone()));
+  let asset = MDLAssetID::alloc().init_with_url_vertex_descriptor_buffer_allocator(&NSURLID::alloc().init_with_string(&NSStringID::from_str(path)), &MDLVertexDescriptorID::nil(), &MTKMeshBufferAllocatorID::alloc().init_with_device(device));
 
   if asset.count() != 1 { panic!("Not one single mesh in file") }
 
-  return MTKMeshID::alloc().init_with_mesh_device_error(asset.object_at_index::<MDLMeshID>(0), device.clone()).unwrap();
+  return MTKMeshID::alloc().init_with_mesh_device_error(&asset.object_at_index::<MDLMeshID>(0), device).unwrap();
 }
 
 struct Example05Renderer {
@@ -51,7 +51,6 @@ impl RSMRenderer for Example05Renderer {
     view.set_color_pixel_format(MTLPixelFormatBGRA8Unorm);
     view.set_depth_stencil_pixel_format(MTLPixelFormatDepth32Float);
 
-    view.set_preferred_frames_per_second(60);
     view.set_clear_color(MTLClearColor { red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0 });
     view.set_clear_depth(1.0);
 
@@ -61,7 +60,7 @@ impl RSMRenderer for Example05Renderer {
     let depth_stencil_descriptor = MTLDepthStencilDescriptorID::alloc().init();
     depth_stencil_descriptor.set_depth_compare_function(MTLCompareFunctionLess);
     depth_stencil_descriptor.set_depth_write_enabled(true);
-    self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(depth_stencil_descriptor);
+    self.depth_stencil_state = device.new_depth_stencil_state_with_descriptor(&depth_stencil_descriptor);
 
     let mesh = load_mesh(&device, "../engine/hulls/cc1_t2/CC1_TShape1.obj");
     self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
@@ -76,16 +75,16 @@ impl RSMRenderer for Example05Renderer {
     sampler_descriptor.set_s_address_mode(MTLSamplerAddressModeRepeat);
     sampler_descriptor.set_t_address_mode(MTLSamplerAddressModeRepeat);
 
-    self.sampler_state = device.new_sampler_state_with_descriptor(sampler_descriptor);
+    self.sampler_state = device.new_sampler_state_with_descriptor(&sampler_descriptor);
 
-    let library = device.new_library_with_file_error(NSStringID::from_str("src/examples/example-05.metallib")).unwrap();
+    let library = device.new_library_with_file_error(&NSStringID::from_str("src/examples/example-05.metallib")).unwrap();
 
     let pipeline_descriptor = MTLRenderPipelineDescriptorID::alloc().init();
-    pipeline_descriptor.set_vertex_function(library.new_function_with_name(NSStringID::from_str("vertex_main")));
-    pipeline_descriptor.set_fragment_function(library.new_function_with_name(NSStringID::from_str("fragment_main")));
+    pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
+    pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
 
-    self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(pipeline_descriptor).unwrap();
+    self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(&pipeline_descriptor).unwrap();
   }
 
   fn draw(&mut self, view: RSMViewID) {
@@ -123,24 +122,24 @@ impl RSMRenderer for Example05Renderer {
     }
 
     let command_buffer = self.command_queue.command_buffer();
-    let command_encoder = command_buffer.render_command_encoder_with_descriptor(view.current_render_pass_descriptor());
-    command_encoder.set_render_pipeline_state(self.pipeline_state.clone());
-    command_encoder.set_depth_stencil_state(self.depth_stencil_state.clone());
+    let command_encoder = command_buffer.render_command_encoder_with_descriptor(&view.current_render_pass_descriptor());
+    command_encoder.set_render_pipeline_state(&self.pipeline_state);
+    command_encoder.set_depth_stencil_state(&self.depth_stencil_state);
     command_encoder.set_front_facing_winding(MTLWindingCounterClockwise);
     command_encoder.set_cull_mode(MTLCullModeBack);
-    command_encoder.set_vertex_buffer_offset_at_index(self.mesh_buffer.buffer(), self.mesh_buffer.offset(), 0);
-    command_encoder.set_vertex_buffer_offset_at_index(self.uniform_buffer.clone(), 0, 1);
-    command_encoder.set_fragment_texture_at_index(self.texture.clone(), 0);
-    command_encoder.set_fragment_sampler_state_at_index(self.sampler_state.clone(), 0);
+    command_encoder.set_vertex_buffer_offset_at_index(&self.mesh_buffer.buffer(), self.mesh_buffer.offset(), 0);
+    command_encoder.set_vertex_buffer_offset_at_index(&self.uniform_buffer, 0, 1);
+    command_encoder.set_fragment_texture_at_index(&self.texture, 0);
+    command_encoder.set_fragment_sampler_state_at_index(&self.sampler_state, 0);
 
     for &ref submesh in &self.submeshes {
       let index_buffer = submesh.index_buffer();
 
-      command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(submesh.primitive_type(), submesh.index_count(), submesh.index_type(), index_buffer.buffer(), index_buffer.offset());
+      command_encoder.draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset(submesh.primitive_type(), submesh.index_count(), submesh.index_type(), &index_buffer.buffer(), index_buffer.offset());
     }
 
     command_encoder.end_encoding();
-    command_buffer.present_drawable(view.current_drawable());
+    command_buffer.present_drawable(&view.current_drawable());
     command_buffer.commit();
   }
 }
@@ -162,10 +161,10 @@ fn main() {
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::alloc().init_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
-  window.set_title(NSStringID::from_str("Metal Example 05"));
-  window.set_content_view(RSMViewID::from_renderer(renderer, content_rect, metal::system_default_device()));
-  window.set_delegate(RSMWindowDelegateID::alloc().retain());
-  window.make_key_and_order_front(NSObjectID::nil());
+  window.set_title(&NSStringID::from_str("Metal Example 05"));
+  window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));
+  window.set_delegate(&RSMWindowDelegateID::alloc().retain());
+  window.make_key_and_order_front(&NSObjectID::nil());
 
   NSApplicationID::shared_application().run();
 }

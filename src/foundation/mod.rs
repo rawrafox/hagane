@@ -134,15 +134,7 @@ impl Drop for NSArrayID {
 }
 
 impl ObjectiveC for NSArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -202,15 +194,7 @@ impl Drop for NSCoderID {
 }
 
 impl ObjectiveC for NSCoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSCoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -290,15 +274,7 @@ impl Drop for NSDataID {
 }
 
 impl ObjectiveC for NSDataID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSDataID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -378,15 +354,7 @@ impl Drop for NSDictionaryID {
 }
 
 impl ObjectiveC for NSDictionaryID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSDictionaryID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -454,15 +422,7 @@ impl Drop for NSErrorID {
 }
 
 impl ObjectiveC for NSErrorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSErrorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -531,15 +491,7 @@ impl Drop for NSMutableArrayID {
 }
 
 impl ObjectiveC for NSMutableArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSMutableArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -727,15 +679,7 @@ impl Drop for NSStringID {
 }
 
 impl ObjectiveC for NSStringID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSStringID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -753,7 +697,7 @@ impl std::fmt::Debug for NSStringID {
 }
 
 pub trait NSURL : NSObject {
-  fn init_with_string<T0: 'static + NSString>(self, url_string: T0) -> Self where Self: 'static + Sized {
+  fn init_with_string<T0: 'static + NSString>(self, url_string: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithString:), (url_string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -815,15 +759,7 @@ impl Drop for NSURLID {
 }
 
 impl ObjectiveC for NSURLID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSURLID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -841,7 +777,7 @@ impl std::fmt::Debug for NSURLID {
 }
 
 pub trait NSObject : ObjectiveC {
-  fn is_equal<T0: 'static + NSObject>(&self, view: T0) -> bool where Self: 'static + Sized {
+  fn is_equal<T0: 'static + NSObject>(&self, view: &T0) -> bool where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(isEqual:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -956,15 +892,7 @@ impl Drop for NSObjectID {
 }
 
 impl ObjectiveC for NSObjectID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSObjectID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

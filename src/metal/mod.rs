@@ -841,15 +841,7 @@ impl Drop for MTLArgumentID {
 }
 
 impl ObjectiveC for MTLArgumentID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLArgumentID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -917,15 +909,7 @@ impl Drop for MTLArrayTypeID {
 }
 
 impl ObjectiveC for MTLArrayTypeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLArrayTypeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -993,15 +977,7 @@ impl Drop for MTLAttributeID {
 }
 
 impl ObjectiveC for MTLAttributeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLAttributeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1069,15 +1045,7 @@ impl Drop for MTLAttributeDescriptorID {
 }
 
 impl ObjectiveC for MTLAttributeDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLAttributeDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1170,15 +1138,7 @@ impl Drop for MTLAttributeDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLAttributeDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLAttributeDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1246,15 +1206,7 @@ impl Drop for MTLBufferLayoutDescriptorID {
 }
 
 impl ObjectiveC for MTLBufferLayoutDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLBufferLayoutDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1347,15 +1299,7 @@ impl Drop for MTLBufferLayoutDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLBufferLayoutDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLBufferLayoutDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1423,15 +1367,7 @@ impl Drop for MTLCompileOptionsID {
 }
 
 impl ObjectiveC for MTLCompileOptionsID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLCompileOptionsID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1499,15 +1435,7 @@ impl Drop for MTLComputePipelineDescriptorID {
 }
 
 impl ObjectiveC for MTLComputePipelineDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLComputePipelineDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1575,15 +1503,7 @@ impl Drop for MTLComputePipelineReflectionID {
 }
 
 impl ObjectiveC for MTLComputePipelineReflectionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLComputePipelineReflectionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1673,7 +1593,7 @@ pub trait MTLDepthStencilDescriptor : NSObject {
     }
   }
 
-  fn set_back_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, back_face_stencil: T) where Self: 'static + Sized {
+  fn set_back_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, back_face_stencil: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1699,7 +1619,7 @@ pub trait MTLDepthStencilDescriptor : NSObject {
     }
   }
 
-  fn set_front_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, front_face_stencil: T) where Self: 'static + Sized {
+  fn set_front_face_stencil<T: 'static + ObjectiveC + MTLStencilDescriptor>(&self, front_face_stencil: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1725,7 +1645,7 @@ pub trait MTLDepthStencilDescriptor : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1785,15 +1705,7 @@ impl Drop for MTLDepthStencilDescriptorID {
 }
 
 impl ObjectiveC for MTLDepthStencilDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLDepthStencilDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1861,15 +1773,7 @@ impl Drop for MTLFunctionConstantID {
 }
 
 impl ObjectiveC for MTLFunctionConstantID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLFunctionConstantID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1937,15 +1841,7 @@ impl Drop for MTLFunctionConstantValuesID {
 }
 
 impl ObjectiveC for MTLFunctionConstantValuesID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLFunctionConstantValuesID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2013,15 +1909,7 @@ impl Drop for MTLHeapDescriptorID {
 }
 
 impl ObjectiveC for MTLHeapDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLHeapDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2089,15 +1977,7 @@ impl Drop for MTLRenderPassAttachmentDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPassAttachmentDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassAttachmentDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2166,15 +2046,7 @@ impl Drop for MTLRenderPassColorAttachmentDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassColorAttachmentDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2267,15 +2139,7 @@ impl Drop for MTLRenderPassColorAttachmentDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLRenderPassColorAttachmentDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassColorAttachmentDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2344,15 +2208,7 @@ impl Drop for MTLRenderPassDepthAttachmentDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPassDepthAttachmentDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassDepthAttachmentDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2420,15 +2276,7 @@ impl Drop for MTLRenderPassDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPassDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2497,15 +2345,7 @@ impl Drop for MTLRenderPassStencilAttachmentDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPassStencilAttachmentDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPassStencilAttachmentDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2770,15 +2610,7 @@ impl Drop for MTLRenderPipelineColorAttachmentDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPipelineColorAttachmentDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2871,15 +2703,7 @@ impl Drop for MTLRenderPipelineColorAttachmentDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLRenderPipelineColorAttachmentDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPipelineColorAttachmentDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2925,7 +2749,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
     }
   }
 
-  fn set_fragment_function<T: 'static + ObjectiveC + MTLFunction>(&self, fragment_function: T) where Self: 'static + Sized {
+  fn set_fragment_function<T: 'static + ObjectiveC + MTLFunction>(&self, fragment_function: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -2951,7 +2775,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
     }
   }
 
-  fn set_vertex_function<T: 'static + ObjectiveC + MTLFunction>(&self, vertex_function: T) where Self: 'static + Sized {
+  fn set_vertex_function<T: 'static + ObjectiveC + MTLFunction>(&self, vertex_function: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -2977,7 +2801,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
     }
   }
 
-  fn set_vertex_descriptor<T: 'static + ObjectiveC + MTLVertexDescriptor>(&self, vertex_descriptor: T) where Self: 'static + Sized {
+  fn set_vertex_descriptor<T: 'static + ObjectiveC + MTLVertexDescriptor>(&self, vertex_descriptor: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3016,7 +2840,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
     }
   }
 
-  fn set_color_attachments<T: 'static + ObjectiveC + MTLRenderPipelineColorAttachmentDescriptorArray>(&self, color_attachments: T) where Self: 'static + Sized {
+  fn set_color_attachments<T: 'static + ObjectiveC + MTLRenderPipelineColorAttachmentDescriptorArray>(&self, color_attachments: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3086,7 +2910,7 @@ pub trait MTLRenderPipelineDescriptor : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3146,15 +2970,7 @@ impl Drop for MTLRenderPipelineDescriptorID {
 }
 
 impl ObjectiveC for MTLRenderPipelineDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPipelineDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3222,15 +3038,7 @@ impl Drop for MTLRenderPipelineReflectionID {
 }
 
 impl ObjectiveC for MTLRenderPipelineReflectionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPipelineReflectionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3562,7 +3370,7 @@ pub trait MTLSamplerDescriptor : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3622,15 +3430,7 @@ impl Drop for MTLSamplerDescriptorID {
 }
 
 impl ObjectiveC for MTLSamplerDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLSamplerDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3698,15 +3498,7 @@ impl Drop for MTLStageInputOutputDescriptorID {
 }
 
 impl ObjectiveC for MTLStageInputOutputDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLStageInputOutputDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3774,15 +3566,7 @@ impl Drop for MTLStencilDescriptorID {
 }
 
 impl ObjectiveC for MTLStencilDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLStencilDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3850,15 +3634,7 @@ impl Drop for MTLStructMemberID {
 }
 
 impl ObjectiveC for MTLStructMemberID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLStructMemberID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3926,15 +3702,7 @@ impl Drop for MTLStructTypeID {
 }
 
 impl ObjectiveC for MTLStructTypeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLStructTypeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4002,15 +3770,7 @@ impl Drop for MTLTextureDescriptorID {
 }
 
 impl ObjectiveC for MTLTextureDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLTextureDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4078,15 +3838,7 @@ impl Drop for MTLVertexAttributeID {
 }
 
 impl ObjectiveC for MTLVertexAttributeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexAttributeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4154,15 +3906,7 @@ impl Drop for MTLVertexAttributeDescriptorID {
 }
 
 impl ObjectiveC for MTLVertexAttributeDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexAttributeDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4255,15 +3999,7 @@ impl Drop for MTLVertexAttributeDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLVertexAttributeDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexAttributeDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4331,15 +4067,7 @@ impl Drop for MTLVertexBufferLayoutDescriptorID {
 }
 
 impl ObjectiveC for MTLVertexBufferLayoutDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexBufferLayoutDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4432,15 +4160,7 @@ impl Drop for MTLVertexBufferLayoutDescriptorArrayID {
 }
 
 impl ObjectiveC for MTLVertexBufferLayoutDescriptorArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexBufferLayoutDescriptorArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4508,15 +4228,7 @@ impl Drop for MTLVertexDescriptorID {
 }
 
 impl ObjectiveC for MTLVertexDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLVertexDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4577,15 +4289,7 @@ impl Drop for MTLBlitCommandEncoderID {
 }
 
 impl ObjectiveC for MTLBlitCommandEncoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLBlitCommandEncoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4682,15 +4386,7 @@ impl Drop for MTLBufferID {
 }
 
 impl ObjectiveC for MTLBufferID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLBufferID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4708,7 +4404,7 @@ impl std::fmt::Debug for MTLBufferID {
 }
 
 pub trait MTLCommandBuffer : NSObject {
-  fn render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T0) -> MTLRenderCommandEncoderID where Self: 'static + Sized {
+  fn render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: &T0) -> MTLRenderCommandEncoderID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(renderCommandEncoderWithDescriptor:), (render_pass_descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4747,7 +4443,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn parallel_render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: T0) -> MTLParallelRenderCommandEncoderID where Self: 'static + Sized {
+  fn parallel_render_command_encoder_with_descriptor<T0: 'static + MTLRenderPassDescriptor>(&self, render_pass_descriptor: &T0) -> MTLParallelRenderCommandEncoderID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(parallelRenderCommandEncoderWithDescriptor:), (render_pass_descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4786,7 +4482,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn present_drawable<T0: 'static + MTLDrawable>(&self, drawable: T0) where Self: 'static + Sized {
+  fn present_drawable<T0: 'static + MTLDrawable>(&self, drawable: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(presentDrawable:), (drawable.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4799,7 +4495,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn present_drawable_at_time<T0: 'static + MTLDrawable>(&self, drawable: T0, time: CFTimeInterval) where Self: 'static + Sized {
+  fn present_drawable_at_time<T0: 'static + MTLDrawable>(&self, drawable: &T0, time: CFTimeInterval) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(presentDrawable:atTime:), (drawable.as_ptr(), time)) {
         Err(s) => panic!("{}", s),
@@ -4894,7 +4590,7 @@ pub trait MTLCommandBuffer : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -4946,15 +4642,7 @@ impl Drop for MTLCommandBufferID {
 }
 
 impl ObjectiveC for MTLCommandBufferID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLCommandBufferID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4985,7 +4673,7 @@ pub trait MTLCommandEncoder : NSObject {
     }
   }
 
-  fn insert_debug_signpost<T0: 'static + NSString>(&self, string: T0) where Self: 'static + Sized {
+  fn insert_debug_signpost<T0: 'static + NSString>(&self, string: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(insertDebugSignpost), (string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -4998,7 +4686,7 @@ pub trait MTLCommandEncoder : NSObject {
     }
   }
 
-  fn push_debug_group<T0: 'static + NSString>(&self, string: T0) where Self: 'static + Sized {
+  fn push_debug_group<T0: 'static + NSString>(&self, string: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(pushDebugGroup), (string.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5054,7 +4742,7 @@ pub trait MTLCommandEncoder : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -5106,15 +4794,7 @@ impl Drop for MTLCommandEncoderID {
 }
 
 impl ObjectiveC for MTLCommandEncoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLCommandEncoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5201,7 +4881,7 @@ pub trait MTLCommandQueue : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -5253,15 +4933,7 @@ impl Drop for MTLCommandQueueID {
 }
 
 impl ObjectiveC for MTLCommandQueueID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLCommandQueueID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5322,15 +4994,7 @@ impl Drop for MTLComputeCommandEncoderID {
 }
 
 impl ObjectiveC for MTLComputeCommandEncoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLComputeCommandEncoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5390,15 +5054,7 @@ impl Drop for MTLComputePipelineStateID {
 }
 
 impl ObjectiveC for MTLComputePipelineStateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLComputePipelineStateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5458,15 +5114,7 @@ impl Drop for MTLDepthStencilStateID {
 }
 
 impl ObjectiveC for MTLDepthStencilStateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLDepthStencilStateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5593,7 +5241,7 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_library_with_file_error<T0: 'static + NSString>(&self, filepath: T0) -> Result<MTLLibraryID, NSErrorID> where Self: 'static + Sized {
+  fn new_library_with_file_error<T0: 'static + NSString>(&self, filepath: &T0) -> Result<MTLLibraryID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -5677,7 +5325,7 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_sampler_state_with_descriptor<T0: 'static + MTLSamplerDescriptor>(&self, descriptor: T0) -> MTLSamplerStateID where Self: 'static + Sized {
+  fn new_sampler_state_with_descriptor<T0: 'static + MTLSamplerDescriptor>(&self, descriptor: &T0) -> MTLSamplerStateID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newSamplerStateWithDescriptor:), (descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5690,7 +5338,7 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_render_pipeline_state_with_descriptor_error<T0: 'static + MTLRenderPipelineDescriptor>(&self, descriptor: T0) -> Result<MTLRenderPipelineStateID, NSErrorID> where Self: 'static + Sized {
+  fn new_render_pipeline_state_with_descriptor_error<T0: 'static + MTLRenderPipelineDescriptor>(&self, descriptor: &T0) -> Result<MTLRenderPipelineStateID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -5709,7 +5357,7 @@ pub trait MTLDevice : NSObject {
     }
   }
 
-  fn new_depth_stencil_state_with_descriptor<T0: 'static + MTLDepthStencilDescriptor>(&self, descriptor: T0) -> MTLDepthStencilStateID where Self: 'static + Sized {
+  fn new_depth_stencil_state_with_descriptor<T0: 'static + MTLDepthStencilDescriptor>(&self, descriptor: &T0) -> MTLDepthStencilStateID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newDepthStencilStateWithDescriptor:), (descriptor.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -5775,15 +5423,7 @@ impl Drop for MTLDeviceID {
 }
 
 impl ObjectiveC for MTLDeviceID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLDeviceID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5868,15 +5508,7 @@ impl Drop for MTLDrawableID {
 }
 
 impl ObjectiveC for MTLDrawableID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLDrawableID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -5924,7 +5556,7 @@ pub trait MTLFence : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -5976,15 +5608,7 @@ impl Drop for MTLFenceID {
 }
 
 impl ObjectiveC for MTLFenceID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLFenceID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6044,15 +5668,7 @@ impl Drop for MTLFunctionID {
 }
 
 impl ObjectiveC for MTLFunctionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLFunctionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6112,15 +5728,7 @@ impl Drop for MTLHeapID {
 }
 
 impl ObjectiveC for MTLHeapID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLHeapID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6138,7 +5746,7 @@ impl std::fmt::Debug for MTLHeapID {
 }
 
 pub trait MTLLibrary : NSObject {
-  fn new_function_with_name<T0: 'static + NSString>(&self, function_name: T0) -> MTLFunctionID where Self: 'static + Sized {
+  fn new_function_with_name<T0: 'static + NSString>(&self, function_name: &T0) -> MTLFunctionID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newFunctionWithName:), (function_name.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -6196,7 +5804,7 @@ pub trait MTLLibrary : NSObject {
     }
   }
 
-  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: T) where Self: 'static + Sized {
+  fn set_label<T: 'static + ObjectiveC + NSString>(&self, label: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -6248,15 +5856,7 @@ impl Drop for MTLLibraryID {
 }
 
 impl ObjectiveC for MTLLibraryID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLLibraryID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6317,15 +5917,7 @@ impl Drop for MTLParallelRenderCommandEncoderID {
 }
 
 impl ObjectiveC for MTLParallelRenderCommandEncoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLParallelRenderCommandEncoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6395,7 +5987,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_depth_stencil_state<T0: 'static + MTLDepthStencilState>(&self, depth_stencil_state: T0) where Self: 'static + Sized {
+  fn set_depth_stencil_state<T0: 'static + MTLDepthStencilState>(&self, depth_stencil_state: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setDepthStencilState:), (depth_stencil_state.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -6421,7 +6013,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_render_pipeline_state<T0: 'static + MTLRenderPipelineState>(&self, pipeline_state: T0) where Self: 'static + Sized {
+  fn set_render_pipeline_state<T0: 'static + MTLRenderPipelineState>(&self, pipeline_state: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setRenderPipelineState:), (pipeline_state.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -6512,7 +6104,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_vertex_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
+  fn set_vertex_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: &T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setVertexBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
         Err(s) => panic!("{}", s),
@@ -6525,7 +6117,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_fragment_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
+  fn set_fragment_buffer_offset_at_index<T0: 'static + MTLBuffer>(&self, buffer: &T0, offset: NSUInteger, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setFragmentBuffer:offset:atIndex:), (buffer.as_ptr(), offset, index)) {
         Err(s) => panic!("{}", s),
@@ -6538,7 +6130,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_fragment_sampler_state_at_index<T0: 'static + MTLSamplerState>(&self, sampler: T0, index: NSUInteger) where Self: 'static + Sized {
+  fn set_fragment_sampler_state_at_index<T0: 'static + MTLSamplerState>(&self, sampler: &T0, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setFragmentSamplerState:atIndex:), (sampler.as_ptr(), index)) {
         Err(s) => panic!("{}", s),
@@ -6551,7 +6143,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn set_fragment_texture_at_index<T0: 'static + MTLTexture>(&self, texture: T0, index: NSUInteger) where Self: 'static + Sized {
+  fn set_fragment_texture_at_index<T0: 'static + MTLTexture>(&self, texture: &T0, index: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(setFragmentTexture:atIndex:), (texture.as_ptr(), index)) {
         Err(s) => panic!("{}", s),
@@ -6577,7 +6169,7 @@ pub trait MTLRenderCommandEncoder : MTLCommandEncoder + NSObject {
     }
   }
 
-  fn draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset<T0: 'static + MTLBuffer>(&self, primitive_type: MTLPrimitiveType, index_count: NSUInteger, index_type: MTLIndexType, index_buffer: T0, index_buffer_offset: NSUInteger) where Self: 'static + Sized {
+  fn draw_indexed_primitives_index_count_index_type_index_buffer_index_buffer_offset<T0: 'static + MTLBuffer>(&self, primitive_type: MTLPrimitiveType, index_count: NSUInteger, index_type: MTLIndexType, index_buffer: &T0, index_buffer_offset: NSUInteger) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:), (primitive_type, index_count, index_type, index_buffer.as_ptr(), index_buffer_offset)) {
         Err(s) => panic!("{}", s),
@@ -6632,15 +6224,7 @@ impl Drop for MTLRenderCommandEncoderID {
 }
 
 impl ObjectiveC for MTLRenderCommandEncoderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderCommandEncoderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6700,15 +6284,7 @@ impl Drop for MTLRenderPipelineStateID {
 }
 
 impl ObjectiveC for MTLRenderPipelineStateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLRenderPipelineStateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6768,15 +6344,7 @@ impl Drop for MTLResourceID {
 }
 
 impl ObjectiveC for MTLResourceID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLResourceID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6836,15 +6404,7 @@ impl Drop for MTLSamplerStateID {
 }
 
 impl ObjectiveC for MTLSamplerStateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLSamplerStateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -6904,15 +6464,7 @@ impl Drop for MTLTextureID {
 }
 
 impl ObjectiveC for MTLTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTLTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

@@ -25,7 +25,7 @@ pub trait NSApplication : NSObject {
     }
   }
 
-  fn terminate<T0: 'static + ObjectiveC>(&self, sender: T0) where Self: 'static + Sized {
+  fn terminate<T0: 'static + ObjectiveC>(&self, sender: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(terminate:), (sender.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -93,15 +93,7 @@ impl Drop for NSApplicationID {
 }
 
 impl ObjectiveC for NSApplicationID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSApplicationID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -169,15 +161,7 @@ impl Drop for NSViewID {
 }
 
 impl ObjectiveC for NSViewID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSViewID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -208,7 +192,7 @@ pub trait NSWindow : NSObject {
     }
   }
 
-  fn make_key_and_order_front<T0: 'static + ObjectiveC>(&self, sender: T0) where Self: 'static + Sized {
+  fn make_key_and_order_front<T0: 'static + ObjectiveC>(&self, sender: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(makeKeyAndOrderFront:), (sender.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -236,7 +220,7 @@ pub trait NSWindow : NSObject {
     }
   }
 
-  fn set_content_view<T: 'static + ObjectiveC + NSView>(&self, content_view: T) where Self: 'static + Sized {
+  fn set_content_view<T: 'static + ObjectiveC + NSView>(&self, content_view: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -262,7 +246,7 @@ pub trait NSWindow : NSObject {
     }
   }
 
-  fn set_delegate<T: 'static + ObjectiveC + NSWindowDelegate>(&self, delegate: T) where Self: 'static + Sized {
+  fn set_delegate<T: 'static + ObjectiveC + NSWindowDelegate>(&self, delegate: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -288,7 +272,7 @@ pub trait NSWindow : NSObject {
     }
   }
 
-  fn set_title<T: 'static + ObjectiveC + NSString>(&self, title: T) where Self: 'static + Sized {
+  fn set_title<T: 'static + ObjectiveC + NSString>(&self, title: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -348,15 +332,7 @@ impl Drop for NSWindowID {
 }
 
 impl ObjectiveC for NSWindowID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSWindowID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -424,15 +400,7 @@ impl Drop for NSWindowDelegateID {
 }
 
 impl ObjectiveC for NSWindowDelegateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return NSWindowDelegateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

@@ -14,7 +14,7 @@ use model_io::*;
 extern {}
 
 pub trait MTKMesh : NSObject {
-  fn init_with_mesh_device_error<T0: 'static + MDLMesh, T1: 'static + MTLDevice>(self, mesh: T0, device: T1) -> Result<Self, NSErrorID> where Self: 'static + Sized {
+  fn init_with_mesh_device_error<T0: 'static + MDLMesh, T1: 'static + MTLDevice>(self, mesh: &T0, device: &T1) -> Result<Self, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -104,7 +104,7 @@ pub trait MTKMesh : NSObject {
     }
   }
 
-  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: T) where Self: 'static + Sized {
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -164,15 +164,7 @@ impl Drop for MTKMeshID {
 }
 
 impl ObjectiveC for MTKMeshID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKMeshID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -291,15 +283,7 @@ impl Drop for MTKMeshBufferID {
 }
 
 impl ObjectiveC for MTKMeshBufferID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKMeshBufferID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -317,7 +301,7 @@ impl std::fmt::Debug for MTKMeshBufferID {
 }
 
 pub trait MTKMeshBufferAllocator : MDLMeshBufferAllocator + NSObject {
-  fn init_with_device<T0: 'static + MTLDevice>(self, device: T0) -> Self where Self: 'static + Sized {
+  fn init_with_device<T0: 'static + MTLDevice>(self, device: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithDevice:), (device.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -345,7 +329,7 @@ pub trait MTKMeshBufferAllocator : MDLMeshBufferAllocator + NSObject {
     }
   }
 
-  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: T) where Self: 'static + Sized {
+  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -406,15 +390,7 @@ impl Drop for MTKMeshBufferAllocatorID {
 }
 
 impl ObjectiveC for MTKMeshBufferAllocatorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKMeshBufferAllocatorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -510,7 +486,7 @@ pub trait MTKSubmesh : NSObject {
     }
   }
 
-  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: T) where Self: 'static + Sized {
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -570,15 +546,7 @@ impl Drop for MTKSubmeshID {
 }
 
 impl ObjectiveC for MTKSubmeshID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKSubmeshID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -596,7 +564,7 @@ impl std::fmt::Debug for MTKSubmeshID {
 }
 
 pub trait MTKTextureLoader : NSObject {
-  fn init_with_device<T0: 'static + MTLDevice>(self, device: T0) -> Self where Self: 'static + Sized {
+  fn init_with_device<T0: 'static + MTLDevice>(self, device: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithDevice:), (device.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -624,7 +592,7 @@ pub trait MTKTextureLoader : NSObject {
     }
   }
 
-  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: T) where Self: 'static + Sized {
+  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -635,7 +603,7 @@ pub trait MTKTextureLoader : NSObject {
     }
   }
 
-  fn new_texture_with_contents_of_url_options_error<T0: 'static + NSURL, T1: 'static + NSDictionary>(&self, url: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+  fn new_texture_with_contents_of_url_options_error<T0: 'static + NSURL, T1: 'static + NSDictionary>(&self, url: &T0, options: &T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -654,7 +622,7 @@ pub trait MTKTextureLoader : NSObject {
     }
   }
 
-  fn new_textures_with_contents_of_ur_ls_options_error<T0: 'static + NSArray, T1: 'static + NSDictionary>(&self, ur_ls: T0, options: T1) -> Result<NSArrayID, NSErrorID> where Self: 'static + Sized {
+  fn new_textures_with_contents_of_ur_ls_options_error<T0: 'static + NSArray, T1: 'static + NSDictionary>(&self, ur_ls: &T0, options: &T1) -> Result<NSArrayID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -673,7 +641,7 @@ pub trait MTKTextureLoader : NSObject {
     }
   }
 
-  fn new_texture_with_data_options_error<T0: 'static + NSData, T1: 'static + NSDictionary>(&self, data: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+  fn new_texture_with_data_options_error<T0: 'static + NSData, T1: 'static + NSDictionary>(&self, data: &T0, options: &T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -692,7 +660,7 @@ pub trait MTKTextureLoader : NSObject {
     }
   }
 
-  fn new_texture_with_mdl_texture_options_error<T0: 'static + MDLTexture, T1: 'static + NSDictionary>(&self, texture: T0, options: T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
+  fn new_texture_with_mdl_texture_options_error<T0: 'static + MDLTexture, T1: 'static + NSDictionary>(&self, texture: &T0, options: &T1) -> Result<MTLTextureID, NSErrorID> where Self: 'static + Sized {
     let mut error = NSErrorID::nil();
 
     unsafe {
@@ -760,15 +728,7 @@ impl Drop for MTKTextureLoaderID {
 }
 
 impl ObjectiveC for MTKTextureLoaderID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKTextureLoaderID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -786,7 +746,7 @@ impl std::fmt::Debug for MTKTextureLoaderID {
 }
 
 pub trait MTKView : NSView + NSObject {
-  fn init_with_coder<T0: 'static + NSCoder>(self, coder: T0) -> Self where Self: 'static + Sized {
+  fn init_with_coder<T0: 'static + NSCoder>(self, coder: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithCoder:), (coder.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -799,7 +759,7 @@ pub trait MTKView : NSView + NSObject {
     }
   }
 
-  fn init_with_frame_device<T1: 'static + MTLDevice>(self, frame_rect: CGRect, device: T1) -> Self where Self: 'static + Sized {
+  fn init_with_frame_device<T1: 'static + MTLDevice>(self, frame_rect: CGRect, device: &T1) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithFrame:device:), (frame_rect, device.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -827,7 +787,7 @@ pub trait MTKView : NSView + NSObject {
     }
   }
 
-  fn set_delegate<T: 'static + ObjectiveC + MTKViewDelegate>(&self, delegate: T) where Self: 'static + Sized {
+  fn set_delegate<T: 'static + ObjectiveC + MTKViewDelegate>(&self, delegate: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -853,7 +813,7 @@ pub trait MTKView : NSView + NSObject {
     }
   }
 
-  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: T) where Self: 'static + Sized {
+  fn set_device<T: 'static + ObjectiveC + MTLDevice>(&self, device: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1286,15 +1246,7 @@ impl Drop for MTKViewID {
 }
 
 impl ObjectiveC for MTKViewID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKViewID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1312,7 +1264,7 @@ impl std::fmt::Debug for MTKViewID {
 }
 
 pub trait MTKViewDelegate : NSObject {
-  fn mtk_view_drawable_size_will_change<T0: 'static + MTKView>(&self, view: T0, size: CGSize) where Self: 'static + Sized {
+  fn mtk_view_drawable_size_will_change<T0: 'static + MTKView>(&self, view: &T0, size: CGSize) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(mtkView:drawableSizeWillChange:), (view.as_ptr(), size)) {
         Err(s) => panic!("{}", s),
@@ -1325,7 +1277,7 @@ pub trait MTKViewDelegate : NSObject {
     }
   }
 
-  fn draw_in_mtk_view<T0: 'static + MTKView>(&self, view: T0) where Self: 'static + Sized {
+  fn draw_in_mtk_view<T0: 'static + MTKView>(&self, view: &T0) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(drawInMTKView:), (view.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -1379,15 +1331,7 @@ impl Drop for MTKViewDelegateID {
 }
 
 impl ObjectiveC for MTKViewDelegateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MTKViewDelegateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

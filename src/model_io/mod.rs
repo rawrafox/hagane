@@ -165,15 +165,7 @@ impl Drop for MDLAreaLightID {
 }
 
 impl ObjectiveC for MDLAreaLightID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLAreaLightID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -191,7 +183,7 @@ impl std::fmt::Debug for MDLAreaLightID {
 }
 
 pub trait MDLAsset : NSObject {
-  fn init_with_url<T0: 'static + NSURL>(self, url: T0) -> Self where Self: 'static + Sized {
+  fn init_with_url<T0: 'static + NSURL>(self, url: &T0) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:), (url.as_ptr(),)) {
         Err(s) => panic!("{}", s),
@@ -204,7 +196,7 @@ pub trait MDLAsset : NSObject {
     }
   }
 
-  fn init_with_url_vertex_descriptor_buffer_allocator<T0: 'static + NSURL, T1: 'static + MDLVertexDescriptor, T2: 'static + MDLMeshBufferAllocator>(self, url: T0, vertex_descriptor: T1, buffer_allocator: T2) -> Self where Self: 'static + Sized {
+  fn init_with_url_vertex_descriptor_buffer_allocator<T0: 'static + NSURL, T1: 'static + MDLVertexDescriptor, T2: 'static + MDLMeshBufferAllocator>(self, url: &T0, vertex_descriptor: &T1, buffer_allocator: &T2) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:vertexDescriptor:bufferAllocator:), (url.as_ptr(), vertex_descriptor.as_ptr(), buffer_allocator.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -303,15 +295,7 @@ impl Drop for MDLAssetID {
 }
 
 impl ObjectiveC for MDLAssetID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLAssetID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -552,15 +536,7 @@ impl Drop for MDLCameraID {
 }
 
 impl ObjectiveC for MDLCameraID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLCameraID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -629,15 +605,7 @@ impl Drop for MDLCheckerboardTextureID {
 }
 
 impl ObjectiveC for MDLCheckerboardTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLCheckerboardTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -706,15 +674,7 @@ impl Drop for MDLColorSwatchTextureID {
 }
 
 impl ObjectiveC for MDLColorSwatchTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLColorSwatchTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -783,15 +743,7 @@ impl Drop for MDLLightID {
 }
 
 impl ObjectiveC for MDLLightID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLLightID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -861,15 +813,7 @@ impl Drop for MDLLightProbeID {
 }
 
 impl ObjectiveC for MDLLightProbeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLLightProbeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -937,15 +881,7 @@ impl Drop for MDLMaterialID {
 }
 
 impl ObjectiveC for MDLMaterialID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMaterialID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1013,15 +949,7 @@ impl Drop for MDLMaterialPropertyID {
 }
 
 impl ObjectiveC for MDLMaterialPropertyID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMaterialPropertyID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1089,15 +1017,7 @@ impl Drop for MDLMaterialPropertyConnectionID {
 }
 
 impl ObjectiveC for MDLMaterialPropertyConnectionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMaterialPropertyConnectionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1166,15 +1086,7 @@ impl Drop for MDLMaterialPropertyGraphID {
 }
 
 impl ObjectiveC for MDLMaterialPropertyGraphID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMaterialPropertyGraphID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1242,15 +1154,7 @@ impl Drop for MDLMaterialPropertyNodeID {
 }
 
 impl ObjectiveC for MDLMaterialPropertyNodeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMaterialPropertyNodeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1283,7 +1187,7 @@ pub trait MDLMesh : MDLObject + NSObject {
     }
   }
 
-  fn set_submeshes<T: 'static + ObjectiveC + NSMutableArray>(&self, submeshes: T) where Self: 'static + Sized {
+  fn set_submeshes<T: 'static + ObjectiveC + NSMutableArray>(&self, submeshes: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1309,7 +1213,7 @@ pub trait MDLMesh : MDLObject + NSObject {
     }
   }
 
-  fn set_vertex_buffers<T: 'static + ObjectiveC + NSArray>(&self, vertex_buffers: T) where Self: 'static + Sized {
+  fn set_vertex_buffers<T: 'static + ObjectiveC + NSArray>(&self, vertex_buffers: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1357,7 +1261,7 @@ pub trait MDLMesh : MDLObject + NSObject {
     }
   }
 
-  fn set_vertex_descriptor<T: 'static + ObjectiveC + MDLVertexDescriptor>(&self, vertex_descriptor: T) where Self: 'static + Sized {
+  fn set_vertex_descriptor<T: 'static + ObjectiveC + MDLVertexDescriptor>(&self, vertex_descriptor: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -1418,15 +1322,7 @@ impl Drop for MDLMeshID {
 }
 
 impl ObjectiveC for MDLMeshID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1494,15 +1390,7 @@ impl Drop for MDLMeshBufferDataID {
 }
 
 impl ObjectiveC for MDLMeshBufferDataID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferDataID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1571,15 +1459,7 @@ impl Drop for MDLMeshBufferDataAllocatorID {
 }
 
 impl ObjectiveC for MDLMeshBufferDataAllocatorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferDataAllocatorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1657,15 +1537,7 @@ impl Drop for MDLMeshBufferMapID {
 }
 
 impl ObjectiveC for MDLMeshBufferMapID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferMapID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1734,15 +1606,7 @@ impl Drop for MDLMeshBufferZoneDefaultID {
 }
 
 impl ObjectiveC for MDLMeshBufferZoneDefaultID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferZoneDefaultID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1811,15 +1675,7 @@ impl Drop for MDLNoiseTextureID {
 }
 
 impl ObjectiveC for MDLNoiseTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLNoiseTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1888,15 +1744,7 @@ impl Drop for MDLNormalMapTextureID {
 }
 
 impl ObjectiveC for MDLNormalMapTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLNormalMapTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -1964,15 +1812,7 @@ impl Drop for MDLObjectID {
 }
 
 impl ObjectiveC for MDLObjectID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLObjectID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2040,15 +1880,7 @@ impl Drop for MDLObjectContainerID {
 }
 
 impl ObjectiveC for MDLObjectContainerID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLObjectContainerID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2119,15 +1951,7 @@ impl Drop for MDLPhotometricLightID {
 }
 
 impl ObjectiveC for MDLPhotometricLightID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLPhotometricLightID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2197,15 +2021,7 @@ impl Drop for MDLPhysicallyPlausibleLightID {
 }
 
 impl ObjectiveC for MDLPhysicallyPlausibleLightID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLPhysicallyPlausibleLightID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2274,15 +2090,7 @@ impl Drop for MDLPhysicallyPlausibleScatteringFunctionID {
 }
 
 impl ObjectiveC for MDLPhysicallyPlausibleScatteringFunctionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLPhysicallyPlausibleScatteringFunctionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2350,15 +2158,7 @@ impl Drop for MDLScatteringFunctionID {
 }
 
 impl ObjectiveC for MDLScatteringFunctionID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLScatteringFunctionID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2427,15 +2227,7 @@ impl Drop for MDLSkyCubeTextureID {
 }
 
 impl ObjectiveC for MDLSkyCubeTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLSkyCubeTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2505,15 +2297,7 @@ impl Drop for MDLStereoscopicCameraID {
 }
 
 impl ObjectiveC for MDLStereoscopicCameraID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLStereoscopicCameraID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2628,15 +2412,7 @@ impl Drop for MDLSubmeshID {
 }
 
 impl ObjectiveC for MDLSubmeshID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLSubmeshID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2704,15 +2480,7 @@ impl Drop for MDLSubmeshTopologyID {
 }
 
 impl ObjectiveC for MDLSubmeshTopologyID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLSubmeshTopologyID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2780,15 +2548,7 @@ impl Drop for MDLTextureID {
 }
 
 impl ObjectiveC for MDLTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2856,15 +2616,7 @@ impl Drop for MDLTextureFilterID {
 }
 
 impl ObjectiveC for MDLTextureFilterID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLTextureFilterID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -2932,15 +2684,7 @@ impl Drop for MDLTextureSamplerID {
 }
 
 impl ObjectiveC for MDLTextureSamplerID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLTextureSamplerID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3008,15 +2752,7 @@ impl Drop for MDLTransformID {
 }
 
 impl ObjectiveC for MDLTransformID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLTransformID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3034,7 +2770,7 @@ impl std::fmt::Debug for MDLTransformID {
 }
 
 pub trait MDLURLTexture : MDLTexture + NSObject {
-  fn init_with_url_name<T0: 'static + NSURL, T1: 'static + NSString>(self, url: T0, name: T1) -> Self where Self: 'static + Sized {
+  fn init_with_url_name<T0: 'static + NSURL, T1: 'static + NSString>(self, url: &T0, name: &T1) -> Self where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(initWithURL:name:), (url.as_ptr(), name.as_ptr())) {
         Err(s) => panic!("{}", s),
@@ -3062,7 +2798,7 @@ pub trait MDLURLTexture : MDLTexture + NSObject {
     }
   }
 
-  fn set_url<T: 'static + ObjectiveC + NSURL>(&self, url: T) where Self: 'static + Sized {
+  fn set_url<T: 'static + ObjectiveC + NSURL>(&self, url: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3123,15 +2859,7 @@ impl Drop for MDLURLTextureID {
 }
 
 impl ObjectiveC for MDLURLTextureID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLURLTextureID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3164,7 +2892,7 @@ pub trait MDLVertexAttribute : NSObject {
     }
   }
 
-  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: T) where Self: 'static + Sized {
+  fn set_name<T: 'static + ObjectiveC + NSString>(&self, name: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3312,15 +3040,7 @@ impl Drop for MDLVertexAttributeID {
 }
 
 impl ObjectiveC for MDLVertexAttributeID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLVertexAttributeID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3388,15 +3108,7 @@ impl Drop for MDLVertexAttributeDataID {
 }
 
 impl ObjectiveC for MDLVertexAttributeDataID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLVertexAttributeDataID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3464,15 +3176,7 @@ impl Drop for MDLVertexBufferLayoutID {
 }
 
 impl ObjectiveC for MDLVertexBufferLayoutID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLVertexBufferLayoutID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3505,7 +3209,7 @@ pub trait MDLVertexDescriptor : NSObject {
     }
   }
 
-  fn set_attributes<T: 'static + ObjectiveC + NSMutableArray>(&self, attributes: T) where Self: 'static + Sized {
+  fn set_attributes<T: 'static + ObjectiveC + NSMutableArray>(&self, attributes: &T) where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -3565,15 +3269,7 @@ impl Drop for MDLVertexDescriptorID {
 }
 
 impl ObjectiveC for MDLVertexDescriptorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLVertexDescriptorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3641,15 +3337,7 @@ impl Drop for MDLVoxelArrayID {
 }
 
 impl ObjectiveC for MDLVoxelArrayID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLVoxelArrayID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3709,15 +3397,7 @@ impl Drop for MDLComponentID {
 }
 
 impl ObjectiveC for MDLComponentID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLComponentID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3777,15 +3457,7 @@ impl Drop for MDLLightProbeIrradianceDataSourceID {
 }
 
 impl ObjectiveC for MDLLightProbeIrradianceDataSourceID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLLightProbeIrradianceDataSourceID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3879,15 +3551,7 @@ impl Drop for MDLMeshBufferID {
 }
 
 impl ObjectiveC for MDLMeshBufferID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -3947,15 +3611,7 @@ impl Drop for MDLMeshBufferAllocatorID {
 }
 
 impl ObjectiveC for MDLMeshBufferAllocatorID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferAllocatorID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4015,15 +3671,7 @@ impl Drop for MDLMeshBufferZoneID {
 }
 
 impl ObjectiveC for MDLMeshBufferZoneID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLMeshBufferZoneID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4083,15 +3731,7 @@ impl Drop for MDLNamedID {
 }
 
 impl ObjectiveC for MDLNamedID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLNamedID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4151,15 +3791,7 @@ impl Drop for MDLObjectContainerComponentID {
 }
 
 impl ObjectiveC for MDLObjectContainerComponentID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLObjectContainerComponentID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -4219,15 +3851,7 @@ impl Drop for MDLTransformComponentID {
 }
 
 impl ObjectiveC for MDLTransformComponentID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return MDLTransformComponentID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

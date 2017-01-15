@@ -15,7 +15,8 @@ Hello and welcome to this work in progress thing!
 
  - [ ] Split off into various crates.
  - [ ] Some actual tutorials.
- - [ ] Allow using refs instead of cloning all the time.
+ - [x] Allow using refs instead of cloning all the time.
+ - [ ] Add new functions for all the initializers.
  - [ ] Wrap all the things!
  - [ ] Figure out how to handle weak properties.
  - [ ] Write some demoes.

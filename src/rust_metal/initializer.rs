@@ -19,7 +19,7 @@ pub trait RSMRenderer {
 }
 
 impl RSMViewID {
-  pub fn from_renderer<T: MTLDevice + 'static>(renderer: Box<RSMRenderer>, frame: CGRect, device: T) -> RSMViewID {
+  pub fn from_renderer<T: MTLDevice + 'static>(renderer: Box<RSMRenderer>, frame: CGRect, device: &T) -> RSMViewID {
     let mut renderer = Box::new(renderer);
 
     let view = RSMViewID::alloc().init_with_frame_device(frame, device);
@@ -72,7 +72,7 @@ fn load_window_delegate() {
   let mut window_delegate = ClassDecl::new("RSMWindowDelegate", NSObjectID::class()).unwrap();
 
   extern fn window_will_close(this: &mut Object, _cmd: Sel, _notification: usize) {
-    NSApplicationID::shared_application().terminate(NSObjectID::from_object(this));
+    NSApplicationID::shared_application().terminate(&NSObjectID::from_object(this));
   }
 
   unsafe {

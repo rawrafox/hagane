@@ -50,15 +50,7 @@ impl Drop for CAMetalDrawableID {
 }
 
 impl ObjectiveC for CAMetalDrawableID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return CAMetalDrawableID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }

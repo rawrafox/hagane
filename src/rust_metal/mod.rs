@@ -62,15 +62,7 @@ impl Drop for RSMViewID {
 }
 
 impl ObjectiveC for RSMViewID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return RSMViewID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
@@ -139,15 +131,7 @@ impl Drop for RSMWindowDelegateID {
 }
 
 impl ObjectiveC for RSMWindowDelegateID {
-  fn from_ptr(ptr: *mut std::os::raw::c_void) -> Self {
-    return RSMWindowDelegateID::from_ptr(ptr);
-  }
-
   fn as_ptr(&self) -> *mut std::os::raw::c_void {
-    return self.0;
-  }
-
-  fn as_mut_ptr(&mut self) -> *mut std::os::raw::c_void {
     return self.0;
   }
 }
