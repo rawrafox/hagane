@@ -24,3 +24,4 @@ Hello and welcome to this work in progress thing!
  - [ ] Fast iteration.
  - [ ] Extern statics.
  - [ ] Inheriting initializers correctly.
+ - [ ] Typed NSArray, NSDictionary, etc.
