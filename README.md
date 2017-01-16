@@ -25,3 +25,4 @@ Hello and welcome to this work in progress thing!
  - [ ] Extern statics.
  - [ ] Inheriting initializers correctly.
  - [ ] Typed NSArray, NSDictionary, etc.
+ - [ ] simd/simd.h ABI-compatible wrapper.

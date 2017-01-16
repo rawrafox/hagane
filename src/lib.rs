@@ -1,4 +1,5 @@
 #![allow(unknown_lints, needless_return, zero_prefixed_literal, enum_clike_unportable_variant, len_without_is_empty, expl_impl_clone_on_copy)]
+#![feature(repr_simd)]
 
 #[macro_use] extern crate bitflags;
 #[macro_use] extern crate byteorder;
@@ -27,6 +28,9 @@ pub use metal_kit::*;
 
 pub mod model_io;
 pub use model_io::*;
+
+pub mod simd;
+pub use simd::*;
 
 pub mod eve_rust;
 pub mod rust_metal;
