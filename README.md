@@ -2,6 +2,8 @@
 
 Hello and welcome to this work in progress thing!
 
+To build stuff run `rake && cargo build` then you get a folder full of apps to try, you will need Xcode installed and macOS 10.12 (10.11 should mostly work though.)
+
 ## Questions ##
 
  - Is this API stable? No!
@@ -15,14 +17,13 @@ Hello and welcome to this work in progress thing!
 
  - [ ] Split off into various crates.
  - [ ] Some actual tutorials.
- - [x] Add new functions for all the initializers.
  - [ ] Wrap all the things!
  - [ ] Figure out how to handle weak properties.
  - [ ] Write some demoes.
- - [ ] Figure out what should be on this list.
  - [ ] Indexing.
  - [ ] Fast iteration.
- - [ ] Extern statics.
+ - [x] Extern statics.
  - [ ] Inheriting initializers correctly.
  - [ ] Typed NSArray, NSDictionary, etc.
- - [ ] simd/simd.h ABI-compatible wrapper.
+ - [x] simd/simd.h ABI-compatible wrapper.
+ - [ ] Actual methods / useful things for the simd stuff.
