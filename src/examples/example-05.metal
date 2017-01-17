@@ -34,12 +34,8 @@ constant Material material = {
 };
 
 struct VertexInput {
-  float x;
-  float y;
-  float z;
-  float u;
-  float v;
-  float w;
+  packed_float3 position;
+  packed_float3 normal;
   float2 texture_coordinates;
 };
 
@@ -62,9 +58,9 @@ vertex VertexOutput vertex_main(device VertexInput *vertices [[buffer(0)]], cons
 
   VertexOutput output;
 
-  output.position = uniforms.model_view_projection_matrix * float4(input.x, input.y, input.z, 1.0);
-  output.eye =  -(uniforms.model_view_matrix * float4(input.x, input.y, input.z, 1.0)).xyz;
-  output.normal = uniforms.normal_matrix * float3(input.u, input.v, input.w);
+  output.position = uniforms.model_view_projection_matrix * float4(input.position, 1.0);
+  output.eye =  -(uniforms.model_view_matrix * float4(input.position, 1.0)).xyz;
+  output.normal = uniforms.normal_matrix * float3(input.normal);
   output.texture_coordinates = input.texture_coordinates;
 
   return output;

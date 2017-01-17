@@ -66,7 +66,7 @@ impl RSMRenderer for Example05Renderer {
     self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
     self.submeshes = mesh.submeshes().to_vec::<MTKSubmeshID>();
     self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
-    self.texture = load_texture(&device, "../engine/res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds.0.png");
+    self.texture = load_texture(&device, "res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds.0.png");
 
     let sampler_descriptor = MTLSamplerDescriptorID::new();
 
