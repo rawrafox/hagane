@@ -864,7 +864,7 @@ pub fn system_default_device() -> MTLDeviceID {
 
   <class name="MTLSamplerDescriptor" inherits="NSObject">
     <initializer selector="init" />
-    
+
     <!-- Sampler Descriptor Properties -->
     <property name="rAddressMode" type="MTLSamplerAddressMode" />
     <property name="sAddressMode" type="MTLSamplerAddressMode" />
@@ -899,7 +899,24 @@ pub fn system_default_device() -> MTLDeviceID {
   </class>
 
   <class name="MTLTextureDescriptor" inherits="NSObject">
+    <initializer selector="init" />
+
+    <!-- Creating Texture Descriptors -->
     <!-- TODO: All missing -->
+
+    <!-- Specifying Texture Attributes -->
+    <property name="textureType" type="MTLTextureType" />
+    <property name="pixelFormat" type="MTLPixelFormat" />
+    <property name="width" type="NSUInteger" />
+    <property name="height" type="NSUInteger" />
+    <property name="depth" type="NSUInteger" />
+    <property name="mipmapLevelCount" type="NSUInteger" />
+    <property name="sampleCount" type="NSUInteger" />
+    <property name="arrayLength" type="NSUInteger" />
+    <property name="resourceOptions" type="MTLResourceOptions" />
+    <property name="cpuCacheMode" type="MTLCPUCacheMode" />
+    <property name="storageMode" type="MTLStorageMode" />
+    <property name="usage" type="MTLTextureUsage" />
   </class>
 
   <class name="MTLVertexAttribute" inherits="NSObject">
@@ -1076,8 +1093,6 @@ pub fn system_default_device() -> MTLDeviceID {
 
   <protocol name="MTLDevice" inherits="NSObject">
     <!-- Identifying Properties -->
-    <!-- TODO: All missing -->
-
     <property name="depth24Stencil8PixelFormatSupported" getter="isDepth24Stencil8PixelFormatSupported" type="bool" read-only />
     <property name="headless" getter="isHeadless" type="bool" read-only />
     <property name="lowPower" getter="isLowPower" type="bool" read-only />
@@ -1129,7 +1144,32 @@ pub fn system_default_device() -> MTLDeviceID {
       <argument name="options" type="MTLResourceOptions" />
       <return protocol="MTLBuffer" />
     </method>
-    <!-- TODO: All missing -->
+
+    <!-- TODO: newBufferWithBytesNoCopy:length:options:deallocator: -->
+
+    <method selector="newTextureWithDescriptor:">
+      <argument name="descriptor" protocol="MTLTextureDescriptor" />
+      <return protocol="MTLTexture" />
+    </method>
+
+    <!-- TODO: newTextureWithDescriptor:iosurface:plane: -->
+
+    <method selector="newHeapWithDescriptor:">
+      <argument name="descriptor" protocol="MTLHeapDescriptor" />
+      <return protocol="MTLHeap" />
+    </method>
+
+    <method selector="heapBufferSizeAndAlignWithLength:options:">
+      <argument name="length" type="NSUInteger" />
+      <argument name="options" type="MTLResourceOptions" />
+      <return type="MTLSizeAndAlign" />
+    </method>
+
+    <method selector="heapTextureSizeAndAlignWithDescriptor:">
+      <argument name="desc" protocol="MTLTextureDescriptor" />
+      <return type="MTLSizeAndAlign" />
+    </method>
+
     <method selector="newFence">
       <return protocol="MTLFence" />
     </method>
@@ -1357,6 +1397,48 @@ fn texture_sample_counts(&self) -> Vec<usize> where Self: 'static + Sized {
   </protocol>
 
   <protocol name="MTLTexture" inherits="NSObject">
+    <!-- Copying Data into a Texture Image -->
+    <method selector="replaceRegion:mipmapLevel:slice:withBytes:bytesPerRow:bytesPerImage:">
+      <argument name="region" type="MTLRegion" />
+      <argument name="level" type="NSUInteger" />
+      <argument name="slice" type="NSUInteger" />
+      <argument name="pixelBytes" type="*const std::os::raw::c_void" />
+      <argument name="bytesPerRow" type="NSUInteger" />
+      <argument name="bytesPerImage" type="NSUInteger" />
+    </method>
+
+    <method selector="replaceRegion:mipmapLevel:withBytes:bytesPerRow:">
+      <argument name="region" type="MTLRegion" />
+      <argument name="level" type="NSUInteger" />
+      <argument name="pixelBytes" type="*const std::os::raw::c_void" />
+      <argument name="bytesPerRow" type="NSUInteger" />
+    </method>
+
+    <!-- Copying Data from a Texture Image -->
+    <!-- TODO: All missing -->
+
+    <!-- Creating Textures by Reusing Image Data -->
+    <!-- TODO: All missing -->
+
+    <!-- Querying Texture Attributes -->
+    <property name="textureType" type="MTLTextureType" read-only />
+    <property name="pixelFormat" type="MTLPixelFormat" read-only />
+    <property name="width" type="NSUInteger" read-only />
+    <property name="height" type="NSUInteger" read-only />
+    <property name="depth" type="NSUInteger" read-only />
+    <property name="mipmapLevelCount" type="NSUInteger" read-only />
+    <property name="arrayLength" type="NSUInteger" read-only />
+    <property name="sampleCount" type="NSUInteger" read-only />
+    <property name="framebufferOnly" type="bool" read-only />
+    <property name="usage" type="MTLTextureUsage" read-only />
+
+    <!-- Querying IOSurface Attributes -->
+    <!-- TODO: All missing -->
+
+    <!-- Querying Parent Texture Attributes -->
+    <!-- TODO: All missing -->
+
+    <!-- Querying Source Buffer Attributes -->
     <!-- TODO: All missing -->
   </protocol>
 </framework>

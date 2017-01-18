@@ -3732,6 +3732,282 @@ impl std::fmt::Debug for MTLStructTypeID {
 }
 
 pub trait MTLTextureDescriptor : NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn texture_type(&self) -> MTLTextureType where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(textureType), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_texture_type(&self, texture_type: MTLTextureType) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setTextureType:), (texture_type,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn pixel_format(&self) -> MTLPixelFormat where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(pixelFormat), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_pixel_format(&self, pixel_format: MTLPixelFormat) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setPixelFormat:), (pixel_format,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn width(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(width), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_width(&self, width: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setWidth:), (width,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn height(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(height), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_height(&self, height: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setHeight:), (height,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn depth(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(depth), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_depth(&self, depth: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setDepth:), (depth,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn mipmap_level_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(mipmapLevelCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_mipmap_level_count(&self, mipmap_level_count: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setMipmapLevelCount:), (mipmap_level_count,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn sample_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(sampleCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_sample_count(&self, sample_count: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setSampleCount:), (sample_count,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn array_length(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(arrayLength), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_array_length(&self, array_length: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setArrayLength:), (array_length,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn resource_options(&self) -> MTLResourceOptions where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(resourceOptions), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_resource_options(&self, resource_options: MTLResourceOptions) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setResourceOptions:), (resource_options,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn cpu_cache_mode(&self) -> MTLCPUCacheMode where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(cpuCacheMode), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_cpu_cache_mode(&self, cpu_cache_mode: MTLCPUCacheMode) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setCpuCacheMode:), (cpu_cache_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn storage_mode(&self) -> MTLStorageMode where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(storageMode), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_storage_mode(&self, storage_mode: MTLStorageMode) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setStorageMode:), (storage_mode,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
+
+  fn usage(&self) -> MTLTextureUsage where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(usage), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_usage(&self, usage: MTLTextureUsage) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setUsage:), (usage,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
 #[repr(C)] pub struct MTLTextureDescriptorID(*mut std::os::raw::c_void);
@@ -3759,6 +4035,10 @@ impl MTLTextureDescriptorID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MTLTextureDescriptor").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MTLTextureDescriptorID::alloc().init();
   }
 }
 
@@ -5324,6 +5604,58 @@ pub trait MTLDevice : NSObject {
     }
   }
 
+  fn new_texture_with_descriptor<T0: 'static + MTLTextureDescriptor>(&self, descriptor: &T0) -> MTLTextureID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newTextureWithDescriptor:), (descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLTextureID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn new_heap_with_descriptor<T0: 'static + MTLHeapDescriptor>(&self, descriptor: &T0) -> MTLHeapID where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(newHeapWithDescriptor:), (descriptor.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLHeapID = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn heap_buffer_size_and_align_with_length_options(&self, length: NSUInteger, options: MTLResourceOptions) -> MTLSizeAndAlign where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(heapBufferSizeAndAlignWithLength:options:), (length, options)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLSizeAndAlign = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn heap_texture_size_and_align_with_descriptor<T0: 'static + MTLTextureDescriptor>(&self, desc: &T0) -> MTLSizeAndAlign where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(heapTextureSizeAndAlignWithDescriptor:), (desc.as_ptr(),)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: MTLSizeAndAlign = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn new_fence(&self) -> MTLFenceID where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(newFence), ()) {
@@ -6434,6 +6766,141 @@ impl std::fmt::Debug for MTLSamplerStateID {
 }
 
 pub trait MTLTexture : NSObject {
+  fn replace_region_mipmap_level_slice_with_bytes_bytes_per_row_bytes_per_image(&self, region: MTLRegion, level: NSUInteger, slice: NSUInteger, pixel_bytes: *const std::os::raw::c_void, bytes_per_row: NSUInteger, bytes_per_image: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(replaceRegion:mipmapLevel:slice:withBytes:bytesPerRow:bytesPerImage:), (region, level, slice, pixel_bytes, bytes_per_row, bytes_per_image)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn replace_region_mipmap_level_with_bytes_bytes_per_row(&self, region: MTLRegion, level: NSUInteger, pixel_bytes: *const std::os::raw::c_void, bytes_per_row: NSUInteger) where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(replaceRegion:mipmapLevel:withBytes:bytesPerRow:), (region, level, pixel_bytes, bytes_per_row)) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => {
+          let result: () = r;
+
+          return result;
+        }
+      }
+    }
+  }
+
+  fn texture_type(&self) -> MTLTextureType where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(textureType), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn pixel_format(&self) -> MTLPixelFormat where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(pixelFormat), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn width(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(width), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn height(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(height), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn depth(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(depth), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn mipmap_level_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(mipmapLevelCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn array_length(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(arrayLength), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn sample_count(&self) -> NSUInteger where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(sampleCount), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn framebuffer_only(&self) -> bool where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(framebufferOnly), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn usage(&self) -> MTLTextureUsage where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(usage), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
 }
 
 #[repr(C)] pub struct MTLTextureID(*mut std::os::raw::c_void);

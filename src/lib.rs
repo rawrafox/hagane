@@ -32,6 +32,7 @@ pub use model_io::*;
 pub mod simd;
 pub use simd::*;
 
+pub mod dds;
 pub mod eve_rust;
 pub mod rust_metal;
 

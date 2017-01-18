@@ -21,9 +21,7 @@ fn load_texture(device: &MTLDeviceID, path: &str) -> MTLTextureID {
   let mut texture_data = Vec::new();
   f.read_to_end(&mut texture_data).unwrap();
 
-  let texture_data = NSDataID::new_with_bytes_length(texture_data.as_ptr() as *const std::os::raw::c_void, texture_data.len());
-  let texture_loader = MTKTextureLoaderID::new_with_device(device);
-  return texture_loader.new_texture_with_data_options_error(&texture_data, &NSDictionaryID::new()).unwrap();
+  return dds::import(&texture_data[..], device).unwrap();
 }
 
 fn load_mesh(device: &MTLDeviceID, path: &str) -> MTKMeshID {
@@ -66,7 +64,7 @@ impl RSMRenderer for Example05Renderer {
     self.mesh_buffer = mesh.vertex_buffers().object_at_index::<MTKMeshBufferID>(0);
     self.submeshes = mesh.submeshes().to_vec::<MTKSubmeshID>();
     self.uniform_buffer = device.new_buffer_with_length_options(std::mem::size_of::<Uniform>(), MTLResourceCPUCacheModeDefaultCache);
-    self.texture = load_texture(&device, "res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds.0.png");
+    self.texture = load_texture(&device, "../engine/res/dx9/model/ship/caldari/cruiser/cc1/cc1_t2_ar.dds");
 
     let sampler_descriptor = MTLSamplerDescriptorID::new();
 
