@@ -4,6 +4,7 @@ use objc;
 use super::ObjectiveC;
 
 use foundation::*;
+use simd::*;
 
 #[link(name = "ModelIO", kind = "framework")]
 extern {
@@ -407,6 +408,19 @@ impl std::fmt::Debug for MDLAssetID {
 }
 
 pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
+  fn init(self) -> Self where Self: 'static + Sized {
+    unsafe {
+      match objc::__send_message(self.as_object(), sel!(init), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(result) => {
+          std::mem::forget(self);
+
+          return result;
+        }
+      }
+    }
+  }
+
   fn frame_bounding_box_set_near_and_far(&self, bounding_box: MDLAxisAlignedBoundingBox, set_near_and_far: bool) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(frameBoundingBox:setNearAndFar:), (bounding_box, set_near_and_far)) {
@@ -420,7 +434,7 @@ pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
     }
   }
 
-  fn look_at(&self, focus_position: [f32; 3]) where Self: 'static + Sized {
+  fn look_at(&self, focus_position: vector_float3) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(lookAt:), (focus_position,)) {
         Err(s) => panic!("{}", s),
@@ -433,7 +447,7 @@ pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
     }
   }
 
-  fn look_at_from(&self, focus_position: [f32; 3], camera_position: [f32; 3]) where Self: 'static + Sized {
+  fn look_at_from(&self, focus_position: vector_float3, camera_position: vector_float3) where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(lookAt:from:), (focus_position, camera_position)) {
         Err(s) => panic!("{}", s),
@@ -446,7 +460,7 @@ pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
     }
   }
 
-  fn projection_matrix(&self) -> [f32; 16] where Self: 'static + Sized {
+  fn projection_matrix(&self) -> matrix_float4x4 where Self: 'static + Sized {
     unsafe {
       let target = self.as_object();
 
@@ -523,12 +537,12 @@ pub trait MDLCamera : MDLNamed + MDLObject + NSObject {
     }
   }
 
-  fn ray_to_for_view_port(&self, pixel: [i32; 2], size: [i32; 2]) -> [f32; 3] where Self: 'static + Sized {
+  fn ray_to_for_view_port(&self, pixel: vector_int2, size: vector_int2) -> vector_float3 where Self: 'static + Sized {
     unsafe {
       match objc::__send_message(self.as_object(), sel!(rayTo:forViewPort:), (pixel, size)) {
         Err(s) => panic!("{}", s),
         Ok(r) => {
-          let result: [f32; 3] = r;
+          let result: vector_float3 = r;
 
           return result;
         }
@@ -606,6 +620,10 @@ impl MDLCameraID {
 
   pub fn class() -> &'static objc::runtime::Class {
     return objc::runtime::Class::get("MDLCamera").unwrap();
+  }
+
+  pub fn new() -> Self where Self: 'static + Sized {
+    return MDLCameraID::alloc().init();
   }
 }
 

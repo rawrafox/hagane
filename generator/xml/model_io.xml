@@ -1,5 +1,6 @@
 <framework module="model_io">
   <use>foundation::*</use>
+  <use>simd::*</use>
 
   <extern framework="ModelIO">
     <static name="MDLVertexAttributeAnisotropy" protocol="NSString" public />
@@ -172,6 +173,8 @@
   </class>
 
   <class name="MDLCamera" inherits="MDLNamed, MDLObject, NSObject">
+    <initializer selector="init" />
+
     <!-- Managing Camera Position and Orientation -->
     <method selector="frameBoundingBox:setNearAndFar:">
       <argument name="boundingBox" type="MDLAxisAlignedBoundingBox" />
@@ -179,24 +182,24 @@
     </method>
 
     <method selector="lookAt:">
-      <argument name="focusPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+      <argument name="focusPosition" type="vector_float3" />
     </method>
 
     <method selector="lookAt:from:">
-      <argument name="focusPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
-      <argument name="cameraPosition" type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+      <argument name="focusPosition" type="vector_float3" />
+      <argument name="cameraPosition" type="vector_float3" />
     </method>
 
     <!-- Managing Camera Perspective -->
-    <property name="projectionMatrix" type="[f32; 16]" read-only /> <!-- TODO: matrix_float4x4 -->
+    <property name="projectionMatrix" type="matrix_float4x4" read-only />
     <property name="nearVisibilityDistance" type="f32" />
     <property name="farVisibilityDistance" type="f32" />
     <property name="fieldOfView" type="f32" />
 
     <method selector="rayTo:forViewPort:">
-      <argument name="pixel" type="[i32; 2]" /> <!-- TODO: vector_int2 -->
-      <argument name="size" type="[i32; 2]" /> <!-- TODO: vector_int2 -->
-      <return type="[f32; 3]" /> <!-- TODO: vector_float3 -->
+      <argument name="pixel" type="vector_int2" />
+      <argument name="size" type="vector_int2" />
+      <return type="vector_float3" />
     </method>
 
     <property name="worldToMetersConversionScale" type="f32" />

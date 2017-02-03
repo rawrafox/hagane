@@ -41,8 +41,6 @@ pub fn read_bone_bindings(cursor: &mut Cursor<&[u8]>) -> NSMutableArrayID {
 }
 
 pub fn read_blend_shapes(cursor: &mut Cursor<&[u8]>) -> () {
-  let blend_shapes = NSMutableArrayID::alloc().init();
-
   for _ in 0 .. cursor.read_u16::<LittleEndian>().unwrap() {
     read_string(cursor);
     read_vertex_buffer(cursor);
@@ -105,8 +103,8 @@ fn read_submeshes(cursor: &mut Cursor<&[u8]>) -> NSMutableArrayID {
     let start = cursor.read_u32::<LittleEndian>().unwrap() as NSUInteger * index_size;
     let index_count = cursor.read_u32::<LittleEndian>().unwrap() as NSUInteger * 3;
     let buffer = MDLMeshBufferDataID::new_with_type_data(MDLMeshBufferTypeIndex, &index_buffer.subdata_with_range(NSRange { location: start, length: index_size * index_count }));
-    let min_bounds = [cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap()];
-    let max_bounds = [cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap()];
+    let _ = [cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap()];
+    let _ = [cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap(), cursor.read_f32::<LittleEndian>().unwrap()];
 
     let submesh = MDLSubmeshID::new_with_index_buffer_index_count_index_type_geometry_type_material(&buffer, index_count, index_type, MDLGeometryTypeTriangles, &MDLMaterialID::nil());
     submesh.set_name(&name);

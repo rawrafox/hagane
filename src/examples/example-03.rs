@@ -1,19 +1,14 @@
 extern crate metal;
-extern crate nalgebra;
-
-use std::ops::Mul;
 
 use metal::*;
 use metal::rust_metal::*;
 
-use nalgebra::ToHomogeneous;
-
-#[allow(dead_code)]
+#[repr(C)]
 struct Uniform {
-  model_view_projection: [f32; 16]
+  model_view_projection: float4x4
 }
 
-#[allow(dead_code)]
+#[repr(C)]
 struct Vertex {
   position: [f32; 4],
   color: [f32; 4]
@@ -90,26 +85,14 @@ impl RSMRenderer for Example03Renderer {
 
     let rotation_x = seconds * std::f32::consts::FRAC_PI_2;
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = (5.0f32 * seconds).sin() * 0.25f32 + 1.0f32;
 
-    let rotation = nalgebra::Rotation3::from_euler_angles(rotation_x, rotation_y, 0.0);
+    let model_matrix = float4x4::from_scale(1.0 + (5.0 * seconds).sin() * 0.25).dot(float4x4::from_euler_angles(rotation_x, rotation_y, 0.0));
+    let projection_matrix = float4x4::perspective(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
+    let view_matrix = float3(0.0, 0.0, -5.0).look_at(float3(0.0, 0.0, 0.0), float3(0.0, 1.0, 0.0));
 
-    let model_matrix = nalgebra::Similarity3::from_rotation_matrix(nalgebra::Vector3::new(0.0f32, 0.0f32, 0.0f32), rotation, scale_factor);
+    let uniform = Uniform { model_view_projection: projection_matrix.dot(view_matrix.dot(model_matrix)) };
 
-    let origin = nalgebra::Point3::new(0.0f32, 0.0f32,  0.0f32);
-    let camera = nalgebra::Point3::new(0.0f32, 0.0f32, -5.0f32);
-
-    let camera_matrix = nalgebra::Isometry3::new_observer_frame(&camera, &origin, &nalgebra::Vector3::new(0.0f32, 1.0f32, 0.0f32));
-    let projection_matrix = nalgebra::PerspectiveMatrix3::new(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
-
-    let view_model_matrix = camera_matrix.mul(model_matrix);
-    let matrix = (*projection_matrix.as_matrix()).mul(view_model_matrix.to_homogeneous());
-    
-    unsafe {
-      let slice: [f32; 16] = std::mem::transmute(matrix);
-
-      std::intrinsics::copy(&slice, self.uniform_buffer.contents() as *mut [f32; 16], 1);
-    }
+    unsafe { std::intrinsics::copy(&uniform, self.uniform_buffer.contents() as *mut Uniform, 1) };
 
     let command_buffer = self.command_queue.command_buffer();
     let command_encoder = command_buffer.render_command_encoder_with_descriptor(&view.current_render_pass_descriptor());

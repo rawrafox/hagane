@@ -30,9 +30,9 @@ end
 rule "#{__dir__}/src/simd/mod.rs" => "#{__dir__}/generator/simd-bridge-generator.rb" do |t|
   puts "Generating SIMD bridge (#{t.name} from #{t.source})"
 
-  io = StringIO.new
-  Bridge::SIMD.generate(Bridge::Output.new(io)) 
-  File.write(t.name, io.string)
+  Bridge::SIMD.generate("#{__dir__}/src/simd/types").map do |name, contents|
+    File.write(name, contents)
+  end
 end
 
 rule ".rs" => -> (f) { [XML_RS_MAP.fetch(f), "#{__dir__}/generator/objc-bridge-generator.rb"] } do |t|

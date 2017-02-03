@@ -1,19 +1,15 @@
 extern crate metal;
-extern crate nalgebra;
 
 use std::io::Read;
-use std::ops::Mul;
 
 use metal::*;
 use metal::rust_metal::*;
 
-use nalgebra::ToHomogeneous;
-
-#[allow(dead_code)]
+#[repr(C)]
 struct Uniform {
-  model_view_projection: [f32; 16],
-  model_view: [f32; 16],
-  normal: [f32; 9]
+  model_view_projection: float4x4,
+  model_view: float4x4,
+  normal: float4x4 // TODO: This is a 3x3 matrix, but we send in a 4x4 since we know that this is in this case technically acceptable, and technically acceptable is the best kind of acceptable.
 }
 
 fn load_texture(device: &MTLDeviceID, path: &str) -> MTLTextureID {
@@ -87,33 +83,18 @@ impl RSMRenderer for Example05Renderer {
 
   fn draw(&mut self, view: RSMViewID) {
     let elapsed = self.time.elapsed();
-
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
-    let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
-    let scale_factor = 0.02f32;
-
-    let rotation = nalgebra::Rotation3::from_euler_angles(0.0, rotation_y, 0.0);
-
-    let model_matrix = nalgebra::Similarity3::from_rotation_matrix(nalgebra::Vector3::new(0.0f32, 0.0f32, 0.0f32), rotation, scale_factor);
-
-    let origin = nalgebra::Point3::new(0.0f32, 0.0f32,  0.0f32);
-    let camera = nalgebra::Point3::new(0.0f32, 0.0f32, -7.0f32);
-
-    let camera_matrix = nalgebra::Isometry3::new_observer_frame(&camera, &origin, &nalgebra::Vector3::new(0.0f32, 1.0f32, 0.0f32));
-    let projection_matrix = nalgebra::PerspectiveMatrix3::new(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
-
-    let model_view = camera_matrix.mul(model_matrix);
-    let model_view_matrix = model_view.to_homogeneous();
-    let matrix = (*projection_matrix.as_matrix()).mul(model_view_matrix);
+    let model_matrix = float4x4::from_scale(0.01).dot(float4x4::from_euler_angles(0.0, seconds * std::f32::consts::FRAC_PI_3, 0.0));
+    let projection_matrix = float4x4::perspective(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
+    let view_matrix = float3(0.0, 0.0, -5.0).look_at(float3(0.0, 0.0, 0.0), float3(0.0, 1.0, 0.0));
+    let model_view_matrix = view_matrix.dot(model_matrix);
 
     unsafe {
-      let mv: [f32; 16] = std::mem::transmute(model_view_matrix);
-
       let uniform = Uniform {
-        model_view_projection: std::mem::transmute(matrix),
-        model_view: mv,
-        normal: [mv[0], mv[1], mv[2], mv[4], mv[5], mv[6], mv[8], mv[9], mv[10]]
+        model_view_projection: projection_matrix.dot(model_view_matrix),
+        model_view: model_view_matrix,
+        normal: model_view_matrix
       };
 
       std::intrinsics::copy(&uniform, self.uniform_buffer.contents() as *mut Uniform, 1);

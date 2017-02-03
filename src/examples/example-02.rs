@@ -3,7 +3,7 @@ extern crate metal;
 use metal::*;
 use metal::rust_metal::*;
 
-#[allow(dead_code)]
+#[repr(C)]
 struct Vertex { position: [f32; 4], color: [f32; 4] }
 
 static VERTICES: &'static [Vertex] = &[

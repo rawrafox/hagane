@@ -1,8 +1,8 @@
 #![allow(unknown_lints, needless_return, zero_prefixed_literal, enum_clike_unportable_variant, len_without_is_empty, expl_impl_clone_on_copy)]
-#![feature(repr_simd)]
+#![feature(repr_simd, platform_intrinsics)]
 
 #[macro_use] extern crate bitflags;
-#[macro_use] extern crate byteorder;
+extern crate byteorder;
 #[macro_use] extern crate objc;
 
 pub mod cocoa;
