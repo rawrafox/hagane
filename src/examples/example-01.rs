@@ -3,6 +3,7 @@ extern crate metal;
 use metal::*;
 use metal::rust_metal::*;
 
+#[derive(Debug, Default)]
 struct Example01Renderer {
   command_queue: MTLCommandQueueID
 }
@@ -26,9 +27,7 @@ impl RSMRenderer for Example01Renderer {
 }
 
 fn main() {
-  let renderer = Box::new(Example01Renderer {
-    command_queue: MTLCommandQueueID::nil()
-  });
+  let renderer = Box::new(Example01Renderer { ..Default::default() });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);

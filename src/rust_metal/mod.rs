@@ -53,6 +53,12 @@ impl Clone for RSMViewID {
   }
 }
 
+impl Default for RSMViewID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for RSMViewID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -135,6 +141,12 @@ impl Clone for RSMWindowDelegateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for RSMWindowDelegateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

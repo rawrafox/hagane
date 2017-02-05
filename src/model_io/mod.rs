@@ -181,6 +181,12 @@ impl Clone for MDLAreaLightID {
   }
 }
 
+impl Default for MDLAreaLightID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLAreaLightID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -378,6 +384,12 @@ impl Clone for MDLAssetID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLAssetID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -640,6 +652,12 @@ impl Clone for MDLCameraID {
   }
 }
 
+impl Default for MDLCameraID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLCameraID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -707,6 +725,12 @@ impl Clone for MDLCheckerboardTextureID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLCheckerboardTextureID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -780,6 +804,12 @@ impl Clone for MDLColorSwatchTextureID {
   }
 }
 
+impl Default for MDLColorSwatchTextureID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLColorSwatchTextureID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -847,6 +877,12 @@ impl Clone for MDLLightID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLLightID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -921,6 +957,12 @@ impl Clone for MDLLightProbeID {
   }
 }
 
+impl Default for MDLLightProbeID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLLightProbeID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -987,6 +1029,12 @@ impl Clone for MDLMaterialID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMaterialID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1059,6 +1107,12 @@ impl Clone for MDLMaterialPropertyID {
   }
 }
 
+impl Default for MDLMaterialPropertyID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMaterialPropertyID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1125,6 +1179,12 @@ impl Clone for MDLMaterialPropertyConnectionID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMaterialPropertyConnectionID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1198,6 +1258,12 @@ impl Clone for MDLMaterialPropertyGraphID {
   }
 }
 
+impl Default for MDLMaterialPropertyGraphID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMaterialPropertyGraphID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1264,6 +1330,12 @@ impl Clone for MDLMaterialPropertyNodeID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMaterialPropertyNodeID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1453,6 +1525,12 @@ impl Clone for MDLMeshID {
   }
 }
 
+impl Default for MDLMeshID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMeshID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1570,6 +1648,12 @@ impl Clone for MDLMeshBufferDataID {
   }
 }
 
+impl Default for MDLMeshBufferDataID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMeshBufferDataID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1636,6 +1720,12 @@ impl Clone for MDLMeshBufferDataAllocatorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMeshBufferDataAllocatorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1717,6 +1807,12 @@ impl Clone for MDLMeshBufferMapID {
   }
 }
 
+impl Default for MDLMeshBufferMapID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMeshBufferMapID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1783,6 +1879,12 @@ impl Clone for MDLMeshBufferZoneDefaultID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMeshBufferZoneDefaultID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1856,6 +1958,12 @@ impl Clone for MDLNoiseTextureID {
   }
 }
 
+impl Default for MDLNoiseTextureID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLNoiseTextureID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1923,6 +2031,12 @@ impl Clone for MDLNormalMapTextureID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLNormalMapTextureID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1995,6 +2109,12 @@ impl Clone for MDLObjectID {
   }
 }
 
+impl Default for MDLObjectID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLObjectID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2060,6 +2180,12 @@ impl Clone for MDLObjectContainerID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLObjectContainerID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2135,6 +2261,12 @@ impl Clone for MDLPhotometricLightID {
   }
 }
 
+impl Default for MDLPhotometricLightID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLPhotometricLightID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2203,6 +2335,12 @@ impl Clone for MDLPhysicallyPlausibleLightID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLPhysicallyPlausibleLightID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2276,6 +2414,12 @@ impl Clone for MDLPhysicallyPlausibleScatteringFunctionID {
   }
 }
 
+impl Default for MDLPhysicallyPlausibleScatteringFunctionID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLPhysicallyPlausibleScatteringFunctionID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2342,6 +2486,12 @@ impl Clone for MDLScatteringFunctionID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLScatteringFunctionID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2415,6 +2565,12 @@ impl Clone for MDLSkyCubeTextureID {
   }
 }
 
+impl Default for MDLSkyCubeTextureID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLSkyCubeTextureID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2483,6 +2639,12 @@ impl Clone for MDLStereoscopicCameraID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLStereoscopicCameraID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2671,6 +2833,12 @@ impl Clone for MDLSubmeshID {
   }
 }
 
+impl Default for MDLSubmeshID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLSubmeshID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2736,6 +2904,12 @@ impl Clone for MDLSubmeshTopologyID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLSubmeshTopologyID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2808,6 +2982,12 @@ impl Clone for MDLTextureID {
   }
 }
 
+impl Default for MDLTextureID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLTextureID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2873,6 +3053,12 @@ impl Clone for MDLTextureFilterID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLTextureFilterID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2944,6 +3130,12 @@ impl Clone for MDLTextureSamplerID {
   }
 }
 
+impl Default for MDLTextureSamplerID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLTextureSamplerID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3009,6 +3201,12 @@ impl Clone for MDLTransformID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLTransformID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3121,6 +3319,12 @@ impl Clone for MDLURLTextureID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLURLTextureID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3322,6 +3526,12 @@ impl Clone for MDLVertexAttributeID {
   }
 }
 
+impl Default for MDLVertexAttributeID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLVertexAttributeID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3387,6 +3597,12 @@ impl Clone for MDLVertexAttributeDataID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLVertexAttributeDataID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3493,6 +3709,12 @@ impl Clone for MDLVertexBufferLayoutID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLVertexBufferLayoutID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3727,6 +3949,12 @@ impl Clone for MDLVertexDescriptorID {
   }
 }
 
+impl Default for MDLVertexDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLVertexDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3795,6 +4023,12 @@ impl Clone for MDLVoxelArrayID {
   }
 }
 
+impl Default for MDLVoxelArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLVoxelArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3855,6 +4089,12 @@ impl Clone for MDLComponentID {
   }
 }
 
+impl Default for MDLComponentID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLComponentID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3912,6 +4152,12 @@ impl Clone for MDLLightProbeIrradianceDataSourceID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLLightProbeIrradianceDataSourceID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4009,6 +4255,12 @@ impl Clone for MDLMeshBufferID {
   }
 }
 
+impl Default for MDLMeshBufferID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMeshBufferID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4069,6 +4321,12 @@ impl Clone for MDLMeshBufferAllocatorID {
   }
 }
 
+impl Default for MDLMeshBufferAllocatorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLMeshBufferAllocatorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4126,6 +4384,12 @@ impl Clone for MDLMeshBufferZoneID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLMeshBufferZoneID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4214,6 +4478,12 @@ impl Clone for MDLNamedID {
   }
 }
 
+impl Default for MDLNamedID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLNamedID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4274,6 +4544,12 @@ impl Clone for MDLObjectContainerComponentID {
   }
 }
 
+impl Default for MDLObjectContainerComponentID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MDLObjectContainerComponentID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4331,6 +4607,12 @@ impl Clone for MDLTransformComponentID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MDLTransformComponentID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

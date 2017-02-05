@@ -41,6 +41,12 @@ impl Clone for CAMetalDrawableID {
   }
 }
 
+impl Default for CAMetalDrawableID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for CAMetalDrawableID {
   fn drop(&mut self) {
     if !self.is_nil() {

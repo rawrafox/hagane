@@ -179,9 +179,15 @@ module Bridge
       o.puts
       o.block("impl Clone for #{self.name}ID") do |o|
         o.block("fn clone(&self) -> Self") do |o|
-          o.puts "let ptr = self.as_ptr();"
+          o.puts("let ptr = self.as_ptr();")
           o.puts
-          o.puts "return Self::from_ptr(ptr).retain();"
+          o.puts("return Self::from_ptr(ptr).retain();")
+        end
+      end
+      o.puts
+      o.block("impl Default for #{self.name}ID") do |o|
+        o.block("fn default() -> Self") do |o|
+          o.puts("return Self::nil();")
         end
       end
       o.puts

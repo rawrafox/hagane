@@ -159,6 +159,12 @@ impl Clone for MTKMeshID {
   }
 }
 
+impl Default for MTKMeshID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTKMeshID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -278,6 +284,12 @@ impl Clone for MTKMeshBufferID {
   }
 }
 
+impl Default for MTKMeshBufferID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTKMeshBufferID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -386,6 +398,12 @@ impl Clone for MTKMeshBufferAllocatorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTKMeshBufferAllocatorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -543,6 +561,12 @@ impl Clone for MTKSubmeshID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTKSubmeshID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -729,6 +753,12 @@ impl Clone for MTKTextureLoaderID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTKTextureLoaderID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1258,6 +1288,12 @@ impl Clone for MTKViewID {
   }
 }
 
+impl Default for MTKViewID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTKViewID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1340,6 +1376,12 @@ impl Clone for MTKViewDelegateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTKViewDelegateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

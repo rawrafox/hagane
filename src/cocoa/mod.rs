@@ -84,6 +84,12 @@ impl Clone for NSApplicationID {
   }
 }
 
+impl Default for NSApplicationID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSApplicationID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -149,6 +155,12 @@ impl Clone for NSViewID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSViewID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -327,6 +339,12 @@ impl Clone for NSWindowID {
   }
 }
 
+impl Default for NSWindowID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSWindowID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -392,6 +410,12 @@ impl Clone for NSWindowDelegateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSWindowDelegateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

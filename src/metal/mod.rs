@@ -832,6 +832,12 @@ impl Clone for MTLArgumentID {
   }
 }
 
+impl Default for MTLArgumentID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLArgumentID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -897,6 +903,12 @@ impl Clone for MTLArrayTypeID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLArrayTypeID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -968,6 +980,12 @@ impl Clone for MTLAttributeID {
   }
 }
 
+impl Default for MTLAttributeID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLAttributeID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1033,6 +1051,12 @@ impl Clone for MTLAttributeDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLAttributeDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1129,6 +1153,12 @@ impl Clone for MTLAttributeDescriptorArrayID {
   }
 }
 
+impl Default for MTLAttributeDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLAttributeDescriptorArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1194,6 +1224,12 @@ impl Clone for MTLBufferLayoutDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLBufferLayoutDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1290,6 +1326,12 @@ impl Clone for MTLBufferLayoutDescriptorArrayID {
   }
 }
 
+impl Default for MTLBufferLayoutDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLBufferLayoutDescriptorArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1355,6 +1397,12 @@ impl Clone for MTLCompileOptionsID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLCompileOptionsID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1426,6 +1474,12 @@ impl Clone for MTLComputePipelineDescriptorID {
   }
 }
 
+impl Default for MTLComputePipelineDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLComputePipelineDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1491,6 +1545,12 @@ impl Clone for MTLComputePipelineReflectionID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLComputePipelineReflectionID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1700,6 +1760,12 @@ impl Clone for MTLDepthStencilDescriptorID {
   }
 }
 
+impl Default for MTLDepthStencilDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLDepthStencilDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1765,6 +1831,12 @@ impl Clone for MTLFunctionConstantID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLFunctionConstantID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1836,6 +1908,12 @@ impl Clone for MTLFunctionConstantValuesID {
   }
 }
 
+impl Default for MTLFunctionConstantValuesID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLFunctionConstantValuesID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -1901,6 +1979,12 @@ impl Clone for MTLHeapDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLHeapDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -1972,6 +2056,12 @@ impl Clone for MTLRenderPassAttachmentDescriptorID {
   }
 }
 
+impl Default for MTLRenderPassAttachmentDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderPassAttachmentDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2038,6 +2128,12 @@ impl Clone for MTLRenderPassColorAttachmentDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPassColorAttachmentDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2134,6 +2230,12 @@ impl Clone for MTLRenderPassColorAttachmentDescriptorArrayID {
   }
 }
 
+impl Default for MTLRenderPassColorAttachmentDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderPassColorAttachmentDescriptorArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2200,6 +2302,12 @@ impl Clone for MTLRenderPassDepthAttachmentDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPassDepthAttachmentDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2271,6 +2379,12 @@ impl Clone for MTLRenderPassDescriptorID {
   }
 }
 
+impl Default for MTLRenderPassDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderPassDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2337,6 +2451,12 @@ impl Clone for MTLRenderPassStencilAttachmentDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPassStencilAttachmentDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2605,6 +2725,12 @@ impl Clone for MTLRenderPipelineColorAttachmentDescriptorID {
   }
 }
 
+impl Default for MTLRenderPipelineColorAttachmentDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderPipelineColorAttachmentDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -2695,6 +2821,12 @@ impl Clone for MTLRenderPipelineColorAttachmentDescriptorArrayID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPipelineColorAttachmentDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -2969,6 +3101,12 @@ impl Clone for MTLRenderPipelineDescriptorID {
   }
 }
 
+impl Default for MTLRenderPipelineDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderPipelineDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3034,6 +3172,12 @@ impl Clone for MTLRenderPipelineReflectionID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPipelineReflectionID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3433,6 +3577,12 @@ impl Clone for MTLSamplerDescriptorID {
   }
 }
 
+impl Default for MTLSamplerDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLSamplerDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3498,6 +3648,12 @@ impl Clone for MTLStageInputOutputDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLStageInputOutputDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -3569,6 +3725,12 @@ impl Clone for MTLStencilDescriptorID {
   }
 }
 
+impl Default for MTLStencilDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLStencilDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3637,6 +3799,12 @@ impl Clone for MTLStructMemberID {
   }
 }
 
+impl Default for MTLStructMemberID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLStructMemberID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -3702,6 +3870,12 @@ impl Clone for MTLStructTypeID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLStructTypeID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4053,6 +4227,12 @@ impl Clone for MTLTextureDescriptorID {
   }
 }
 
+impl Default for MTLTextureDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLTextureDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4121,6 +4301,12 @@ impl Clone for MTLVertexAttributeID {
   }
 }
 
+impl Default for MTLVertexAttributeID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLVertexAttributeID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4186,6 +4372,12 @@ impl Clone for MTLVertexAttributeDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLVertexAttributeDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4282,6 +4474,12 @@ impl Clone for MTLVertexAttributeDescriptorArrayID {
   }
 }
 
+impl Default for MTLVertexAttributeDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLVertexAttributeDescriptorArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4347,6 +4545,12 @@ impl Clone for MTLVertexBufferLayoutDescriptorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLVertexBufferLayoutDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4443,6 +4647,12 @@ impl Clone for MTLVertexBufferLayoutDescriptorArrayID {
   }
 }
 
+impl Default for MTLVertexBufferLayoutDescriptorArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLVertexBufferLayoutDescriptorArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4511,6 +4721,12 @@ impl Clone for MTLVertexDescriptorID {
   }
 }
 
+impl Default for MTLVertexDescriptorID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLVertexDescriptorID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -4569,6 +4785,12 @@ impl Clone for MTLBlitCommandEncoderID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLBlitCommandEncoderID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4666,6 +4888,12 @@ impl Clone for MTLBufferID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLBufferID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -4925,6 +5153,12 @@ impl Clone for MTLCommandBufferID {
   }
 }
 
+impl Default for MTLCommandBufferID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLCommandBufferID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -5077,6 +5311,12 @@ impl Clone for MTLCommandEncoderID {
   }
 }
 
+impl Default for MTLCommandEncoderID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLCommandEncoderID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -5216,6 +5456,12 @@ impl Clone for MTLCommandQueueID {
   }
 }
 
+impl Default for MTLCommandQueueID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLCommandQueueID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -5274,6 +5520,12 @@ impl Clone for MTLComputeCommandEncoderID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLComputeCommandEncoderID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -5337,6 +5589,12 @@ impl Clone for MTLComputePipelineStateID {
   }
 }
 
+impl Default for MTLComputePipelineStateID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLComputePipelineStateID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -5394,6 +5652,12 @@ impl Clone for MTLDepthStencilStateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLDepthStencilStateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -5758,6 +6022,12 @@ impl Clone for MTLDeviceID {
   }
 }
 
+impl Default for MTLDeviceID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLDeviceID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -5840,6 +6110,12 @@ impl Clone for MTLDrawableID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLDrawableID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -5943,6 +6219,12 @@ impl Clone for MTLFenceID {
   }
 }
 
+impl Default for MTLFenceID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLFenceID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -6003,6 +6285,12 @@ impl Clone for MTLFunctionID {
   }
 }
 
+impl Default for MTLFunctionID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLFunctionID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -6060,6 +6348,12 @@ impl Clone for MTLHeapID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLHeapID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -6191,6 +6485,12 @@ impl Clone for MTLLibraryID {
   }
 }
 
+impl Default for MTLLibraryID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLLibraryID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -6249,6 +6549,12 @@ impl Clone for MTLParallelRenderCommandEncoderID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLParallelRenderCommandEncoderID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -6559,6 +6865,12 @@ impl Clone for MTLRenderCommandEncoderID {
   }
 }
 
+impl Default for MTLRenderCommandEncoderID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLRenderCommandEncoderID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -6616,6 +6928,12 @@ impl Clone for MTLRenderPipelineStateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLRenderPipelineStateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -6679,6 +6997,12 @@ impl Clone for MTLResourceID {
   }
 }
 
+impl Default for MTLResourceID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for MTLResourceID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -6736,6 +7060,12 @@ impl Clone for MTLSamplerStateID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLSamplerStateID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -6931,6 +7261,12 @@ impl Clone for MTLTextureID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for MTLTextureID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

@@ -149,6 +149,12 @@ impl Clone for NSArrayID {
   }
 }
 
+impl Default for NSArrayID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSArrayID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -206,6 +212,12 @@ impl Clone for NSCoderID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSCoderID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -306,6 +318,12 @@ impl Clone for NSDataID {
   }
 }
 
+impl Default for NSDataID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSDataID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -390,6 +408,12 @@ impl Clone for NSDictionaryID {
   }
 }
 
+impl Default for NSDictionaryID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSDictionaryID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -455,6 +479,12 @@ impl Clone for NSErrorID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSErrorID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -536,6 +566,12 @@ impl Clone for NSMutableArrayID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSMutableArrayID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -735,6 +771,12 @@ impl Clone for NSStringID {
   }
 }
 
+impl Default for NSStringID {
+  fn default() -> Self {
+    return Self::nil();
+  }
+}
+
 impl Drop for NSStringID {
   fn drop(&mut self) {
     if !self.is_nil() {
@@ -816,6 +858,12 @@ impl Clone for NSURLID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSURLID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 
@@ -949,6 +997,12 @@ impl Clone for NSObjectID {
     let ptr = self.as_ptr();
 
     return Self::from_ptr(ptr).retain();
+  }
+}
+
+impl Default for NSObjectID {
+  fn default() -> Self {
+    return Self::nil();
   }
 }
 

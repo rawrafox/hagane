@@ -12,6 +12,7 @@ static VERTICES: &'static [Vertex] = &[
   Vertex { position: [ 0.5, -0.5, 0.0, 1.0], color: [0.0, 0.0, 1.0, 1.0] }
 ];
 
+#[derive(Debug, Default)]
 struct Example02Renderer {
   command_queue: MTLCommandQueueID,
   buffer: MTLBufferID,
@@ -51,11 +52,7 @@ impl RSMRenderer for Example02Renderer {
 }
 
 fn main() {
-  let renderer = Box::new(Example02Renderer {
-    command_queue: MTLCommandQueueID::nil(),
-    buffer: MTLBufferID::nil(),
-    pipeline_state: MTLRenderPipelineStateID::nil()
-  });
+  let renderer = Box::new(Example02Renderer { ..Default::default() });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);

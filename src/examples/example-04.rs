@@ -10,9 +10,10 @@ struct Uniform {
   normal: float4x4 // TODO: This is a 3x3 matrix, but we send in a 4x4 since we know that this is in this case technically acceptable, and technically acceptable is the best kind of acceptable.
 }
 
+#[derive(Debug, Default)]
 struct Example04Renderer {
   command_queue: MTLCommandQueueID,
-  time: std::time::Instant,
+  time: Option<std::time::Instant>,
   uniform_buffer: MTLBufferID,
   mesh_buffer: MTKMeshBufferID,
   submeshes: Vec<MTKSubmeshID>,
@@ -59,7 +60,7 @@ impl RSMRenderer for Example04Renderer {
   }
 
   fn draw(&mut self, view: RSMViewID) {
-    let elapsed = self.time.elapsed();
+    let elapsed = self.time.unwrap().elapsed();
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
     let model_matrix = float4x4::from_scale(0.01).dot(float4x4::from_euler_angles(0.0, seconds * std::f32::consts::FRAC_PI_3, 0.0));
@@ -99,15 +100,7 @@ impl RSMRenderer for Example04Renderer {
 }
 
 fn main() {
-  let renderer = Box::new(Example04Renderer {
-    command_queue: MTLCommandQueueID::nil(),
-    time: std::time::Instant::now(),
-    uniform_buffer: MTLBufferID::nil(),
-    mesh_buffer: MTKMeshBufferID::nil(),
-    submeshes: vec![],
-    depth_stencil_state: MTLDepthStencilStateID::nil(),
-    pipeline_state: MTLRenderPipelineStateID::nil()
-  });
+  let renderer = Box::new(Example04Renderer { time: Some(std::time::Instant::now()), ..Default::default() });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);

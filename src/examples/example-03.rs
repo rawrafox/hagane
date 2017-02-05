@@ -34,9 +34,10 @@ static INDICES: &'static [u16] = &[
   7, 6, 5, 5, 4, 7
 ];
 
+#[derive(Debug, Default)]
 struct Example03Renderer {
   command_queue: MTLCommandQueueID,
-  time: std::time::Instant,
+  time: Option<std::time::Instant>,
   index_buffer: MTLBufferID,
   uniform_buffer: MTLBufferID,
   vertex_buffer: MTLBufferID,
@@ -79,7 +80,7 @@ impl RSMRenderer for Example03Renderer {
   }
 
   fn draw(&mut self, view: RSMViewID) {
-    let elapsed = self.time.elapsed();
+    let elapsed = self.time.unwrap().elapsed();
 
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
 
@@ -110,15 +111,7 @@ impl RSMRenderer for Example03Renderer {
 }
 
 fn main() {
-  let renderer = Box::new(Example03Renderer {
-    command_queue: MTLCommandQueueID::nil(),
-    time: std::time::Instant::now(),
-    index_buffer: MTLBufferID::nil(),
-    uniform_buffer: MTLBufferID::nil(),
-    vertex_buffer: MTLBufferID::nil(),
-    depth_stencil_state: MTLDepthStencilStateID::nil(),
-    pipeline_state: MTLRenderPipelineStateID::nil()
-  });
+  let renderer = Box::new(Example03Renderer { time: Some(std::time::Instant::now()), ..Default::default() });
 
   let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
   let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);

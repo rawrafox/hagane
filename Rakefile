@@ -14,7 +14,7 @@ METAL = Rake::FileList["#{__dir__}/**/*.metal"]
 task default: [:objc_bridge, :simd_bridge, :shaders]
 
 task objc_bridge: XML_RS
-task simd_bridge: ["#{__dir__}/src/simd/mod.rs"]
+task simd_bridge: ["#{__dir__}/src/simd/types/mod.rs"]
 task shaders: METAL.ext(".metallib")
 
 rule ".metalir" => ".metal" do |t|
@@ -27,7 +27,7 @@ rule ".metallib" => ".metalir" do |t|
   system("xcrun metallib -o #{t.name.shellescape} #{t.source.shellescape}") or exit
 end
 
-rule "#{__dir__}/src/simd/mod.rs" => "#{__dir__}/generator/simd-bridge-generator.rb" do |t|
+rule "#{__dir__}/src/simd/types/mod.rs" => "#{__dir__}/generator/simd-bridge-generator.rb" do |t|
   puts "Generating SIMD bridge (#{t.name} from #{t.source})"
 
   Bridge::SIMD.generate("#{__dir__}/src/simd/types").map do |name, contents|
