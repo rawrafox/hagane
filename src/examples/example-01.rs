@@ -26,8 +26,6 @@ impl RSMRenderer for Example01Renderer {
 }
 
 fn main() {
-  rust_metal::load_classes();
-
   let renderer = Box::new(Example01Renderer {
     command_queue: MTLCommandQueueID::nil()
   });

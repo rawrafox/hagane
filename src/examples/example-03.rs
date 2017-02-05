@@ -110,8 +110,6 @@ impl RSMRenderer for Example03Renderer {
 }
 
 fn main() {
-  rust_metal::load_classes();
-
   let renderer = Box::new(Example03Renderer {
     command_queue: MTLCommandQueueID::nil(),
     time: std::time::Instant::now(),

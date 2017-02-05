@@ -20,6 +20,8 @@ pub trait RSMRenderer {
 
 impl RSMViewID {
   pub fn from_renderer<T: MTLDevice + 'static>(renderer: Box<RSMRenderer>, frame: CGRect, device: &T) -> RSMViewID {
+    load_classes();
+
     let mut renderer = Box::new(renderer);
 
     let view = RSMViewID::alloc().init_with_frame_device(frame, device);
