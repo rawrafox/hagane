@@ -117,6 +117,27 @@ impl std::fmt::Debug for NSApplicationID {
 }
 
 pub trait NSView : NSObject {
+  fn frame(&self) -> NSRect where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(frame), ()) {
+        Err(s) => panic!("{}", s),
+        Ok(r) => r
+      }
+    }
+  }
+
+  fn set_frame(&self, frame: NSRect) where Self: 'static + Sized {
+    unsafe {
+      let target = self.as_object();
+
+      return match objc::__send_message(target, sel!(setFrame:), (frame,)) {
+        Err(s) => panic!("{}", s),
+        Ok(()) => ()
+      }
+    }
+  }
 }
 
 #[repr(C)] pub struct NSViewID(*mut std::os::raw::c_void);

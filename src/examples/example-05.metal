@@ -66,7 +66,7 @@ vertex VertexOutput vertex_main(device VertexInput *vertices [[buffer(0)]], cons
   return output;
 }
 
-fragment float4 fragment_main(VertexOutput input [[stage_in]], constant Uniforms &uniforms [[buffer(0)]], texture2d<float> texture [[texture(0)]], sampler texture_sampler [[sampler(0)]]) {
+fragment float4 fragment_main(VertexOutput input [[stage_in]], texture2d<float> texture [[texture(0)]], sampler texture_sampler [[sampler(0)]]) {
   float3 normal = normalize(input.normal);
 
   float3 ambient_term = light.ambient_color * material.ambient_color;

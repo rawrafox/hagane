@@ -4,7 +4,7 @@ use objc;
 use super::ObjectiveC;
 
 use foundation::*;
-use simd::*;
+use hagane_simd::objc::*;
 
 #[link(name = "ModelIO", kind = "framework")]
 extern {

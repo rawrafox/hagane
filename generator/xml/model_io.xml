@@ -1,6 +1,6 @@
 <framework module="model_io">
   <use>foundation::*</use>
-  <use>simd::*</use>
+  <use>hagane_simd::objc::*</use>
 
   <extern framework="ModelIO">
     <static name="MDLVertexAttributeAnisotropy" protocol="NSString" public />

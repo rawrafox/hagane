@@ -16,7 +16,6 @@ struct Uniforms {
     float4x4 modelViewProjectionMatrix;
 };
 
-
 vertex VertexOutput vertex_main(device VertexInput *vertices [[buffer(0)]], constant Uniforms &uniforms [[buffer(1)]], uint vid [[vertex_id]]) {
   VertexInput input = vertices[vid];
 

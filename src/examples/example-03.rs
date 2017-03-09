@@ -1,7 +1,10 @@
 extern crate metal;
+extern crate hagane_simd;
 
 use metal::*;
 use metal::rust_metal::*;
+
+use hagane_simd::*;
 
 #[repr(C)]
 struct Uniform {
@@ -75,6 +78,7 @@ impl RSMRenderer for Example03Renderer {
     pipeline_descriptor.set_vertex_function(&library.new_function_with_name(&NSStringID::from_str("vertex_main")));
     pipeline_descriptor.set_fragment_function(&library.new_function_with_name(&NSStringID::from_str("fragment_main")));
     pipeline_descriptor.color_attachments().object_at_indexed_subscript(0).set_pixel_format(MTLPixelFormatBGRA8Unorm);
+    pipeline_descriptor.set_depth_attachment_pixel_format(MTLPixelFormatDepth32Float);
 
     self.pipeline_state = device.new_render_pipeline_state_with_descriptor_error(&pipeline_descriptor).unwrap();
   }
@@ -86,12 +90,11 @@ impl RSMRenderer for Example03Renderer {
 
     let rotation_x = seconds * std::f32::consts::FRAC_PI_2;
     let rotation_y = seconds * std::f32::consts::FRAC_PI_3;
+    let model_matrix = float4x4::from_scale(0.5 + (5.0 * seconds).sin() * 0.25) * float4x4::from_euler_angles(rotation_x, rotation_y, 0.0);
+    let view_matrix = float4x4::look_at(float3(0.0, 0.0, -3.0), float3(0.0, 0.0, 0.0), float3(0.0, 1.0, 0.0));
+    let projection_matrix = float4x4::perspective_fov(0.4 * std::f32::consts::PI, 1.0, 0.1, 100.0);
 
-    let model_matrix = float4x4::from_scale(1.0 + (5.0 * seconds).sin() * 0.25).dot(float4x4::from_euler_angles(rotation_x, rotation_y, 0.0));
-    let projection_matrix = float4x4::perspective(1.0f32, 0.4f32 * std::f32::consts::PI, 1.0f32, 100.0f32);
-    let view_matrix = float3(0.0, 0.0, -5.0).look_at(float3(0.0, 0.0, 0.0), float3(0.0, 1.0, 0.0));
-
-    let uniform = Uniform { model_view_projection: projection_matrix.dot(view_matrix.dot(model_matrix)) };
+    let uniform = Uniform { model_view_projection: projection_matrix * view_matrix * model_matrix };
 
     unsafe { std::intrinsics::copy(&uniform, self.uniform_buffer.contents() as *mut Uniform, 1) };
 
@@ -99,7 +102,6 @@ impl RSMRenderer for Example03Renderer {
     let command_encoder = command_buffer.render_command_encoder_with_descriptor(&view.current_render_pass_descriptor());
     command_encoder.set_render_pipeline_state(&self.pipeline_state);
     command_encoder.set_depth_stencil_state(&self.depth_stencil_state);
-    command_encoder.set_front_facing_winding(MTLWindingCounterClockwise);
     command_encoder.set_cull_mode(MTLCullModeBack);
     command_encoder.set_vertex_buffer_offset_at_index(&self.vertex_buffer, 0, 0);
     command_encoder.set_vertex_buffer_offset_at_index(&self.uniform_buffer, 0, 1);
@@ -113,7 +115,7 @@ impl RSMRenderer for Example03Renderer {
 fn main() {
   let renderer = Box::new(Example03Renderer { time: Some(std::time::Instant::now()), ..Default::default() });
 
-  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 400.0, height: 400.0 } };
+  let content_rect = CGRect { origin: CGPoint { x: 100.0, y: 300.0 }, size: CGSize { width: 600.0, height: 600.0 } };
   let window = NSWindowID::new_with_content_rect_style_mask_backing_defer(content_rect, 7, 2, false);
   window.set_title(&NSStringID::from_str("Metal Example 03"));
   window.set_content_view(&RSMViewID::from_renderer(renderer, content_rect, &metal::system_default_device()));

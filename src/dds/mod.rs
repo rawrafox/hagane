@@ -81,44 +81,53 @@ pub fn import<T: 'static + MTLDevice>(input: &[u8], device: &T) -> Option<MTLTex
     descriptor.set_mipmap_level_count(header.mip_map_count as NSUInteger);
   }
 
-  let mut width = descriptor.width();
-  let mut height = descriptor.height();
-  let mut depth = descriptor.depth();
-  let size_per_pixel;
+  if header.caps[1] & 0x200 != 0 {
+    let mut n = 0;
+
+    if header.caps[1] & 0x0400 != 0 { n += 1; }
+    if header.caps[1] & 0x0800 != 0 { n += 1; }
+    if header.caps[1] & 0x1000 != 0 { n += 1; }
+    if header.caps[1] & 0x2000 != 0 { n += 1; }
+    if header.caps[1] & 0x4000 != 0 { n += 1; }
+    if header.caps[1] & 0x8000 != 0 { n += 1; }
+
+
+    if n != 6 {
+      panic!("Cube map has just {} sides, what does that actually mean?", n)
+    }
+
+    descriptor.set_texture_type(MTLTextureTypeCube);
+  }
 
   match &header.pixel_format.fourcc {
     b"DXT1" => {
       descriptor.set_pixel_format(MTLPixelFormatBC1_RGBA);
-      size_per_pixel = 4;
     }
     b"DXT2" | b"DXT3" => {
       descriptor.set_pixel_format(MTLPixelFormatBC2_RGBA);
-      size_per_pixel = 8;
     }
     b"DXT4" | b"DXT5" => {
       descriptor.set_pixel_format(MTLPixelFormatBC3_RGBA);
-      size_per_pixel = 8;
     }
     _ => return None
   };
 
+  println!("Descriptor {:?}", descriptor);
+
   let texture = device.new_texture_with_descriptor(&descriptor);
 
-  for level in 0 .. descriptor.mipmap_level_count() {
-    let region = MTLRegion {
-      origin: MTLOrigin { x: 0, y: 0, z: 0 },
-      size: MTLSize { width: width, height: height, depth: depth }
-    };
-
-    let data = read_vec(&mut cursor, width * height * depth * size_per_pixel / 8);
-
-    texture.replace_region_mipmap_level_with_bytes_bytes_per_row(region, level, data.as_ptr() as *const std::os::raw::c_void, 0);
-
-    width = std::cmp::max(width / 2, 1);
-    height = std::cmp::max(height / 2, 1);
-    depth = std::cmp::max(depth / 2, 1);
+  match descriptor.texture_type() {
+    MTLTextureTypeCube => {
+      for slice in 0 .. 6 {
+        load_slice(&mut cursor, &descriptor, &texture, slice);
+      }
+    }
+    MTLTextureType2D => {
+      load_slice(&mut cursor, &descriptor, &texture, 0);
+    }
+    _ => return None
   }
-  
+
   return Some(texture);
 }
 
@@ -178,4 +187,35 @@ fn read_vec(cursor: &mut Read, bytes: usize) -> Vec<u8> {
   cursor.take(bytes as u64).read_to_end(&mut data).unwrap();
 
   return data;
+}
+
+fn load_slice(cursor: &mut Read, descriptor: &MTLTextureDescriptorID, texture: &MTLTextureID, slice: NSUInteger) {
+  let mut width = descriptor.width();
+  let mut height = descriptor.height();
+  let mut depth = descriptor.depth();
+
+  let (size_per_pixel, block_size) = match descriptor.pixel_format() {
+    MTLPixelFormatBC1_RGBA => (4, 8),
+    MTLPixelFormatBC2_RGBA | MTLPixelFormatBC3_RGBA => (8, 16),
+    _ => panic!("Unsupported pixel format")
+  };
+
+  for level in 0 .. descriptor.mipmap_level_count() {
+    let region = MTLRegion {
+      origin: MTLOrigin { x: 0, y: 0, z: 0 },
+      size: MTLSize { width: width, height: height, depth: depth }
+    };
+
+    let size = width * height * depth * size_per_pixel / 8;
+    let data = read_vec(cursor, size);
+
+    let blocks_in_row = std::cmp::max((width + 3) / 4, 1);
+    let pitch = blocks_in_row * block_size;
+
+    texture.replace_region_mipmap_level_slice_with_bytes_bytes_per_row_bytes_per_image(region, level, slice, data.as_ptr() as *const std::os::raw::c_void, pitch, 0);
+
+    width = std::cmp::max(width / 2, 1);
+    height = std::cmp::max(height / 2, 1);
+    depth = std::cmp::max(depth / 2, 1);
+  }
 }

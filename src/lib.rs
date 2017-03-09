@@ -1,9 +1,11 @@
-#![allow(unknown_lints, needless_return, zero_prefixed_literal, enum_clike_unportable_variant, len_without_is_empty, expl_impl_clone_on_copy)]
+#![allow(unknown_lints, needless_return, zero_prefixed_literal, enum_clike_unportable_variant, len_without_is_empty, expl_impl_clone_on_copy, non_upper_case_globals)]
 #![feature(repr_simd, platform_intrinsics)]
 
 #[macro_use] extern crate bitflags;
-extern crate byteorder;
 #[macro_use] extern crate objc;
+
+extern crate byteorder;
+extern crate hagane_simd;
 
 pub mod cocoa;
 pub use cocoa::*;
@@ -28,9 +30,6 @@ pub use metal_kit::*;
 
 pub mod model_io;
 pub use model_io::*;
-
-pub mod simd;
-pub use simd::*;
 
 pub mod dds;
 pub mod eve_rust;

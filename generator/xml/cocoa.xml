@@ -21,7 +21,9 @@ pub fn shared_application() -> Self {
     </script>
   </class>
 
-  <class name="NSView" inherits="NSObject" />
+  <class name="NSView" inherits="NSObject">
+    <property name="frame" type="NSRect" />
+  </class>
   
   <class name="NSWindow" inherits="NSObject">
     <initializer selector="initWithContentRect:styleMask:backing:defer:">
