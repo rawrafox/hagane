@@ -1,4 +1,7 @@
+extern crate hagane_objc;
 extern crate metal;
+
+use hagane_objc::*;
 
 use metal::*;
 use metal::rust_metal::*;

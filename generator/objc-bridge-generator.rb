@@ -82,7 +82,7 @@ module Bridge
       unless @no_prelude
         o.puts("use std;")
         o.puts("use objc;")
-        o.puts("use super::ObjectiveC;")
+        o.puts("use hagane_objc::*;")
       end
 
       self.children.each { |c| c.to_rust(o) }

@@ -1,12 +1,14 @@
-extern crate metal;
+extern crate hagane_objc;
 extern crate hagane_simd;
+extern crate metal;
 
 use std::io::Read;
 
+use hagane_objc::*;
+use hagane_simd::*;
+
 use metal::*;
 use metal::rust_metal::*;
-
-use hagane_simd::*;
 
 #[repr(C)]
 struct Uniform {

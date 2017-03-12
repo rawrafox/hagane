@@ -5,8 +5,7 @@ use objc::runtime::{Object, Sel};
 
 use super::RSMViewID;
 
-use ObjectiveC;
-
+use hagane_objc::*;
 use foundation::*;
 use core_graphics::*;
 use cocoa::*;

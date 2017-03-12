@@ -1,7 +1,7 @@
 #![allow(non_upper_case_globals)]
 use std;
 use objc;
-use super::ObjectiveC;
+use hagane_objc::ObjectiveC;
 
 use foundation::*;
 use hagane_simd::objc::*;

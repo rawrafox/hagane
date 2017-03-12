@@ -35,12 +35,9 @@ path = "src/examples/example-05.rs"
 name = "wbg-to-obj"
 path = "src/examples/wbg-to-obj.rs"
 
-[[bin]]
-name = "example-renderer"
-path = "src/examples/renderer/bin.rs"
-
 [dependencies]
 bitflags = "0.7.0"
 byteorder = "1.0.0"
 objc = "0.2.2"
+hagane-objc = { path = "hagane-objc" }
 hagane-simd = { path = "../hagane-simd" }

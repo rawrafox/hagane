@@ -1,0 +1,7 @@
+[package]
+name = "hagane-objc"
+version = "0.1.0"
+authors = ["Aurora <aurora@aventine.se>"]
+
+[dependencies]
+objc = "0.2.2"

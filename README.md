@@ -1,4 +1,4 @@
-# Aurora's Rust / Metal bindings #
+# Hagane: Aurora's Rust / Metal bindings #
 
 Hello and welcome to this work in progress thing!
 
@@ -22,8 +22,6 @@ To build stuff run `rake && cargo build` then you get a folder full of apps to t
  - [ ] Write some demoes.
  - [ ] Indexing.
  - [ ] Fast iteration.
- - [x] Extern statics.
  - [ ] Inheriting initializers correctly.
  - [ ] Typed NSArray, NSDictionary, etc.
- - [x] simd/simd.h ABI-compatible wrapper.
  - [ ] Actual methods / useful things for the simd stuff.
