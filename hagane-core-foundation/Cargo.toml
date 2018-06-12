@@ -1,0 +1,8 @@
+[package]
+name = "hagane-core-foundation"
+version = "0.1.0"
+authors = ["Aurora <aurora@aventine.se>"]
+description = "Wrapper for the Core Foundation for use with Hagane"
+keywords = ["core-foundation", "hagane"]
+
+[dependencies]
