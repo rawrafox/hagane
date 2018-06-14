@@ -6,3 +6,4 @@ description = "Wrapper for the Core Foundation for use with Hagane"
 keywords = ["core-foundation", "hagane"]
 
 [dependencies]
+hagane-core = { path = "../core" }

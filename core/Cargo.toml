@@ -1,0 +1,8 @@
+[package]
+name = "hagane-core"
+version = "0.1.0"
+authors = ["Aurora <aurora@aventine.se>"]
+description = "Core traits and functions for use with Hagane"
+keywords = ["hagane"]
+
+[dependencies]

@@ -1,0 +1,11 @@
+[[package]]
+name = "hagane-core"
+version = "0.1.0"
+
+[[package]]
+name = "hagane-core-foundation"
+version = "0.1.0"
+dependencies = [
+ "hagane-core 0.1.0",
+]
+
