@@ -37,7 +37,21 @@ mod object;
 // mod preferences;
 // mod property_list;
 // mod run_loop;
+// mod set;
+// mod socket;
+// mod stream;
 mod string;
+// mod string_tokenizer;
+// mod time_zone;
+// mod tree;
+// mod url;
+// mod url_access;
+// mod url_enumerator;
+// mod user_notification;
+// Utilities?
+// mod uuid;
+// mod xml_node;
+// mod xml_parser;
 
 pub use allocator::*;
 pub use null::*;
